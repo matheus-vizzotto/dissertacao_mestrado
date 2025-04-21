@@ -1,0 +1,334 @@
+% \documentclass{ijclclp}
+\documentclass[article]{abntex2}
+
+% \documentclass{article}
+\usepackage[alf]{abntex2cite}
+\usepackage{graphicx}
+% \usepackage[round]{natbib}
+\usepackage{indentfirst}
+\usepackage{hyperref}
+\usepackage[brazilian]{babel} %ajustar palavras de acordo com português no documento final
+% \usepackage{algorithm}
+% \usepackage[portuguese, ruled, linesnumbered]{algorithm2e}
+% \usepackage{algorithm}
+% \usepackage{algorithmicx}
+% \usepackage{algpseudocode}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{mathtools}
+\usepackage{bm}
+\usepackage{geometry}
+% \usepackage{array}
+\usepackage{amsthm}
+\newtheorem{theorem}{Theorem} % Theorems have their own numbering
+\newtheorem{lemma}{Lemma}     % Lemmas have their own numbering
+\newtheorem{definition}{Definition} % Definitions have their own numbering
+
+
+% \setlength{\tabcolsep}{18pt}
+% \renewcommand{\arraystrech}{1.5}
+% \setlength{\arrayrulewidth}{0.5mm}
+% This template is intanted to be used with the XeLaTex compiler for supporting CJK fonts
+% Title Information
+\renewcommand{\arraystretch}{1.5}
+\title{Forecasting probability density functions through functional data analysis}
+\author{UNIVERSIDADE FEDERAL DO RIO GRANDE DO SUL\\ FACULDADE DE CIÊNCIAS ECONÔMICAS \\ PROGRAMA DE PÓS-GRADUAÇÃO EM ECONOMIA \\ Matheus Vizzotto dos Santos - 00290240 \\ Porto Alegre \\ 2025}
+
+
+% Document Start
+\begin{document}
+\pagestyle{headings}
+
+\maketitle
+% \thispagestyle{firstpage}
+
+\newpage
+% Sections
+\newpage
+MATHEUS VIZZOTTO DOS SANTOS
+
+Forecasting probability density functions through functional data analysis
+
+Projeto de dissertação apresentado ao Programa de Pós-Graduação em Economia da Faculdade de Ciências Econômicas da UFRGS, como requisito parcial para a obtenção do título de Mestre em Economia Aplicada.
+
+Orientador: Prof. Dr. Flávio Ziegelmann
+Coorientador: Prof. Dr. Eduardo Horta
+
+Porto Alegre
+
+2025
+
+\newpage
+
+\section{Abstract}
+Functional time series -> density functions.
+
+Hall \& Vial -> Bathia et al.
+
+Espaço de funções de densidade (integração, não negativa).
+
+Dados utilizados.
+
+\textbf{Keywords}: funcional, functional time series, probability density functions, PCA, Karhunen-Loève.
+
+\newpage
+
+\section{Summary}
+
+\newpage
+
+\section{Introduction}
+\subsection{Density estimation}
+High-frequency trading (HFT) represents a significant evolution in modern financial markets, characterized by the execution of large volumes of trades at extremely high speeds, often within microseconds. In such an environment, the traditional assumptions of financial econometrics—such as normally distributed returns or independent and identically distributed (i.i.d.) increments—frequently break down. As a result, the \textit{specification of the probability density function (PDF)} governing price changes or returns becomes a foundational aspect of modeling, forecasting, and executing trades in HFT systems.
+
+PDF specification allows practitioners to move beyond point forecasts and assess the full range of possible future price realizations. This is particularly important in high-frequency contexts, where price changes are often small but frequent, and the tail behavior of the distribution can have outsized impacts on profitability and risk. Accurate modeling of PDFs aids in several key HFT tasks, including \textit{order placement}, \textit{market making}, \textit{liquidity provision}, and \textit{statistical arbitrage}.
+
+Empirical studies have shown that the distributions of high-frequency returns exhibit \textit{heavy tails}, \textit{volatility clustering}, and \textit{non-Gaussianity}, especially over very short horizons \citeonline{cont2001empirical}. Mischaracterizing these features can result in substantial model risk, leading to incorrect probability estimates and suboptimal execution. For instance, assuming normality in return distributions can underestimate the likelihood of large price swings, increasing exposure to adverse selection or sudden liquidity shocks.
+
+Various models have been proposed to better capture the observed dynamics of high-frequency data. Nonparametric and semiparametric methods, such as \textit{kernel density estimation} and \textit{mixture models}, offer flexibility in modeling the empirical PDF without overly restrictive distributional assumptions \citeonline{fan2003nonlinear}. On the parametric side, models based on \textit{generalized hyperbolic distributions} \citeonline{prause1999generalized}, \textit{$\alpha$-stable distributions} \citeonline{nolan2003modeling}, and \textit{autoregressive conditional duration (ACD)} models \citeonline{engle1998autoregressive} have been shown to provide better fits to high-frequency financial time series.
+
+In practical HFT systems, the real-time estimation of these PDFs is often embedded in algorithmic decision engines. For example, \textit{limit order placement algorithms} rely on an accurate forecast of the short-term price movement distribution to maximize expected fill rates while minimizing adverse selection risk \citeonline{cartea2015algorithmic}. Similarly, \textit{market-making strategies} use estimates of the conditional PDF to dynamically adjust bid-ask spreads based on the predicted volatility and direction of price changes.
+
+Thus, the specification of the probability density function is not merely a statistical exercise, but a key driver of performance in high-frequency trading. It directly informs the risk-reward trade-offs of algorithmic strategies and serves as a bridge between quantitative modeling and microstructural market dynamics.
+
+
+\subsection{A glimpse into Functional Data Analysis}
+In the realm of statistics and data science, \textit{Multivariate Data Analysis} (MDA) encompasses a collection of techniques designed to analyze data that arises from more than one variable. Unlike univariate or bivariate methods, MDA seeks to explore the structure and relationships that exist in datasets with multiple interdependent measurements, enabling a more comprehensive understanding of complex phenomena. These methods are particularly valuable in fields such as psychology, biology, finance, marketing, and social sciences, where multivariate observations are the norm rather than the exception.
+
+The foundation of MDA lies in the recognition that many real-world processes are inherently multidimensional. For example, in market research, a consumer's preferences might be influenced by price, quality, brand perception, and peer opinion simultaneously. Analyzing each of these dimensions independently would obscure the relationships among them. MDA techniques, such as \textit{Principal Component Analysis (PCA)}, \textit{Factor Analysis}, \textit{Discriminant Analysis}, \textit{Cluster Analysis}, and \textit{Canonical Correlation}, enable researchers to reduce dimensionality, classify observations, detect latent structures, and model the joint distribution of variables.
+
+The formal development of MDA began in the early 20th century, parallel to advancements in linear algebra and matrix theory. One of the earliest and most influential contributions was \textit{Principal Component Analysis} formulated by \citeonline{pearson1901lines}, which aimed to reduce the dimensionality of a dataset while preserving as much variance as possible. Later, \citeonline{hotelling1936relations} introduced \textit{Canonical Correlation Analysis}, establishing a framework to examine relationships between two sets of variables.
+
+Another key milestone was the introduction of \textit{Discriminant Analysis} by \citeonline{fisher1936use}, originally applied to distinguish between species of iris flowers using several morphological measurements. Fisher’s Linear Discriminant Analysis (LDA) laid the groundwork for modern supervised classification techniques. These early methods were implemented manually or with the help of mechanical calculators, and only became widespread with the advent of digital computers in the mid-20th century.
+
+By the 1960s and 1970s, multivariate analysis had become a core statistical tool, with widespread adoption in psychology, sociology, and economics. Seminal textbooks, such as \citeonline{anderson1958introduction} and \citeonline{tatsuoka1971multivariate}, codified the theory and practice of MDA. Software implementations began emerging in statistical packages like SAS, SPSS, and later R, which enabled more complex analyses to be conducted more efficiently and at scale.
+
+Today, multivariate analysis is a foundational aspect of data science, with modern extensions including machine learning models, multivariate time series, and high-dimensional data exploration. The ability to extract meaning from multiple correlated variables remains crucial across disciplines, underscoring the enduring value and relevance of the early contributions to multivariate data analysis.
+
+Functional Data Analysis (FDA) is a statistical framework for analyzing data that can be represented by functions, curves, or trajectories over a continuum such as time, space, or frequency. Unlike traditional multivariate analysis, which handles data as finite-dimensional vectors, FDA treats each observation as a function, often lying in an infinite-dimensional Hilbert space. This perspective is especially useful for studying processes that evolve continuously, such as temperature records, financial intraday returns, electroencephalogram (EEG) signals, or movement trajectories.
+
+The emergence of FDA stems from the realization that many scientific and engineering datasets are best understood when their underlying smooth structure is preserved rather than discretized. For example, in biomedical sciences, a patient’s heart rate over time is more naturally modeled as a curve rather than a collection of individual measurements. Functional data techniques provide tools for smoothing, registering, comparing, and modeling such curves \citeonline{ramsay2005functional}.
+
+The foundational developments in FDA began in the late 20th century, notably with the pioneering work of \citeonline{ramsay1982fitting}, who introduced spline smoothing techniques for curve estimation. This was followed by a broader formalization of FDA as a distinct statistical discipline in the early 1990s and 2000s. In their influential texts, \citeonline{ramsay2005functional} and \citeonline{ferraty2006nonparametric} developed a unified theory that encompasses functional principal component analysis (FPCA), functional regression, and clustering of functional observations.
+
+One of the earliest practical applications of FDA was in growth curve analysis, where children’s height measurements taken at different ages were analyzed as smooth trajectories \citeonline{ramsay1991some}. Since then, FDA has seen widespread use in meteorology, chemometrics, biomechanics, and econometrics. Modern extensions now integrate FDA with machine learning, time series models, and high-dimensional statistics.
+
+The core challenge in FDA lies in adapting classical statistical techniques to infinite-dimensional spaces. This requires tools from functional analysis, such as basis function expansions (e.g., splines, Fourier, wavelets), and the use of inner product structures for defining distances and covariances between functions. These methods enable dimension reduction (via FPCA), classification, hypothesis testing, and regression in the functional domain.
+
+With the rise of high-frequency and longitudinal data in numerous fields, FDA continues to grow in relevance, offering a mathematically rich and practically effective framework for analyzing complex, smooth data structures.
+
+%%%%%% FUNCTIONAL TIME SERIES
+
+% \citeonline{hall2006assessing},
+% \citeonline{bathia2010identifying},
+% \citeonline{aue2015prediction},
+% \citeonline{bosq2000linear}
+
+
+Functional data analysis (FDA) is a branch of statistics that deals with data providing information about curves, surfaces or anything else varying over a continuum. In this context, a \emph{functional time series} (FTS) is a sequence of random functions indexed by time. Each observation in the series is a function, typically lying in an infinite-dimensional function space, such as $L^2(\mathcal{T})$ for some compact interval $\mathcal{T} \subset \mathbb{R}$.
+
+Let $\mathcal{H}$ be a separable Hilbert space, typically taken to be $\mathcal{H} = L^2(\mathcal{T})$, the space of square-integrable functions on a compact interval $\mathcal{T} \subset \mathbb{R}$, equipped with the inner product
+\[
+\langle f, g \rangle = \int_{\mathcal{T}} f(t) g(t) \, dt,
+\]
+and the associated norm $\|f\| = \sqrt{\langle f, f \rangle}$.
+
+A \emph{functional time series} is a sequence of $\mathcal{H}$-valued random variables $\{X_t\}_{t \in \mathbb{Z}}$, where each $X_t$ is a random element of $\mathcal{H}$, i.e.,
+\[
+X_t : \Omega \to \mathcal{H}, \quad t \in \mathbb{Z}.
+\]
+
+A functional time series $\{X_t\}_{t \in \mathbb{Z}}$ is said to be \textbf{Mean-square continuous} if $\mathbb{E}\|X_t\|^2 < \infty$ for all $t$; \textbf{Second-order stationary} if the mean function $\mu(t) := \mathbb{E}[X_t]$ is constant over time and the autocovariance operator 
+    \[
+    \Gamma_h = \text{Cov}(X_{t+h}, X_t) = \mathbb{E}[(X_{t+h} - \mu) \otimes (X_t - \mu)]
+    \]
+    depends only on the lag $h$, where $\otimes$ denotes the tensor product.
+
+
+Functional Time Series (FTS) analysis is a modern statistical framework developed to handle data that are naturally viewed as functions observed over time. Unlike traditional time series models that deal with scalar or finite-dimensional vector observations, FTS methods treat each observation as a real-valued function, typically defined on a compact interval. This functional approach allows for the modeling of complex dynamic phenomena where each data point is an entire curve, such as daily temperature curves, intraday financial returns, or spectrometric curves.
+
+A foundational treatment of linear models for functional data was provided by \citeonline{bosq2000linear}, who developed autoregressive models in a Hilbert space setting, laying the groundwork for many later developments in the field. His approach enabled the extension of classical time series concepts like stationarity and autocorrelation to the infinite-dimensional setting.
+
+Subsequent research has addressed various aspects of FTS, such as model assessment and estimation. \citeonline{hall2006assessing} introduced diagnostic tools and inference procedures for assessing the adequacy of functional time series models, emphasizing the importance of model checking in high-dimensional settings. Their work underscored the challenges posed by the infinite-dimensional nature of the data and proposed practical solutions for effective model validation.
+
+\citeonline{bathia2010identifying} focused on identifying and estimating finite-dimensional dynamic structures in functional time series, addressing the issue of dimensionality reduction while preserving temporal dependence. Their methodology enables the recovery of dynamic factors that drive the functional observations over time, thus facilitating interpretable modeling and forecasting.
+
+\citeonline{aue2015prediction} advanced the field further by developing predictive methods for FTS, including linear prediction theory and associated estimation techniques. Their work provided both theoretical guarantees and practical algorithms for functional time series forecasting, which is a central goal in many applications.
+
+Together, these contributions form a robust theoretical and methodological foundation for the analysis and prediction of functional data observed over time, making Functional Time Series a vibrant and evolving area of research in modern statistics.
+
+
+% Trabalhos iniciais (ex Ramsay).
+
+% \citeonline{gertheiss2024}, \citeonline{dabo2024uncovering}
+
+% \subsection{Functional Time Series}
+
+\section{Goal}
+The main goal of this work is to assess the viability of forecasting functional time series that inherently carry relative information. Specifically, the functional observations are probability density functions, which are subject to the following constraints by definition:
+
+Proposition: Let $f_X(x)$ denote the density function of a continuous random variable X,  defined on the probability space $(\Omega, \mathbb{F}, \mathbb{P})$. Then $f_X(x)$ satisfies
+\begin{enumerate}
+    \item $f_X(x)\geq0$, for all $x$ in $\mathbb{R}$
+    \item $\int_{-\infty}^{\infty}f(w)dw=1$
+\end{enumerate}
+
+Namely, the objectives are:
+\begin{enumerate}
+    \item Perform a data analysis step of the time series subject to the study;
+    \item Evaluate the decomposition of objects;
+    \item Find the best time series model fitting to the principal component scores;
+    \item Obtain a set of forecast values for the probability density functions;
+    \item Compare the accuracy of the model with other state-of-the-art methods.
+\end{enumerate}
+
+
+
+\section{Literature Review}
+The work of \citeonline{aue2015prediction} proposes a simplification of the functional time series prediction problem by reducing it to a multivariate forecasting problem, thereby allowing the use of well-established tools, as opposed to the methodology initially developed in \citeonline{bosq2000linear}. The proposed algorithm consists of three steps: first, a number $d$ of principal components is selected to retain $(\alpha \cdot 100)\%$ of the variance of the original data; then, given a forecast horizon $h$, a VAR($p$) model is fitted to the principal components, and an $h$-step-ahead forecast is computed; finally, the multivariate forecasts are transformed back to the original functional space via a truncated Karhunen--Lo\`eve representation. It is also shown that the one-step-ahead forecast from a VAR(1) model in the second step is asymptotically equivalent to that of a FAR(1) model, which simplifies the forecasting task. Another important contribution of the paper is the proposal of a fully automatic and joint procedure for selecting the model order $p$ and the number of components $d$ through the minimization of a functional final prediction error (fFPE) criterion given by
+\begin{equation}
+ \textit{fFPE}(p,d)=\frac{n+pd}{n-pd}\mathrm{tr}(\hat{\Sigma}_{Z})+\sum_{l>d}\hat{\lambda}_{l},
+\end{equation}
+which makes the proposed methodology entirely data-driven. The possibility of including exogenous variables in the model is also supported without major theoretical complications. Finally, simulation studies and applications to real data compare the performance of the new methodology with that of \citeonline{hyndmanUllah2007}, which carries out forecasting by treating the principal component scores as univariate time series, and \citeonline{bosq2000linear}, using the autoregressive order selection criterion proposed by \citeonline{kokoszkaReimherr2013}. In both settings, the new method outperformed the alternatives.
+
+
+\subsection*{Aitchison Geometry}
+
+Let $S^D$ denote the \emph{D-part simplex}, defined as:
+\[
+S^D = \left\{ \mathbf{x} = (x_1, \dots, x_D) \in \mathbb{R}^D : x_i > 0 \ \text{for all} \ i, \ \sum_{i=1}^D x_i = 1 \right\}.
+\]
+
+The \textbf{Aitchison geometry} on $S^D$ is a vector space structure defined by the following components:
+
+\begin{itemize}
+    \item \textbf{Perturbation (Composition Addition)}: For $\mathbf{x}, \mathbf{y} \in S^D$, their perturbation is defined as:
+    \[
+    \mathbf{x} \oplus \mathbf{y} = \mathcal{C}(x_1 y_1, \dots, x_D y_D),
+    \]
+    where $\mathcal{C}$ is the closure operator:
+    \[
+    \mathcal{C}(\mathbf{z}) = \left( \frac{z_1}{\sum_{i=1}^D z_i}, \dots, \frac{z_D}{\sum_{i=1}^D z_i} \right).
+    \]
+    
+    \item \textbf{Powering (Scalar Multiplication)}: For $\alpha \in \mathbb{R}$ and $\mathbf{x} \in S^D$,
+    \[
+    \alpha \odot \mathbf{x} = \mathcal{C}(x_1^\alpha, \dots, x_D^\alpha).
+    \]
+    
+    \item \textbf{Aitchison Inner Product}: For $\mathbf{x}, \mathbf{y} \in S^D$, define
+    \[
+    \langle \mathbf{x}, \mathbf{y} \rangle_A = \frac{1}{2D} \sum_{i=1}^D \sum_{j=1}^D \log\left(\frac{x_i}{x_j}\right) \log\left(\frac{y_i}{y_j}\right).
+    \]
+    
+    \item \textbf{Aitchison Norm}: The norm induced by the inner product is:
+    \[
+    \|\mathbf{x}\|_A = \sqrt{\langle \mathbf{x}, \mathbf{x} \rangle_A}.
+    \]
+    
+    \item \textbf{Aitchison Distance}: The distance between two compositions $\mathbf{x}, \mathbf{y} \in S^D$ is:
+    \[
+    d_A(\mathbf{x}, \mathbf{y}) = \|\text{clr}(\mathbf{x}) - \text{clr}(\mathbf{y})\|_2,
+    \]
+    where $\text{clr}(\mathbf{x})$ is the \emph{centered log-ratio transformation}:
+    \[
+    \text{clr}(\mathbf{x}) = \left( \log\frac{x_1}{g(\mathbf{x})}, \dots, \log\frac{x_D}{g(\mathbf{x})} \right), \quad g(\mathbf{x}) = \left( \prod_{i=1}^D x_i \right)^{1/D}.
+    \]
+\end{itemize}
+
+This structure turns $S^D$ into a real Hilbert space under the operations $\oplus$, $\odot$ and the inner product $\langle \cdot, \cdot \rangle_A$.
+
+\subsection{Para olhar}
+
+Trabalhos relacionados à estimação de séries temporais funcionais.
+
+Previsão.
+
+Tentativas de prever funções de densidade de probabilidade.
+
+Artigo Horta.
+
+Introdução a FDA: \citeonline{dabo2024uncovering}.
+
+\citeonline{aue2015prediction},\citeonline{bathia2010identifying}, \citeonline{benko2009common}, \citeonline{besse1986principal}, \citeonline{bosq2000linear}, \citeonline{dabo2008functional}, \citeonline{dauxois1982asymptotic}, \citeonline{ferraty2003curves}, \citeonline{hall2006assessing}, \citeonline{ferraty2006nonparametric}, \citeonline{horta2018dynamics}, \citeonline{hron2016simplicial}, \citeonline{muller1998heavy}, \citeonline{petersen2016functional}, \citeonline{ramsay1991some}, \citeonline{ramsay2002applied}, \citeonline{ramsay2005functional}, \citeonline{ramsay2009FDAwithR}
+
+\section{Metodologia}
+\begin{theorem}
+This is the first theorem.
+\end{theorem}
+
+\begin{lemma}
+This is a lemma that follows the theorem.
+\end{lemma}
+
+\begin{definition}
+This is a definition related to the previous results.
+\end{definition}
+
+\begin{definition}
+In the theory of random processes, a sequence $\{ X_n \}_{n=1}^{\infty}$ is said to be $\psi$-mixing if the dependence between past and future events decreases as they become further apart in time, according to a specific mixing coefficient.
+
+Let $\{ X_n \}_{n=1}^{\infty}$ be a sequence of random variables defined on a probability space $(\Omega, \mathcal{F}, P)$. The sequence is called \emph{$\psi$-mixing} if there exists a function $\psi(n)$ such that for any two $\sigma$-algebras $\mathcal{F}_a^b = \sigma(X_a, X_{a+1}, \ldots, X_b)$ and $\mathcal{F}_c^d = \sigma(X_c, X_{c+1}, \ldots, X_d)$ with $a \leq b < c \leq d$, the following holds:
+\[
+\psi(n) = \sup_{A \in \mathcal{F}_1^k, B \in \mathcal{F}_{k+n}^\infty} |P(A \cap B) - P(A)P(B)|,
+\]
+where $\psi(n) \to 0$ as $n \to \infty$.
+
+The sequence is said to be $\psi$-mixing if $\psi(n) \to 0$ as $n \to \infty$. This condition implies that the events in the distant past and the far future become asymptotically independent.
+\end{definition}
+
+\begin{definition}
+
+Let $\mathcal{X}$ be a domain and $h_0(x)$ a reference probability density function on $\mathcal{X}$. The \emph{Bayes space} $B^2(\mathcal{X}, h_0)$ is defined as the space of all functions $h(x) > 0$ such that:
+\[
+\log \frac{h(x)}{h_0(x)} \in L^2(\mathcal{X}),
+\]
+where $L^2(\mathcal{X})$ denotes the space of square-integrable functions on $\mathcal{X}$. The inner product between two elements $h_1(x), h_2(x) \in B^2(\mathcal{X}, h_0)$ is given by:
+\[
+\langle h_1, h_2 \rangle_{B^2} = \int_{\mathcal{X}} \log \frac{h_1(x)}{h_0(x)} \log \frac{h_2(x)}{h_0(x)} h_0(x) dx.
+\]
+The associated norm is:
+\[
+\| h \|_{B^2} = \left( \int_{\mathcal{X}} \left( \log \frac{h(x)}{h_0(x)} \right)^2 h_0(x) dx \right)^{\frac{1}{2}}.
+\]
+\end{definition}
+
+\subsection{Introduction to the Wasserstein Metric}
+
+The Wasserstein metric, also known as the Earth Mover's Distance (EMD), is a distance function defined between probability distributions on a given metric space. It arises naturally in optimal transport theory, where the goal is to quantify the "cost" of transporting mass from one distribution to another.
+
+Let $(\mathcal{X}, d)$ be a Polish metric space (i.e., a complete separable metric space), and let $\mathcal{P}_p(\mathcal{X})$ denote the space of Borel probability measures on $\mathcal{X}$ with finite $p$-th moment, defined as:
+\[
+\mathcal{P}_p(\mathcal{X}) = \left\{ \mu \in \mathcal{P}(\mathcal{X}) \; \middle| \; \int_{\mathcal{X}} d(x_0, x)^p \, d\mu(x) < \infty \text{ for some } x_0 \in \mathcal{X} \right\}.
+\]
+
+For two probability measures $\mu, \nu \in \mathcal{P}_p(\mathcal{X})$, the $p$-Wasserstein distance between them is defined as:
+\[
+W_p(\mu, \nu) = \left( \inf_{\pi \in \Pi(\mu, \nu)} \int_{\mathcal{X} \times \mathcal{X}} d(x, y)^p \, d\pi(x, y) \right)^{1/p},
+\]
+where $\Pi(\mu, \nu)$ denotes the set of all couplings of $\mu$ and $\nu$, i.e., all probability measures on $\mathcal{X} \times \mathcal{X}$ with marginals $\mu$ and $\nu$.
+
+The Wasserstein metric has gained significant attention in statistics, machine learning, and functional data analysis due to its meaningful geometric structure and robustness to small perturbations in distributions. In particular, it provides a powerful tool for comparing empirical distributions and studying convergence properties in probabilistic settings.
+
+\subsection{Estimação de densidade}
+\subsection{Dados}
+\subsubsection{Análise exploratória}
+
+\section{Resultados}
+
+\section{Considerações finais}
+
+
+
+% \include{fichario}
+
+\newpage
+\bibliographystyle{abntex2-alf}
+\bibliography{references}
+
+\newpage
+\section{Apêndice}
+\subsection{Figuras}
+\subsection{Tabelas}
+
+
+\end{document}
