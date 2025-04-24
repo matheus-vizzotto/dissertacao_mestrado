@@ -36,6 +36,7 @@
 
 % Document Start
 \begin{document}
+
 \pagestyle{headings}
 
 \maketitle
@@ -60,19 +61,16 @@ Porto Alegre
 \newpage
 
 \section{Abstract}
-Functional time series -> density functions.
 
-Hall \& Vial -> Bathia et al.
+Functional Data Analysis (FDA) has emerged as a rapidly evolving field, extending classical statistical methods to data represented by functions. In this context, time series analysis can also be generalized by treating each observation as a function rather than a scalar or vector. This work focuses on forecasting a specific class of functional objects: probability density functions (pdfs). A key challenge in this setting arises from the fact that pdfs do not form a vector space, but instead reside in a convex subset of one, rendering standard functional time series techniques inapplicable. To address this, we explore a transformation approach that maps pdfs into a more suitable functional space, enabling the application of existing methods. The effectiveness of this approach is illustrated through an application in high frequency financial data.
 
-Espaço de funções de densidade (integração, não negativa).
 
-Dados utilizados.
-
-\textbf{Keywords}: funcional, functional time series, probability density functions, PCA, Karhunen-Loève.
+\textbf{Keywords}: Functional data analysis. Functional time series. Probability density functions. Forecasting. Karhunen-Loève expansion. 
 
 \newpage
 
-\section{Summary}
+\tableofcontents
+
 
 \newpage
 
@@ -184,11 +182,7 @@ Namely, the objectives are:
 
 
 \section{Literature Review}
-The work of \citeonline{aue2015prediction} proposes a simplification of the functional time series prediction problem by reducing it to a multivariate forecasting problem, thereby allowing the use of well-established tools, as opposed to the methodology initially developed in \citeonline{bosq2000linear}. The proposed algorithm consists of three steps: first, a number $d$ of principal components is selected to retain $(\alpha \cdot 100)\%$ of the variance of the original data; then, given a forecast horizon $h$, a VAR($p$) model is fitted to the principal components, and an $h$-step-ahead forecast is computed; finally, the multivariate forecasts are transformed back to the original functional space via a truncated Karhunen--Lo\`eve representation. It is also shown that the one-step-ahead forecast from a VAR(1) model in the second step is asymptotically equivalent to that of a FAR(1) model, which simplifies the forecasting task. Another important contribution of the paper is the proposal of a fully automatic and joint procedure for selecting the model order $p$ and the number of components $d$ through the minimization of a functional final prediction error (fFPE) criterion given by
-\begin{equation}
- \textit{fFPE}(p,d)=\frac{n+pd}{n-pd}\mathrm{tr}(\hat{\Sigma}_{Z})+\sum_{l>d}\hat{\lambda}_{l},
-\end{equation}
-which makes the proposed methodology entirely data-driven. The possibility of including exogenous variables in the model is also supported without major theoretical complications. Finally, simulation studies and applications to real data compare the performance of the new methodology with that of \citeonline{hyndmanUllah2007}, which carries out forecasting by treating the principal component scores as univariate time series, and \citeonline{bosq2000linear}, using the autoregressive order selection criterion proposed by \citeonline{kokoszkaReimherr2013}. In both settings, the new method outperformed the alternatives.
+
 
 
 \subsection*{Aitchison Geometry}
@@ -237,21 +231,62 @@ The \textbf{Aitchison geometry} on $S^D$ is a vector space structure defined by 
 
 This structure turns $S^D$ into a real Hilbert space under the operations $\oplus$, $\odot$ and the inner product $\langle \cdot, \cdot \rangle_A$.
 
-\subsection{Para olhar}
+% \subsection{Para olhar}
 
-Trabalhos relacionados à estimação de séries temporais funcionais.
+% Trabalhos relacionados à estimação de séries temporais funcionais.
 
-Previsão.
+% Previsão.
 
-Tentativas de prever funções de densidade de probabilidade.
+% Tentativas de prever funções de densidade de probabilidade.
 
-Artigo Horta.
+% Artigo Horta.
 
-Introdução a FDA: \citeonline{dabo2024uncovering}.
+% Introdução a FDA: \citeonline{dabo2024uncovering}.
 
 \citeonline{aue2015prediction},\citeonline{bathia2010identifying}, \citeonline{benko2009common}, \citeonline{besse1986principal}, \citeonline{bosq2000linear}, \citeonline{dabo2008functional}, \citeonline{dauxois1982asymptotic}, \citeonline{ferraty2003curves}, \citeonline{hall2006assessing}, \citeonline{ferraty2006nonparametric}, \citeonline{horta2018dynamics}, \citeonline{hron2016simplicial}, \citeonline{muller1998heavy}, \citeonline{petersen2016functional}, \citeonline{ramsay1991some}, \citeonline{ramsay2002applied}, \citeonline{ramsay2005functional}, \citeonline{ramsay2009FDAwithR}
 
-\section{Metodologia}
+\section{Framework}
+
+First, we might define some useful concepts used in most work about functional time series. 
+
+\begin{definition}
+Let \( X(t) \), \( t \in \mathcal{T} \subset \mathbb{R} \), be a square-integrable stochastic process with mean function \( \mu(t) = \mathbb{E}[X(t)] \) and covariance function 
+\begin{equation}
+C(s, t) = \text{Cov}(X(s), X(t)) = \mathbb{E}[(X(s) - \mu(s))(X(t) - \mu(t))].
+\end{equation}
+
+Then, if \( C(s, t) \) is continuous and positive semi-definite, the Karhunen--Lo\`eve Expansion of \( X(t) \) is given by
+
+\begin{equation}
+X(t) = \mu(t) + \sum_{k=1}^\infty \xi_k \phi_k(t),
+\end{equation}
+where \( \{ \phi_k(t) \}_{k=1}^\infty \) are the orthonormal eigenfunctions of the covariance operator associated with \( C(s, t) \); \( \{ \xi_k \}_{k=1}^\infty \) are uncorrelated random variables with zero mean and variances equal to the corresponding eigenvalues \( \lambda_k \); and \( \mathbb{E}[\xi_k \xi_j] = \lambda_k \delta_{kj} \), with \( \delta_{kj} \) being the Kronecker delta.
+\end{definition}
+
+\begin{definition}
+Let $\mathcal{H}$ be a separable Hilbert space taken to be $\mathcal{H} = L^2(\mathcal{T})$, that is, the space of square-integrable functions on a compact interval $\mathcal{T} \subset \mathbb{R}$, equipped with the inner product
+\begin{equation}
+\langle f, g \rangle = \int_{\mathcal{T}} f(t) g(t) \, dt,
+\end{equation}
+and the associated norm $\|f\| = \sqrt{\langle f, f \rangle}$.
+
+A \emph{functional time series} is a sequence of $\mathcal{H}$-valued random variables $\{X_t\}_{t \in \mathbb{Z}}$, where each $X_t$ is a random element of $\mathcal{H}$, i.e., $X_t : \Omega \to \mathcal{H}, t \in \mathbb{Z}.$
+
+\end{definition}
+
+If we consider an observed functional time series object $Y_t$, we define
+
+\begin{equation}
+     Y_t(u) = X_t(u) + \varepsilon_t(u), \quad u \in \mathcal{T}, \quad t = 1, \dots, n,
+\end{equation}
+
+where the noise term $\varepsilon_t(u)$ is originated from experimental error and numerical rounding in discrete data treatment.
+
+In \citeonline{bosq2000linear}, we can find a \textit{functional autoregressive} (FAR) approach for time series forecasting, and this has long been the main method used in research because of the lack of other techniques. The work of \citeonline{aue2015prediction} proposes a simplification of the functional time series prediction problem by reducing it to a multivariate forecasting problem, thereby allowing the use of well-established tools, in contrast with the methodology of a FAR(1) model. The proposed algorithm consists of three steps: first, a number $d$ of principal components is selected to retain $(\alpha \cdot 100)\%$ of the variance of the original data; then, given a forecast horizon $h$, a VAR($p$) model is fitted to the principal components, and an $h$-step-ahead forecast is computed; finally, the multivariate forecasts are transformed back to the original functional space via a truncated Karhunen--Lo\`eve representation. It is also shown that the one-step-ahead forecast from a VAR(1) model in the second step is asymptotically equivalent to that of a FAR(1) model, which simplifies the forecasting task. Another important contribution of the paper is the proposal of a fully automatic and joint procedure for selecting the model order $p$ and the number of components $d$ through the minimization of a functional final prediction error (fFPE) criterion given by
+\begin{equation}
+ \textit{fFPE}(p,d)=\frac{n+pd}{n-pd}\mathrm{tr}(\hat{\Sigma}_{Z})+\sum_{l>d}\hat{\lambda}_{l},
+\end{equation}
+which makes the proposed methodology entirely data-driven. The possibility of including exogenous variables in the model is also supported without major theoretical complications. Finally, simulation studies and applications to real data compare the performance of the new methodology with that of \citeonline{hyndmanUllah2007}, which carries out forecasting by treating the principal component scores as univariate time series, and \citeonline{bosq2000linear}, using the autoregressive order selection criterion proposed by \citeonline{kokoszkaReimherr2013}. In both settings, the new method outperformed the alternatives.
 \begin{theorem}
 This is the first theorem.
 \end{theorem}
@@ -292,7 +327,7 @@ The associated norm is:
 \]
 \end{definition}
 
-\subsection{Introduction to the Wasserstein Metric}
+% \subsection{Introduction to the Wasserstein Metric}
 
 The Wasserstein metric, also known as the Earth Mover's Distance (EMD), is a distance function defined between probability distributions on a given metric space. It arises naturally in optimal transport theory, where the goal is to quantify the "cost" of transporting mass from one distribution to another.
 
@@ -309,13 +344,13 @@ where $\Pi(\mu, \nu)$ denotes the set of all couplings of $\mu$ and $\nu$, i.e.,
 
 The Wasserstein metric has gained significant attention in statistics, machine learning, and functional data analysis due to its meaningful geometric structure and robustness to small perturbations in distributions. In particular, it provides a powerful tool for comparing empirical distributions and studying convergence properties in probabilistic settings.
 
-\subsection{Estimação de densidade}
-\subsection{Dados}
-\subsubsection{Análise exploratória}
+% \subsection{Estimação de densidade}
+\section{Data analysis}
+% \subsubsection{Análise exploratória}
 
-\section{Resultados}
+\section{Results}
 
-\section{Considerações finais}
+% \section{Considerações finais}
 
 
 
