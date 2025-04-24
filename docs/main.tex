@@ -88,6 +88,30 @@ In practical HFT systems, the real-time estimation of these PDFs is often embedd
 
 Thus, the specification of the probability density function is not merely a statistical exercise, but a key driver of performance in high-frequency trading. It directly informs the risk-reward trade-offs of algorithmic strategies and serves as a bridge between quantitative modeling and microstructural market dynamics.
 
+\subsection{Compositional Data Analysis}
+Compositional data (CoDa) are multivariate observations conveying relative information, typically represented as vectors with strictly positive components summing to a constant, usually one or 100\% \cite{aitchison1982statistical}. Such data arise naturally in diverse disciplines, including geology (e.g., mineral compositions), economics (e.g., market shares), biology (e.g., proportions of species in ecological samples), and medicine (e.g., time-use or microbiome data).
+
+Classical multivariate statistical techniques often fail to appropriately handle the specific properties of compositional data due to the constant-sum constraint and the inherent relative scale of the data. As a consequence, applying standard techniques directly to raw compositional data can lead to misleading results \cite{pawlowsky2015modelling}.
+
+Aitchison's pioneering work \cite{aitchison1986statistical} laid the foundation for the modern statistical treatment of compositional data. He introduced the use of log-ratio transformations, such as the centered log-ratio (clr), additive log-ratio (alr), and isometric log-ratio (ilr) transformations, to enable the application of standard statistical tools in an appropriate transformed space. These transformations map the data from the simplex (the sample space of compositions) to real Euclidean space, facilitating analysis while preserving the essential relative information.
+
+The simplex, denoted as $\mathcal{S}^D = \left\{ \mathbf{x} = (x_1, \ldots, x_D) \in \mathbb{R}^D_{>0} : \sum_{i=1}^D x_i = \kappa \right\}$, where $\kappa$ is a positive constant (typically 1 or 100), serves as the sample space for compositional data \cite{egozcue2003isometric}. A key aspect of CoDa is the use of the Aitchison geometry on the simplex, which redefines operations such as perturbation (compositionally meaningful addition) and powering (compositionally meaningful scalar multiplication).
+
+In recent years, CoDa methodology has seen significant advancements, particularly in its integration with functional data analysis, machine learning, and Bayesian inference \cite{van2013analyzing,greenacre2018compositional}. These developments have broadened the applicability of CoDa tools to more complex data structures, such as longitudinal compositional data or high-dimensional microbiome datasets.
+
+This paper introduces the theoretical basis and methodological framework of CoDa, with emphasis on log-ratio transformations and the geometry of the simplex, providing a foundation for the application and development of compositional techniques in applied scientific research.
+
+
+An important and growing extension of CoDa is its adaptation to probability density functions (PDFs), which share a key compositional property: they are non-negative and integrate to one. This extension is formally developed within the framework of \textit{Bayes spaces}, where PDFs are treated as infinite-dimensional compositional objects \cite{egozcue2006hilbert}. The centered log-ratio (clr) transformation is generalized to functions, allowing PDFs to be analyzed in a Hilbert space endowed with the Aitchison geometry. For a density $f(x)$ defined on a compact support $I$, the clr transform is given by
+\[
+\text{clr}(f)(x) = \log(f(x)) - \frac{1}{|I|} \int_I \log(f(t))\,dt,
+\]
+which maps $f$ into a real-valued function with zero integral.
+
+This perspective enables the application of functional principal component analysis (fPCA), clustering, and regression directly to probability densities, and has found applications in various domains including electricity demand modeling \cite{delicado2011compositional}, Bayesian model assessment, and compositional inference in medical statistics \cite{talska2018principal}.
+
+This paper introduces the theoretical basis and methodological framework of CoDa, with emphasis on log-ratio transformations, the geometry of the simplex, and their extension to the analysis of probability density functions.
+
 
 \subsection{A glimpse into Functional Data Analysis}
 In the realm of statistics and data science, \textit{Multivariate Data Analysis} (MDA) encompasses a collection of techniques designed to analyze data that arises from more than one variable. Unlike univariate or bivariate methods, MDA seeks to explore the structure and relationships that exist in datasets with multiple interdependent measurements, enabling a more comprehensive understanding of complex phenomena. These methods are particularly valuable in fields such as psychology, biology, finance, marketing, and social sciences, where multivariate observations are the norm rather than the exception.
