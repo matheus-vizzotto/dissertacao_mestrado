@@ -1,18 +1,88 @@
-% \documentclass{ijclclp}
-\documentclass[article]{abntex2}
+%% abtex2-modelo-trabalho-academico.tex, v-1.9.2 laurocesar
+%% Copyright 2012-2014 by abnTeX2 group at http://abntex2.googlecode.com/ 
+%%
+%% This work may be distributed and/or modified under the
+%% conditions of the LaTeX Project Public License, either version 1.3
+%% of this license or (at your option) any later version.
+%% The latest version of this license is in
+%%   http://www.latex-project.org/lppl.txt
+%% and version 1.3 or later is part of all distributions of LaTeX
+%% version 2005/12/01 or later.
+%%
+%% This work has the LPPL maintenance status `maintained'.
+%% 
+%% The Current Maintainer of this work is the abnTeX2 team, led
+%% by Lauro César Araujo. Further information are available on 
+%% http://abntex2.googlecode.com/
+%%
+%% This work consists of the files abntex2-modelo-trabalho-academico.tex,
+%% abntex2-modelo-include-comandos and abntex2-modelo-references.bib
+%%
 
-% \documentclass{article}
-\usepackage[alf]{abntex2cite}
-\usepackage{graphicx}
-% \usepackage[round]{natbib}
-\usepackage{indentfirst}
+% ------------------------------------------------------------------------
+% ------------------------------------------------------------------------
+% abnTeX2: Modelo de Trabalho Academico (tese de doutorado, dissertacao de
+% mestrado e trabalhos monograficos em geral) em conformidade com 
+% ABNT NBR 14724:2011: Informacao e documentacao - Trabalhos academicos -
+% Apresentacao
+% ------------------------------------------------------------------------
+% ------------------------------------------------------------------------
+
+%-------------------------------------------------------------------------
+% Modelo adaptado especificamente para o contexto do PPgSI-EACH-USP por 
+% Marcelo Fantinato, com auxílio dos Professores Norton T. Roman, Helton
+% H. Bíscaro, e Sarajane M. Peres, em 2015, com muitos agradecimentos aos 
+% criadores da classe e do modelo base.
+%-------------------------------------------------------------------------
+
+\documentclass[
+	% -- opções da classe memoir --
+	12pt,				% tamanho da fonte
+	% openright,			% capítulos começam em pág ímpar (insere página vazia caso preciso)
+	oneside,			% para impressão apenas no anverso (apenas frente). Oposto a twoside
+	a4paper,			% tamanho do papel. 
+	% -- opções da classe abntex2 --
+	%chapter=TITLE,		% títulos de capítulos convertidos em letras maiúsculas
+	%section=TITLE,		% títulos de seções convertidos em letras maiúsculas
+	%subsection=TITLE,	% títulos de subseções convertidos em letras maiúsculas
+	%subsubsection=TITLE,% títulos de subsubseções convertidos em letras maiúsculas
+	% -- opções do pacote babel --
+	english,			% idioma adicional para hifenização
+	%french,				% idioma adicional para hifenização
+	%spanish,			% idioma adicional para hifenização
+	brazil				% o último idioma é o principal do documento
+	]{abntex2ppgsi}
+
+% ---
+% Pacotes básicos 
+% ---
+% \usepackage{lmodern}			% Usa a fonte Latin Modern			
+% \usepackage[T1]{fontenc}		% Selecao de codigos de fonte.
+\usepackage[utf8]{inputenc}		% Codificacao do documento (conversão automática dos acentos)
+\usepackage{lastpage}			% Usado pela Ficha catalográfica
+\usepackage{indentfirst}		% Indenta o primeiro parágrafo de cada seção.
+\usepackage{color}				% Controle das cores
+\usepackage{graphicx}			% Inclusão de gráficos
+\usepackage{microtype} 			% para melhorias de justificação
+\usepackage{pdfpages}     %para incluir pdf
+\usepackage{algorithm}			%para ilustrações do tipo algoritmo
+\usepackage{mdwlist}			%para itens com espaço padrão da abnt
+\usepackage[noend]{algpseudocode}			%para ilustrações do tipo algoritmo
+		
+% ---
+% Pacotes adicionais, usados apenas no âmbito do Modelo Canônico do abnteX2
+% ---
+\usepackage{lipsum}				% para geração de dummy text
+% ---
+
+% ---
+% Pacotes de citações
+% ---
+\usepackage[brazilian,hyperpageref]{backref}	 % Paginas com as citações na bibl
+\usepackage[alf]{abntex2cite}	% Citações padrão ABNT
+% PACOTES MATHEUS
 \usepackage{hyperref}
-\usepackage[brazilian]{babel} %ajustar palavras de acordo com português no documento final
-% \usepackage{algorithm}
-% \usepackage[portuguese, ruled, linesnumbered]{algorithm2e}
-% \usepackage{algorithm}
-% \usepackage{algorithmicx}
-% \usepackage{algpseudocode}
+%\usepackage[brazilian]{babel} %ajustar palavras de acordo com português no documento final
 \usepackage{amsmath, amssymb, amsthm}
 \usepackage{mathtools}
 \usepackage{bm}
@@ -21,74 +91,707 @@
 \usepackage{amsthm}
 \newtheorem{theorem}{Theorem} % Theorems have their own numbering
 \newtheorem{lemma}{Lemma}     % Lemmas have their own numbering
-\newtheorem{definition}{Definition} % Definitions have their own numbering
+\newtheorem{definition}{Definition}
+\newtheorem{proposition}{Proposition} 
+\usepackage[bottom=0.5cm]{geometry}
+
+% --- 
+% CONFIGURAÇÕES DE PACOTES
+% --- 
+
+% ---
+% Configurações do pacote backref
+% Usado sem a opção hyperpageref de backref
+\renewcommand{\backrefpagesname}{Citado na(s) página(s):~}
+% Texto padrão antes do número das páginas
+\renewcommand{\backref}{}
+% Define os textos da citação
+\renewcommand*{\backrefalt}[4]{
+	\ifcase #1 %
+		Nenhuma citação no texto.%
+	\or
+		Citado na página #2.%
+	\else
+		Citado #1 vezes nas páginas #2.%
+	\fi}%
+% ---
+
+% ---
+% Informações de dados para CAPA e FOLHA DE ROSTO
+% ---
+
+%-------------------------------------------------------------------------
+% Comentário adicional do PPgSI - Informações sobre o ``instituicao'':
+%
+% Não mexer. Deixar exatamente como está.
+%
+%-------------------------------------------------------------------------
+\instituicao{
+	UNIVERSIDADE FEDERAL DO RIO GRANDE DO SUL
+	\par
+	FACULDADE DE CIÊNCIAS ECONÔMICAS
+	\par
+	PROGRAMA DE PÓS-GRADUAÇÃO EM ECONOMIA}
+
+%-------------------------------------------------------------------------
+% Comentário adicional do PPgSI - Informações sobre o ``título'':
+%
+% Em maiúscula apenas a primeira letra da sentença (do título), exceto 
+% nomes próprios, geográficos, institucionais ou Programas ou Projetos ou 
+% siglas, os quais podem ter letras em maiúscula também.
+%
+% O subtítulo do trabalho é opcional.
+% Sem ponto final.
+%
+% Atenção: o título da Dissertação na versão corrigida não pode mudar. 
+% Ele deve ser idêntico ao da versão original.
+%
+%-------------------------------------------------------------------------
+\titulo{PREVENDO FUNÇÕES DE DENSIDADE DE PROBABILIDADE}
+
+%-------------------------------------------------------------------------
+% Comentário adicional do PPgSI - Informações sobre o ``autor'':
+%
+% Todas as letras em maiúsculas.
+% Nome completo.
+% Sem ponto final.
+%-------------------------------------------------------------------------
+\autor{\uppercase{Matheus Vizzotto dos Santos}}
+
+%-------------------------------------------------------------------------
+% Comentário adicional do PPgSI - Informações sobre o ``local'':
+%
+% Não incluir o ``estado''.
+% Sem ponto final.
+%-------------------------------------------------------------------------
+\local{Porto Alegre}
+
+%-------------------------------------------------------------------------
+% Comentário adicional do PPgSI - Informações sobre a ``data'':
+%
+% Colocar o ano do depósito (ou seja, o ano da entrega) da respectiva 
+% versão, seja ela a versão original (para a defesa) seja ela a versão 
+% corrigida (depois da aprovação na defesa). 
+%
+% Atenção: Se a versão original for depositada no final do ano e a versão 
+% corrigida for entregue no ano seguinte, o ano precisa ser atualizado no 
+% caso da versão corrigida. 
+% Cuidado, pois o ano da ``capa externa'' também precisa ser atualizado 
+% nesse caso.
+%
+% Não incluir o dia, nem o mês.
+% Sem ponto final.
+%-------------------------------------------------------------------------
+\data{2025}
+
+%-------------------------------------------------------------------------
+% Comentário adicional do PPgSI - Informações sobre o ``Orientador'':
+%
+% Se for uma professora, trocar por ``Profa. Dra.''
+% Nome completo.
+% Sem ponto final.
+%-------------------------------------------------------------------------
+\orientador{Prof. Dr. Flávio A. Ziegelmann}
+
+%-------------------------------------------------------------------------
+% Comentário adicional do PPgSI - Informações sobre o ``Coorientador'':
+%
+% Opcional. Incluir apenas se houver co-orientador formal, de acordo com o 
+% Regulamento do Programa.
+%
+% Se for uma professora, trocar por ``Profa. Dra.''
+% Nome completo.
+% Sem ponto final.
+%-------------------------------------------------------------------------
+\coorientador{Prof. Dr. Eduardo de Oliveira Horta}
+
+\tipotrabalho{Dissertação (Mestrado)}
+
+\preambulo{
+%-------------------------------------------------------------------------
+% Comentário adicional do PPgSI - Informações sobre o texto ``Versão 
+% original'':
+%
+% Não usar para Qualificação.
+% Não usar para versão corrigida de Dissertação.
+%
+%-------------------------------------------------------------------------
+\newline \newline \newline 
+%-------------------------------------------------------------------------
+% Comentário adicional do PPgSI - Informações sobre o ``texto principal do
+% preambulo'':
+%
+% Para Qualificação, trocar por: Texto de Exame de Qualificação apresentado à Escola de Artes, Ciências e Humanidades da Universidade de São Paulo como parte dos requisitos para obtenção do título de Mestre em Ciências pelo Programa de Pós-graduação em Sistemas de Informação.
+%
+%-------------------------------------------------------------------------
+Projeto de dissertação apresentado ao Programa de Pós-Graduação em Economia da Faculdade de Ciências Econômicas da UFRGS, como requisito parcial para a obtenção do título de Mestre em Economia, com ênfase em Economia Aplicada.}
+%
+% \newline \newline Área de concentração: Metodologia e Técnicas da Computação
+%-------------------------------------------------------------------------
+% Comentário adicional do PPgSI - Informações sobre o texto da ``Versão 
+% corrigida'':
+%
+% Não usar para Qualificação.
+% Não usar para versão original de Dissertação.
+% 
+% Substituir ``xx de xxxxxxxxxxxxxxx de xxxx'' pela ``data da defesa''.
+%
+%-------------------------------------------------------------------------
+% \newline \newline \newline Versão corrigida contendo as alterações solicitadas pela comissão julgadora em xx de xxxxxxxxxxxxxxx de xxxx. A versão original encontra-se em acervo reservado na Biblioteca da EACH-USP e na Biblioteca Digital de Teses e Dissertações da USP (BDTD), de acordo com a Resolução CoPGr 6018, de 13 de outubro de 2011.}
+% ---
 
 
-% \setlength{\tabcolsep}{18pt}
-% \renewcommand{\arraystrech}{1.5}
-% \setlength{\arrayrulewidth}{0.5mm}
-% This template is intanted to be used with the XeLaTex compiler for supporting CJK fonts
-% Title Information
-\renewcommand{\arraystretch}{1.5}
-\title{Forecasting probability density functions through functional data analysis}
-\author{UNIVERSIDADE FEDERAL DO RIO GRANDE DO SUL\\ FACULDADE DE CIÊNCIAS ECONÔMICAS \\ PROGRAMA DE PÓS-GRADUAÇÃO EM ECONOMIA \\ Matheus Vizzotto dos Santos - 00290240 \\ Porto Alegre \\ 2025}
+% ---
+% Configurações de aparência do PDF final
 
+% alterando o aspecto da cor azul
+\definecolor{blue}{RGB}{41,5,195}
 
-% Document Start
+% informações do PDF
+\makeatletter
+\hypersetup{
+     	%pagebackref=true,
+		pdftitle={\@title}, 
+		pdfauthor={\@author},
+    	pdfsubject={\imprimirpreambulo},
+	    pdfcreator={LaTeX com abnTeX2 adaptado para o PPgSI-EACH-USP},
+		pdfkeywords={abnt}{latex}{abntex}{abntex2}{qualificação de mestrado}{dissertação de mestrado}{ppgsi}, 
+		colorlinks=true,       		% false: boxed links; true: colored links
+    	linkcolor=black,          	% color of internal links
+    	citecolor=black,        		% color of links to bibliography
+    	filecolor=black,      		% color of file links
+		urlcolor=black,
+		bookmarksdepth=4
+}
+\makeatother
+% --- 
+
+% --- 
+% Espaçamentos entre linhas e parágrafos 
+% --- 
+
+% O tamanho do parágrafo é dado por:
+\setlength{\parindent}{1.25cm}
+
+% Controle do espaçamento entre um parágrafo e outro:
+\setlength{\parskip}{0cm}  % tente também \onelineskip
+\renewcommand{\baselinestretch}{1.5}
+
+% ---
+% compila o indice
+% ---
+\makeindex
+% ---
+
+	% Controlar linhas orfas e viuvas
+  \clubpenalty10000
+  \widowpenalty10000
+  \displaywidowpenalty10000
+
+% ----
+% Início do documento
+% ----
+\setulmarginsandblock{1in}{1.5in}{1}
+
 \begin{document}
 
-\pagestyle{headings}
+% Retira espaço extra obsoleto entre as frases.
+\frenchspacing 
 
-\maketitle
-% \thispagestyle{firstpage}
+% ----------------------------------------------------------
+% ELEMENTOS PRÉ-TEXTUAIS
+% ----------------------------------------------------------
+% \pretextual
 
-\newpage
-% Sections
-\newpage
-MATHEUS VIZZOTTO DOS SANTOS
+% ---
+% Capa
+% ---
+%-------------------------------------------------------------------------
+% Comentário adicional do PPgSI - Informações sobre a ``capa'':
+%
+% Esta é a ``capa'' principal/oficial do trabalho, a ser impressa apenas 
+% para os casos de encadernação simples (ou seja, em ``espiral'' com 
+% plástico na frente).
+% 
+% Não imprimir esta ``capa'' quando houver ``capa dura'' ou ``capa brochura'' 
+% em que estas mesmas informações já estão presentes nela.
+%
+%-------------------------------------------------------------------------
+\imprimircapa
+% ---
 
-Forecasting probability density functions through functional data analysis
+% ---
+% Folha de rosto
+% (o * indica que haverá a ficha bibliográfica)
+% ---
+\imprimirfolhaderosto*
+% ---
 
-Projeto de dissertação apresentado ao Programa de Pós-Graduação em Economia da Faculdade de Ciências Econômicas da UFRGS, como requisito parcial para a obtenção do título de Mestre em Economia Aplicada.
+% ---
+% Inserir a autorização para reprodução e ficha bibliografica
+% ---
 
-Orientador: Prof. Dr. Flávio Ziegelmann
-Coorientador: Prof. Dr. Eduardo Horta
+%-------------------------------------------------------------------------
+% Comentário adicional do PPgSI - Informações sobre o texto da 
+% ``autorização para reprodução e ficha bibliografica'':
+%
+% Página a ser usada apenas para Dissertação (tanto na versão original 
+% quanto na versão corrigida).
+%
+% Solicitar a ficha catalográfica na Biblioteca da EACH. 
+% Duas versões devem ser solicitadas, em dois momentos distintos: uma vez 
+% para a versão original, e depois outra atualizada para a versão 
+% corrigida.
+%
+% Atenção: esta página de ``autorização para reprodução e ficha 
+% catalográfica'' deve ser impressa obrigatoriamente no verso da folha de 
+% rosto.
+%
+% Não usar esta página para Qualificação.
+%
+% Substitua o arquivo ``fig_ficha_catalografica.pdf'' abaixo referenciado 
+% pelo PDF elaborado pela Biblioteca
+%
+%-------------------------------------------------------------------------
+\begin{fichacatalografica}
+    \includepdf{fig_ficha_catalografica.pdf}
+\end{fichacatalografica}
 
-Porto Alegre
+% ---
+% Inserir errata
+% ---
+%-------------------------------------------------------------------------
+% Comentário adicional do PPgSI - Informações sobre ``Errata'':
+%
+% Usar esta página de errata apenas em casos de excepcionais, e apenas 
+% para a versão corrigida da Dissertação. Por exemplo, quando depois de
+% já depositada e publicada a versão corrigida, ainda assim verifica-se
+% a necessidade de alguma correção adicional.
+%
+% Se precisar usar esta página, busque a forma correta (o modelo correto) 
+% para fazê-lo, de acordo com a norma ABNT.
+%
+% Não usar esta página para versão original de Dissertação.
+% Não usar esta página para Qualificação.
+%
+%-------------------------------------------------------------------------
+% \begin{errata}
+% Elemento opcional para versão corrigida, depois de depositada.
+% \end{errata}
+% ---
 
-2025
+% ---
+% Inserir folha de aprovação
+% ---
 
-\newpage
+% \begin{folhadeaprovacao}
+%-------------------------------------------------------------------------
+% Comentário adicional do PPgSI - Informações sobre ``Folha da aprovação'':
+%
+% Para Qualificação, trocar por: Texto de Exame de Qualificação de autoria de Fulano de Tal, sob o título \textbf{``\imprimirtitulo''}, apresentado à Escola de Artes, Ciências e Humanidades da Universidade de São Paulo, como parte dos requisitos para obtenção do título de Mestre em Ciências pelo Programa de Pós-graduação em Sistemas de Informação, na área de concentração Metodologia e Técnicas da Computação, aprovado em \_\_\_ de \_\_\_\_\_\_\_\_\_\_\_\_\_\_ de \_\_\_\_\_\_ pela comissão examinadora constituída pelos doutores:
+%
+% Substituir ``Fulano de Tal'' pelo nome completo do autor do trabalho, com 
+% apenas as iniciais em maiúsculo.
+%
+% Substiuir ``___ de ______________ de ______'' por: 
+%     - Para versão original de Dissertação: deixar em branco, pois a data 
+%       pode mudar, mesmo que ela já esteja prevista.
+%     - Para versão corrigida de Dissertação: usar a data em que a defesa 
+%       efetivamente ocorreu.
+%
+%-------------------------------------------------------------------------
+% \noindent Dissertação de autoria de Fulano de Tal, sob o título \textbf{``\imprimirtitulo''}, apresentada à Escola de Artes, Ciências e Humanidades da Universidade de São Paulo, para obtenção do título de Mestre em Ciências pelo Programa de Pós-graduação em Sistemas de Informação, na área de concentração Metodologia e Técnicas da Computação, aprovada em \_\_\_\_\_\_\_ de \_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_ de \_\_\_\_\_\_\_\_\_\_ pela comissão julgadora constituída pelos doutores:
 
-\section{Abstract}
+% \vspace*{3cm}
+
+% \begin{center}
+%-------------------------------------------------------------------------
+% Comentário adicional do PPgSI - Informações sobre ``assinaturas'':
+%
+% Para Qualificação e para versão original de Dissertação: deixar em 
+% branco (ou seja, assim como está abaixo), pois os membros da banca podem
+% mudar, mesmo que eles já estejam previstos.
+% 
+% Para versão corrigida de Dissertação: usar os dados dos examinadores que 
+% efetivamente participaram da defesa. 
+% 
+% Para versão corrigida de Dissertação: em caso de ``professora'', trocar 
+% por ``Profa. Dra.'' 
+% 
+% Para versão corrigida de Dissertação: ao colocar os nomes dos 
+% examinadores, remover o sublinhado
+% 
+% Para versão corrigida de Dissertação: ao colocar os nomes dos 
+% examinadores, usar seus nomes completos, exatamente conforme constam em 
+% seus Currículos Lattes
+% 
+% Para versão corrigida de Dissertação: ao colocar os nomes das 
+% instituições, remover o sublinhado e remover a palavra ``Instituição:''
+%
+% Não abreviar os nomes das instituições.
+%
+%-------------------------------------------------------------------------
+% \_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_
+% \vspace*{0.2cm} 
+% \\ \textbf{Prof. Dr. \_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_} 
+% \\ \vspace*{0.2cm} 
+% Instituição: \_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_ 
+% \\ \vspace*{0.2cm}
+% Presidente 
+
+% \vspace*{2cm}
+
+% \_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_
+% \vspace*{0.2cm} 
+% \\ \textbf{Prof. Dr. \_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_} 
+% \\ \vspace*{0.2cm} 
+% Instituição: \_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_
+
+% \vspace*{2cm}
+
+% \_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_
+% \vspace*{0.2cm} 
+% \\ \textbf{Prof. Dr. \_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_} 
+% \\ \vspace*{0.2cm} 
+% Instituição: \_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_
+
+% \vspace*{2cm}
+
+% \_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_
+% \vspace*{0.2cm} 
+% \\ \textbf{Prof. Dr. \_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_} 
+% \\ \vspace*{0.2cm} 
+% Instituição: \_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_
+
+% \end{center}
+  
+% \end{folhadeaprovacao}
+% ---
+
+% ---
+% Dedicatória
+% ---
+%-------------------------------------------------------------------------
+% Comentário adicional do PPgSI - Informações sobre ``Dedicatória'': 
+%
+% Opcional para Dissertação.
+% Não sugerido para Qualificação.
+% 
+%-------------------------------------------------------------------------
+% \begin{dedicatoria}
+%    \vspace*{\fill}
+%    \centering
+%    \noindent
+%    \textit{Escreva aqui sua dedicatória, se desejar, ou remova esta página...} 
+% 	 \vspace*{\fill}
+% \end{dedicatoria}
+% ---
+
+% ---
+% Agradecimentos
+% ---
+%-------------------------------------------------------------------------
+% Comentário adicional do PPgSI - Informações sobre ``Agradecimentos'': 
+%
+% Opcional para Dissertação.
+% Não sugerido para Qualificação.
+% 
+% Lembrar de agradecer agências de fomento e outras instituições similares.
+%
+%-------------------------------------------------------------------------
+% \begin{agradecimentos}
+% Texto de exemplo, texto de exemplo, texto de exemplo, texto de exemplo, texto de exemplo, texto de exemplo, texto de exemplo, texto de exemplo, texto de exemplo, texto de exemplo, texto de exemplo, texto de exemplo, texto de exemplo, texto de exemplo, texto de exemplo, texto de exemplo, texto de exemplo, texto de exemplo, texto de exemplo, texto de exemplo, texto de exemplo, texto de exemplo.
+
+% Texto de exemplo, texto de exemplo, texto de exemplo, texto de exemplo, texto de exemplo, texto de exemplo, texto de exemplo, texto de exemplo, texto de exemplo, texto de exemplo, texto de exemplo, texto de exemplo, texto de exemplo, texto de exemplo, texto de exemplo, texto de exemplo, texto de exemplo, texto de exemplo, texto de exemplo, texto de exemplo, texto de exemplo, texto de exemplo.
+
+% Texto de exemplo, texto de exemplo, texto de exemplo, texto de exemplo, texto de exemplo, texto de exemplo, texto de exemplo, texto de exemplo, texto de exemplo, texto de exemplo, texto de exemplo, texto de exemplo, texto de exemplo, texto de exemplo, texto de exemplo, texto de exemplo, texto de exemplo, texto de exemplo, texto de exemplo, texto de exemplo, texto de exemplo, texto de exemplo.
+
+% Texto de exemplo, texto de exemplo, texto de exemplo, texto de exemplo, texto de exemplo, texto de exemplo, texto de exemplo, texto de exemplo, texto de exemplo, texto de exemplo, texto de exemplo, texto de exemplo, texto de exemplo, texto de exemplo, texto de exemplo, texto de exemplo, texto de exemplo, texto de exemplo, texto de exemplo, texto de exemplo, texto de exemplo, texto de exemplo.
+
+% Texto de exemplo, texto de exemplo, texto de exemplo, texto de exemplo, texto de exemplo, texto de exemplo, texto de exemplo, texto de exemplo, texto de exemplo, texto de exemplo, texto de exemplo, texto de exemplo, texto de exemplo, texto de exemplo, texto de exemplo, texto de exemplo, texto de exemplo, texto de exemplo, texto de exemplo, texto de exemplo, texto de exemplo, texto de exemplo.
+% \end{agradecimentos}
+% ---
+
+% ---
+% Epígrafe
+% ---
+%-------------------------------------------------------------------------
+% Comentário adicional do PPgSI - Informações sobre ``Epígrafe'': 
+%
+% Opcional para Dissertação.
+% Não sugerido para Qualificação.
+% 
+%-------------------------------------------------------------------------
+% \begin{epigrafe}
+%     \vspace*{\fill}
+% 	\begin{flushright}
+% 		\textit{``Escreva aqui uma epígrafe, se desejar, ou remova esta página...''\\
+% 		(Autor da epígrafe)}
+% 	\end{flushright}
+% \end{epigrafe}
+% ---
+
+% ---
+% RESUMOS
+% ---
+
+% resumo em português
+\setlength{\absparsep}{18pt} % ajusta o espaçamento dos parágrafos do resumo
+\begin{resumo}
+
+%-------------------------------------------------------------------------
+% Comentário adicional do PPgSI - Informações sobre ``referência'':
+% 
+% Troque os seguintes campos pelos dados de sua Dissertação (mantendo a 
+% formatação e pontuação):
+%   - SOBRENOME
+%   - Nome1
+%   - Nome2
+%   - Nome3
+%   - Título do trabalho: subtítulo do trabalho
+%   - AnoDeDefesa
+%
+% Mantenha todas as demais informações exatamente como estão.
+% 
+% [Não usar essas informações de ``referência'' para Qualificação]
+%
+%-------------------------------------------------------------------------
+% \begin{flushleft}
+% SOBRENOME, Nome1 Nome2 Nome3. \textbf{Título do trabalho}: subtítulo do trabalho. \imprimirdata. \pageref{LastPage} f. Dissertação (Mestrado em Ciências) – Escola de Artes, Ciências e Humanidades, Universidade de São Paulo, São Paulo, AnoDeDefesa.
+% \end{flushleft}
+
+A Análise de Dados Funcionais (Functional Data Analysis – FDA) tem emergido como um campo em rápida evolução, estendendo os métodos estatísticos clássicos para dados representados por funções. Nesse contexto, a análise de séries temporais também pode ser generalizada ao tratar cada observação como uma função, em vez de um escalar ou vetor. Este trabalho foca na previsão de uma classe específica de objetos funcionais: as funções densidade de probabilidade (pdfs). Um dos principais desafios nesse cenário decorre do fato de que as pdfs não formam um espaço vetorial, mas sim um subconjunto convexo de um, o que torna as técnicas padrão de séries temporais funcionais inaplicáveis. Para lidar com isso, exploramos uma abordagem de transformação que mapeia as pdfs para um espaço funcional mais apropriado, permitindo a aplicação de métodos existentes. A eficácia dessa abordagem é ilustrada por meio de uma aplicação em dados financeiros de alta frequência.
+
+\textbf{Palavras-chaves}: Análise de dados funcionais. Séries temporais funcionais. Funções de densidade de probabilidade. Projeção. Expansão de Karhunen-Loève. 
+\end{resumo}
+
+% resumo em inglês
+%-------------------------------------------------------------------------
+% Comentário adicional do PPgSI - Informações sobre ``resumo em inglês''
+% 
+% Caso a Qualificação ou a Dissertação inteira seja elaborada no idioma inglês, 
+% então o ``Abstract'' vem antes do ``Resumo''.
+% 
+%-------------------------------------------------------------------------
+\begin{resumo}[Abstract]
+\begin{otherlanguage*}{english}
+
+%-------------------------------------------------------------------------
+% Comentário adicional do PPgSI - Informações sobre ``referência em inglês''
+% 
+% Troque os seguintes campos pelos dados de sua Dissertação (mantendo a 
+% formatação e pontuação):
+%     - SURNAME
+%     - FirstName1
+%     - MiddleName1
+%     - MiddleName2
+%     - Work title: work subtitle
+%     - DefenseYear (Ano de Defesa)
+%
+% Mantenha todas as demais informações exatamente como estão.
+%
+% [Não usar essas informações de ``referência'' para Qualificação]
+%
+%-------------------------------------------------------------------------
+% \begin{flushleft}
+% SURNAME, FirstName MiddleName1 MiddleName2. \textbf{Work title}: work subtitle. \imprimirdata. \pageref{LastPage} p. Dissertation (Master of Science) – School of Arts, Sciences and Humanities, University of São Paulo, São Paulo, DefenseYear. 
+% \end{flushleft}
 
 Functional Data Analysis (FDA) has emerged as a rapidly evolving field, extending classical statistical methods to data represented by functions. In this context, time series analysis can also be generalized by treating each observation as a function rather than a scalar or vector. This work focuses on forecasting a specific class of functional objects: probability density functions (pdfs). A key challenge in this setting arises from the fact that pdfs do not form a vector space, but instead reside in a convex subset of one, rendering standard functional time series techniques inapplicable. To address this, we explore a transformation approach that maps pdfs into a more suitable functional space, enabling the application of existing methods. The effectiveness of this approach is illustrated through an application in high frequency financial data.
 
-
 \textbf{Keywords}: Functional data analysis. Functional time series. Probability density functions. Forecasting. Karhunen-Loève expansion. 
 
-\newpage
+\end{otherlanguage*}
+\end{resumo}
 
-\tableofcontents
+% ---
+% ---
+% inserir lista de figuras
+% ---
+% \pdfbookmark[0]{\listfigurename}{lof}
+% \listoffigures*
+% \cleardoublepage
+% ---
+
+% ---
+% inserir lista de algoritmos
+% ---
+% \pdfbookmark[0]{\listalgorithmname}{loa}
+% \listofalgorithms
+% \cleardoublepage
+
+% ---
+% inserir lista de tabelas
+% ---
+% \pdfbookmark[0]{\listtablename}{lot}
+% \listoftables*
+% \cleardoublepage
+% ---
+
+% ---
+% inserir lista de abreviaturas e siglas
+% ---
+%-------------------------------------------------------------------------
+% Comentário adicional do PPgSI - Informações sobre ``Lista de abreviaturas 
+% e siglas'': 
+%
+% Opcional.
+% Uma vez que se deseja usar, é necessário manter padrão e consistência no
+% trabalho inteiro.
+% Se usar: inserir em ordem alfabética.
+%
+%-------------------------------------------------------------------------
+% \begin{siglas}
+%   \item[Sigla/abreviatura 1] Definição da sigla ou da abreviatura por extenso
+%   \item[Sigla/abreviatura 2] Definição da sigla ou da abreviatura por extenso
+%   \item[Sigla/abreviatura 3] Definição da sigla ou da abreviatura por extenso
+%   \item[Sigla/abreviatura 4] Definição da sigla ou da abreviatura por extenso
+%   \item[Sigla/abreviatura 5] Definição da sigla ou da abreviatura por extenso
+%   \item[Sigla/abreviatura 6] Definição da sigla ou da abreviatura por extenso
+%   \item[Sigla/abreviatura 7] Definição da sigla ou da abreviatura por extenso
+%   \item[Sigla/abreviatura 8] Definição da sigla ou da abreviatura por extenso
+%   \item[Sigla/abreviatura 9] Definição da sigla ou da abreviatura por extenso
+%   \item[Sigla/abreviatura 10] Definição da sigla ou da abreviatura por extenso
+% \end{siglas}
+% ---
+
+% ---
+% inserir lista de símbolos
+% ---
+%-------------------------------------------------------------------------
+% Comentário adicional do PPgSI - Informações sobre ``Lista de símbolos'': 
+%
+% Opcional.
+% Uma vez que se deseja usar, é necessário manter padrão e consistência no
+% trabalho inteiro.
+% Se usar: inserir na ordem em que aparece no texto.
+% 
+%-------------------------------------------------------------------------
+% \begin{simbolos}
+%   \item[$ \Gamma $] Letra grega Gama
+%   \item[$ \Lambda $] Lambda
+%   \item[$ \zeta $] Letra grega minúscula zeta
+%   \item[$ \in $] Pertence
+% \end{simbolos}
+% ---
+
+% ---
+% inserir o sumario
+% ---
+\pdfbookmark[0]{\contentsname}{toc}
+\tableofcontents*
+\cleardoublepage
+% ---
 
 
-\newpage
 
-\section{Introduction}
-\subsection{Density estimation}
-High-frequency trading (HFT) represents a significant evolution in modern financial markets, characterized by the execution of large volumes of trades at extremely high speeds, often within microseconds. In such an environment, the traditional assumptions of financial econometrics—such as normally distributed returns or independent and identically distributed (i.i.d.) increments—frequently break down. As a result, the \textit{specification of the probability density function (PDF)} governing price changes or returns becomes a foundational aspect of modeling, forecasting, and executing trades in HFT systems.
+% ----------------------------------------------------------
+% ELEMENTOS TEXTUAIS
+% ----------------------------------------------------------
+\textual
 
-PDF specification allows practitioners to move beyond point forecasts and assess the full range of possible future price realizations. This is particularly important in high-frequency contexts, where price changes are often small but frequent, and the tail behavior of the distribution can have outsized impacts on profitability and risk. Accurate modeling of PDFs aids in several key HFT tasks, including \textit{order placement}, \textit{market making}, \textit{liquidity provision}, and \textit{statistical arbitrage}.
 
-Empirical studies have shown that the distributions of high-frequency returns exhibit \textit{heavy tails}, \textit{volatility clustering}, and \textit{non-Gaussianity}, especially over very short horizons \citeonline{cont2001empirical}. Mischaracterizing these features can result in substantial model risk, leading to incorrect probability estimates and suboptimal execution. For instance, assuming normality in return distributions can underestimate the likelihood of large price swings, increasing exposure to adverse selection or sudden liquidity shocks.
 
-Various models have been proposed to better capture the observed dynamics of high-frequency data. Nonparametric and semiparametric methods, such as \textit{kernel density estimation} and \textit{mixture models}, offer flexibility in modeling the empirical PDF without overly restrictive distributional assumptions \citeonline{fan2003nonlinear}. On the parametric side, models based on \textit{generalized hyperbolic distributions} \citeonline{prause1999generalized}, \textit{$\alpha$-stable distributions} \citeonline{nolan2003modeling}, and \textit{autoregressive conditional duration (ACD)} models \citeonline{engle1998autoregressive} have been shown to provide better fits to high-frequency financial time series.
+%-------------------------------------------------------------------------
+% Comentário adicional do PPgSI - Informações sobre ``títulos de seções''
+% 
+% Para todos os títulos (seções, subseções, tabelas, ilustrações, etc):
+%
+% Em maiúscula apenas a primeira letra da sentença (do título), exceto 
+% nomes próprios, geográficos, institucionais ou Programas ou Projetos ou
+% siglas, os quais podem ter letras em maiúscula também.
+%
+%-------------------------------------------------------------------------
+\chapter{Introduction}
+\section{Context}
+High-frequency trading (HFT) represents a significant evolution in modern financial markets, characterized by the execution of large volumes of trades at extremely high speeds. In such an environment, traditional assumptions of financial econometrics—such as normally distributed returns or independent and identically distributed (i.i.d.) increments—frequently break down. As a result, the specification of the probability density function (PDF) governing price changes or returns becomes a foundational aspect of modeling, forecasting, and executing trades in HFT systems.
 
-In practical HFT systems, the real-time estimation of these PDFs is often embedded in algorithmic decision engines. For example, \textit{limit order placement algorithms} rely on an accurate forecast of the short-term price movement distribution to maximize expected fill rates while minimizing adverse selection risk \citeonline{cartea2015algorithmic}. Similarly, \textit{market-making strategies} use estimates of the conditional PDF to dynamically adjust bid-ask spreads based on the predicted volatility and direction of price changes.
+PDF specification allows practitioners to move beyond point forecasts and assess the full range of possible future price realizations. This is particularly important in high-frequency contexts, where price changes are often small but frequent, and the tail behavior of the distribution can have outsized impacts on profitability and risk. Accurate modeling of PDFs aids in several key HFT tasks, including order placement, market making, liquidity provision, and statistical arbitrage.
+
+Empirical studies have shown that the distributions of high-frequency returns exhibit heavy tails, volatility clustering, and non-Gaussianity, especially over very short horizons \cite{cont2001empirical}. Mischaracterizing these features can result in substantial model risk, leading to incorrect probability estimates and suboptimal execution. For instance, assuming normality in return distributions can underestimate the likelihood of large price swings, increasing exposure to adverse selection or sudden liquidity shocks.
+
+Various models have been proposed to better capture the observed dynamics of high-frequency data. Nonparametric and semiparametric methods, such as kernel density estimation and mixture models, offer flexibility in modeling the empirical PDF without overly restrictive distributional assumptions \cite{fan2003nonlinear}. On the parametric side, models based on generalized hyperbolic distributions \cite{prause1999generalized}, $\alpha$-stable distributions \cite{nolan2003modeling}, and autoregressive conditional duration (ACD) models \cite{engle1998autoregressive} have been shown to provide better fits to high-frequency financial time series.
+
+In practical HFT systems, the real-time estimation of these PDFs is often embedded in algorithmic decision engines. For example, limit order placement algorithms rely on an accurate forecast of the short-term price movement distribution to maximize expected fill rates while minimizing adverse selection risk \cite{cartea2015algorithmic}. Similarly, market-making strategies use estimates of the conditional PDF to dynamically adjust bid-ask spreads based on the predicted volatility and direction of price changes.
 
 Thus, the specification of the probability density function is not merely a statistical exercise, but a key driver of performance in high-frequency trading. It directly informs the risk-reward trade-offs of algorithmic strategies and serves as a bridge between quantitative modeling and microstructural market dynamics.
 
-\subsection{Compositional Data Analysis}
+\section{A glimpse into Functional Data Analysis}
+An alternative to this analysis is to interpret PDFs as a sequence of random functions, which would allow a researcher to forecast its value for a specific time horizon. This is where Functional Data Analysis (FDA), an extension from Multivariate Data Analysis (MDA), comes into play. First off, we may recall that Multivariate Data Analysis encompasses a collection of techniques designed to analyze data that arises from more than one variable. Unlike univariate or bivariate methods, MDA seeks to explore the structure and relationships that exist in datasets with multiple interdependent measurements, enabling a more comprehensive understanding of complex phenomena that are obserserved in fields such as biology, economics and finance. Techniques such as Principal Component Analysis \cite{pearson1901lines}, Factor Analysis, Cluster Analysis and Canonical Correlation \cite{hotelling1936relations} enable one to reduce dimensionality, detect latent structures, and model the joint distribution of variables.
+
+% Another key milestone was the introduction of \textit{Discriminant Analysis} by \citeonline{fisher1936use}, originally applied to distinguish between species of iris flowers using several morphological measurements. Fisher’s Linear Discriminant Analysis (LDA) laid the groundwork for modern supervised classification techniques. These early methods were implemented manually or with the help of mechanical calculators, and only became widespread with the advent of digital computers in the mid-20th century.
+
+% By the 1960s and 1970s, multivariate analysis had become a core statistical tool, with widespread adoption in psychology, sociology, and economics. Seminal textbooks, such as \citeonline{anderson1958introduction} and \citeonline{tatsuoka1971multivariate}, codified the theory and practice of MDA. Software implementations began emerging in statistical packages like SAS, SPSS, and later R, which enabled more complex analyses to be conducted more efficiently and at scale.
+
+% Today, multivariate analysis is a foundational aspect of data science, with modern extensions including machine learning models, multivariate time series, and high-dimensional data exploration. The ability to extract meaning from multiple correlated variables remains crucial across disciplines, underscoring the enduring value and relevance of the early contributions to multivariate data analysis.
+
+Functional Data Analysis, by its turn, is a statistical framework for analyzing data that can be represented by functions, curves, or trajectories over a continuum such as time, space, or frequency. Unlike traditional multivariate analysis, which handles data as finite-dimensional vectors, FDA treats each observation as a function, often lying in an infinite-dimensional Hilbert space. This perspective is especially useful for studying processes that evolve continuously, such as temperature records, electroencephalogram (EEG) signals or financial intraday returns.
+
+% The emergence of FDA stems from the realization that many scientific and engineering datasets are best understood when their underlying smooth structure is preserved rather than discretized. Functional data techniques provide tools for smoothing, registering, comparing, and modeling such curves \citeonline{ramsay2005functional}.
+
+The foundational developments in FDA began with the pioneering work of \citeonline{ramsay1982fitting}, who introduced spline smoothing techniques for curve estimation. In their influential texts, \citeonline{ramsay2005functional} and \citeonline{ferraty2006nonparametric} developed a unified theory that encompasses functional principal component analysis (FPCA), functional regression, and clustering of functional observations.
+
+One of the earliest practical applications of FDA was in growth curve analysis, where children’s height measurements taken at different ages were analyzed as smooth trajectories \cite{ramsay1991some}. Since then, FDA has seen widespread use in meteorology, biomechanics, and econometrics. Some modern extensions now integrate FDA with machine learning and time series models.
+
+The core challenge in FDA lies in adapting classical statistical techniques to infinite-dimensional spaces. This requires tools from functional analysis, such as basis function expansions (e.g., splines, Fourier, wavelets), and the use of inner product structures for defining distances and covariances between functions. These methods enable dimension reduction (via FPCA), classification, hypothesis testing, and regression in the functional domain. For some clarification,
+
+\begin{definition}
+Let \( V \) be a vector space over a field \( \mathbb{K} \), where \( \mathbb{K} \) is either \( \mathbb{R} \) or \( \mathbb{C} \). An \textbf{inner product} on \( V \) is a function
+\[
+\langle \cdot, \cdot \rangle : V \times V \to \mathbb{K}
+\]
+that satisfies the following properties for all \( u, v, w \in V \) and all scalars \( \alpha \in \mathbb{K} \):
+
+\begin{enumerate}
+    \item Conjugate symmetry: \( \langle u, v \rangle = \overline{\langle v, u \rangle} \)
+    \item Linearity in the first argument: \( \langle \alpha u + w, v \rangle = \alpha \langle u, v \rangle + \langle w, v \rangle \)
+    \item Positive-definiteness: \( \langle v, v \rangle \geq 0 \), with equality if and only if \( v = 0 \)
+\end{enumerate}
+\end{definition}
+
+\begin{definition}[Hilbert Space]
+A \textbf{Hilbert space} is a vector space \( \mathcal{H} \) over \( \mathbb{K} \) equipped with an inner product \( \langle \cdot, \cdot \rangle \), such that \( \mathcal{H} \) is complete with respect to the norm induced by the inner product
+\[
+\|v\| = \sqrt{\langle v, v \rangle},
+\]
+that is, every Cauchy sequence\footnote{A sequence \( \{v_n\} \) in a metric space \( \mathcal{H} \) is called a \textit{Cauchy sequence} if for every \( \epsilon > 0 \), there exists an integer \( N \) such that for all \( m, n \geq N \), we have \( \| v_n - v_m \| < \epsilon \).} in \( \mathcal{H} \)  converges to a limit in \( \mathcal{H} \).
+\end{definition}
+
+% With the rise of high-frequency and longitudinal data in numerous fields, FDA continues to grow in relevance, offering a mathematically rich and practically effective framework for analyzing complex, smooth data structures.
+
+%%%%%% FUNCTIONAL TIME SERIES
+
+Further, if we consider each of the curves to be time-dependent, we obtain a \emph{functional time series} (FTS) object, which is simply a sequence of random functions indexed by time. Each observation in the series is a function, typically lying in an infinite-dimensional function space. In this case, let $\mathcal{H}$ be the separable Hilbert space $L^2(\mathcal{I})$, the space of square-integrable functions on a compact interval $\mathcal{I} \subseteq \mathbb{R}$, equipped with the inner product
+\[
+\langle f, g \rangle = \int_{\mathcal{T}} f(t) g(t) \, dt,
+\]
+and the associated norm $\|f\| = \sqrt{\langle f, f \rangle}$.
+
+% A \emph{functional time series} is a sequence of $\mathcal{H}$-valued random variables $\{X_t\}_{t \in \mathbb{Z}}$, where each $X_t$ is a random element of $\mathcal{H}$, i.e.,
+% \[
+% X_t : \Omega \to \mathcal{H}, \quad t \in \mathbb{Z}.
+% \]
+
+% A functional time series $\{X_t\}_{t \in \mathbb{Z}}$ is said to be \textbf{Mean-square continuous} if $\mathbb{E}\|X_t\|^2 < \infty$ for all $t$; \textbf{Second-order stationary} if the mean function $\mu(t) := \mathbb{E}[X_t]$ is constant over time and the autocovariance operator 
+%     \[
+%     \Gamma_h = \text{Cov}(X_{t+h}, X_t) = \mathbb{E}[(X_{t+h} - \mu) \otimes (X_t - \mu)]
+%     \]
+%     depends only on the lag $h$, where $\otimes$ denotes the tensor product.
+
+
+% Functional Time Series (FTS) analysis is a modern statistical framework developed to handle data that are naturally viewed as functions observed over time. Unlike traditional time series models that deal with scalar or finite-dimensional vector observations, FTS methods treat each observation as a real-valued function, typically defined on a compact interval. This functional approach allows for the modeling of complex dynamic phenomena where each data point is an entire curve, such as daily temperature curves, intraday financial returns, or spectrometric curves.
+
+A foundational treatment of linear models for functional data was provided by \citeonline{bosq2000linear}, who developed autoregressive models in a Hilbert space setting, laying the groundwork for many later developments in the field. His approach enabled the extension of classical time series concepts like stationarity and autocorrelation to the infinite-dimensional setting. This leads to a possibility of forecasting objects like PDFs, but some caveats related to the nature of this type of data must be considered. 
+
+% Subsequent research has addressed various aspects of FTS, such as model assessment and estimation. \citeonline{hall2006assessing} introduced diagnostic tools and inference procedures for assessing the adequacy of functional time series models, emphasizing the importance of model checking in high-dimensional settings. Their work underscored the challenges posed by the infinite-dimensional nature of the data and proposed practical solutions for effective model validation.
+
+% \citeonline{bathia2010identifying} focused on identifying and estimating finite-dimensional dynamic structures in functional time series, addressing the issue of dimensionality reduction while preserving temporal dependence. Their methodology enables the recovery of dynamic factors that drive the functional observations over time, thus facilitating interpretable modeling and forecasting.
+
+% \citeonline{aue2015prediction} advanced the field further by developing predictive methods for FTS, including linear prediction theory and associated estimation techniques. Their work provided both theoretical guarantees and practical algorithms for functional time series forecasting, which is a central goal in many applications.
+
+% Together, these contributions form a robust theoretical and methodological foundation for the analysis and prediction of functional data observed over time, making Functional Time Series a vibrant and evolving area of research in modern statistics.
+
+\section{Compositional Data Analysis}
 Compositional data (CoDa) are multivariate observations conveying relative information, typically represented as vectors with strictly positive components summing to a constant, usually one or 100\% \cite{aitchison1982statistical}. Such data arise naturally in diverse disciplines, including geology (e.g., mineral compositions), economics (e.g., market shares), biology (e.g., proportions of species in ecological samples), and medicine (e.g., time-use or microbiome data).
 
 Classical multivariate statistical techniques often fail to appropriately handle the specific properties of compositional data due to the constant-sum constraint and the inherent relative scale of the data. As a consequence, applying standard techniques directly to raw compositional data can lead to misleading results \cite{pawlowsky2015modelling}.
@@ -99,7 +802,7 @@ The simplex, denoted as $\mathcal{S}^D = \left\{ \mathbf{x} = (x_1, \ldots, x_D)
 
 In recent years, CoDa methodology has seen significant advancements, particularly in its integration with functional data analysis, machine learning, and Bayesian inference \cite{van2013analyzing,greenacre2018compositional}. These developments have broadened the applicability of CoDa tools to more complex data structures, such as longitudinal compositional data or high-dimensional microbiome datasets.
 
-This paper introduces the theoretical basis and methodological framework of CoDa, with emphasis on log-ratio transformations and the geometry of the simplex, providing a foundation for the application and development of compositional techniques in applied scientific research.
+% This paper introduces the theoretical basis and methodological framework of CoDa, with emphasis on log-ratio transformations and the geometry of the simplex, providing a foundation for the application and development of compositional techniques in applied scientific research.
 
 
 An important and growing extension of CoDa is its adaptation to probability density functions (PDFs), which share a key compositional property: they are non-negative and integrate to one. This extension is formally developed within the framework of \textit{Bayes spaces}, where PDFs are treated as infinite-dimensional compositional objects \cite{egozcue2006hilbert}. The centered log-ratio (clr) transformation is generalized to functions, allowing PDFs to be analyzed in a Hilbert space endowed with the Aitchison geometry. For a density $f(x)$ defined on a compact support $I$, the clr transform is given by
@@ -110,73 +813,7 @@ which maps $f$ into a real-valued function with zero integral.
 
 This perspective enables the application of functional principal component analysis (fPCA), clustering, and regression directly to probability densities, and has found applications in various domains including electricity demand modeling \cite{delicado2011compositional}, Bayesian model assessment, and compositional inference in medical statistics \cite{talska2018principal}.
 
-This paper introduces the theoretical basis and methodological framework of CoDa, with emphasis on log-ratio transformations, the geometry of the simplex, and their extension to the analysis of probability density functions.
-
-
-\subsection{A glimpse into Functional Data Analysis}
-In the realm of statistics and data science, \textit{Multivariate Data Analysis} (MDA) encompasses a collection of techniques designed to analyze data that arises from more than one variable. Unlike univariate or bivariate methods, MDA seeks to explore the structure and relationships that exist in datasets with multiple interdependent measurements, enabling a more comprehensive understanding of complex phenomena. These methods are particularly valuable in fields such as psychology, biology, finance, marketing, and social sciences, where multivariate observations are the norm rather than the exception.
-
-The foundation of MDA lies in the recognition that many real-world processes are inherently multidimensional. For example, in market research, a consumer's preferences might be influenced by price, quality, brand perception, and peer opinion simultaneously. Analyzing each of these dimensions independently would obscure the relationships among them. MDA techniques, such as \textit{Principal Component Analysis (PCA)}, \textit{Factor Analysis}, \textit{Discriminant Analysis}, \textit{Cluster Analysis}, and \textit{Canonical Correlation}, enable researchers to reduce dimensionality, classify observations, detect latent structures, and model the joint distribution of variables.
-
-The formal development of MDA began in the early 20th century, parallel to advancements in linear algebra and matrix theory. One of the earliest and most influential contributions was \textit{Principal Component Analysis} formulated by \citeonline{pearson1901lines}, which aimed to reduce the dimensionality of a dataset while preserving as much variance as possible. Later, \citeonline{hotelling1936relations} introduced \textit{Canonical Correlation Analysis}, establishing a framework to examine relationships between two sets of variables.
-
-Another key milestone was the introduction of \textit{Discriminant Analysis} by \citeonline{fisher1936use}, originally applied to distinguish between species of iris flowers using several morphological measurements. Fisher’s Linear Discriminant Analysis (LDA) laid the groundwork for modern supervised classification techniques. These early methods were implemented manually or with the help of mechanical calculators, and only became widespread with the advent of digital computers in the mid-20th century.
-
-By the 1960s and 1970s, multivariate analysis had become a core statistical tool, with widespread adoption in psychology, sociology, and economics. Seminal textbooks, such as \citeonline{anderson1958introduction} and \citeonline{tatsuoka1971multivariate}, codified the theory and practice of MDA. Software implementations began emerging in statistical packages like SAS, SPSS, and later R, which enabled more complex analyses to be conducted more efficiently and at scale.
-
-Today, multivariate analysis is a foundational aspect of data science, with modern extensions including machine learning models, multivariate time series, and high-dimensional data exploration. The ability to extract meaning from multiple correlated variables remains crucial across disciplines, underscoring the enduring value and relevance of the early contributions to multivariate data analysis.
-
-Functional Data Analysis (FDA) is a statistical framework for analyzing data that can be represented by functions, curves, or trajectories over a continuum such as time, space, or frequency. Unlike traditional multivariate analysis, which handles data as finite-dimensional vectors, FDA treats each observation as a function, often lying in an infinite-dimensional Hilbert space. This perspective is especially useful for studying processes that evolve continuously, such as temperature records, financial intraday returns, electroencephalogram (EEG) signals, or movement trajectories.
-
-The emergence of FDA stems from the realization that many scientific and engineering datasets are best understood when their underlying smooth structure is preserved rather than discretized. For example, in biomedical sciences, a patient’s heart rate over time is more naturally modeled as a curve rather than a collection of individual measurements. Functional data techniques provide tools for smoothing, registering, comparing, and modeling such curves \citeonline{ramsay2005functional}.
-
-The foundational developments in FDA began in the late 20th century, notably with the pioneering work of \citeonline{ramsay1982fitting}, who introduced spline smoothing techniques for curve estimation. This was followed by a broader formalization of FDA as a distinct statistical discipline in the early 1990s and 2000s. In their influential texts, \citeonline{ramsay2005functional} and \citeonline{ferraty2006nonparametric} developed a unified theory that encompasses functional principal component analysis (FPCA), functional regression, and clustering of functional observations.
-
-One of the earliest practical applications of FDA was in growth curve analysis, where children’s height measurements taken at different ages were analyzed as smooth trajectories \citeonline{ramsay1991some}. Since then, FDA has seen widespread use in meteorology, chemometrics, biomechanics, and econometrics. Modern extensions now integrate FDA with machine learning, time series models, and high-dimensional statistics.
-
-The core challenge in FDA lies in adapting classical statistical techniques to infinite-dimensional spaces. This requires tools from functional analysis, such as basis function expansions (e.g., splines, Fourier, wavelets), and the use of inner product structures for defining distances and covariances between functions. These methods enable dimension reduction (via FPCA), classification, hypothesis testing, and regression in the functional domain.
-
-With the rise of high-frequency and longitudinal data in numerous fields, FDA continues to grow in relevance, offering a mathematically rich and practically effective framework for analyzing complex, smooth data structures.
-
-%%%%%% FUNCTIONAL TIME SERIES
-
-% \citeonline{hall2006assessing},
-% \citeonline{bathia2010identifying},
-% \citeonline{aue2015prediction},
-% \citeonline{bosq2000linear}
-
-
-Functional data analysis (FDA) is a branch of statistics that deals with data providing information about curves, surfaces or anything else varying over a continuum. In this context, a \emph{functional time series} (FTS) is a sequence of random functions indexed by time. Each observation in the series is a function, typically lying in an infinite-dimensional function space, such as $L^2(\mathcal{T})$ for some compact interval $\mathcal{T} \subset \mathbb{R}$.
-
-Let $\mathcal{H}$ be a separable Hilbert space, typically taken to be $\mathcal{H} = L^2(\mathcal{T})$, the space of square-integrable functions on a compact interval $\mathcal{T} \subset \mathbb{R}$, equipped with the inner product
-\[
-\langle f, g \rangle = \int_{\mathcal{T}} f(t) g(t) \, dt,
-\]
-and the associated norm $\|f\| = \sqrt{\langle f, f \rangle}$.
-
-A \emph{functional time series} is a sequence of $\mathcal{H}$-valued random variables $\{X_t\}_{t \in \mathbb{Z}}$, where each $X_t$ is a random element of $\mathcal{H}$, i.e.,
-\[
-X_t : \Omega \to \mathcal{H}, \quad t \in \mathbb{Z}.
-\]
-
-A functional time series $\{X_t\}_{t \in \mathbb{Z}}$ is said to be \textbf{Mean-square continuous} if $\mathbb{E}\|X_t\|^2 < \infty$ for all $t$; \textbf{Second-order stationary} if the mean function $\mu(t) := \mathbb{E}[X_t]$ is constant over time and the autocovariance operator 
-    \[
-    \Gamma_h = \text{Cov}(X_{t+h}, X_t) = \mathbb{E}[(X_{t+h} - \mu) \otimes (X_t - \mu)]
-    \]
-    depends only on the lag $h$, where $\otimes$ denotes the tensor product.
-
-
-Functional Time Series (FTS) analysis is a modern statistical framework developed to handle data that are naturally viewed as functions observed over time. Unlike traditional time series models that deal with scalar or finite-dimensional vector observations, FTS methods treat each observation as a real-valued function, typically defined on a compact interval. This functional approach allows for the modeling of complex dynamic phenomena where each data point is an entire curve, such as daily temperature curves, intraday financial returns, or spectrometric curves.
-
-A foundational treatment of linear models for functional data was provided by \citeonline{bosq2000linear}, who developed autoregressive models in a Hilbert space setting, laying the groundwork for many later developments in the field. His approach enabled the extension of classical time series concepts like stationarity and autocorrelation to the infinite-dimensional setting.
-
-Subsequent research has addressed various aspects of FTS, such as model assessment and estimation. \citeonline{hall2006assessing} introduced diagnostic tools and inference procedures for assessing the adequacy of functional time series models, emphasizing the importance of model checking in high-dimensional settings. Their work underscored the challenges posed by the infinite-dimensional nature of the data and proposed practical solutions for effective model validation.
-
-\citeonline{bathia2010identifying} focused on identifying and estimating finite-dimensional dynamic structures in functional time series, addressing the issue of dimensionality reduction while preserving temporal dependence. Their methodology enables the recovery of dynamic factors that drive the functional observations over time, thus facilitating interpretable modeling and forecasting.
-
-\citeonline{aue2015prediction} advanced the field further by developing predictive methods for FTS, including linear prediction theory and associated estimation techniques. Their work provided both theoretical guarantees and practical algorithms for functional time series forecasting, which is a central goal in many applications.
-
-Together, these contributions form a robust theoretical and methodological foundation for the analysis and prediction of functional data observed over time, making Functional Time Series a vibrant and evolving area of research in modern statistics.
+% This paper introduces the theoretical basis and methodological framework of CoDa, with emphasis on log-ratio transformations, the geometry of the simplex, and their extension to the analysis of probability density functions.
 
 
 % Trabalhos iniciais (ex Ramsay).
@@ -185,27 +822,29 @@ Together, these contributions form a robust theoretical and methodological found
 
 % \subsection{Functional Time Series}
 
-\section{Goal}
+\chapter{Goal}
 The main goal of this work is to assess the viability of forecasting functional time series that inherently carry relative information. Specifically, the functional observations are probability density functions, which are subject to the following constraints by definition:
-
-Proposition: Let $f_X(x)$ denote the density function of a continuous random variable X,  defined on the probability space $(\Omega, \mathbb{F}, \mathbb{P})$. Then $f_X(x)$ satisfies
+\begin{proposition}
+Let $f_X(x)$ denote the density function of a continuous random variable X,  defined on the probability space $(\Omega, \mathbb{F}, \mathbb{P})$. Then $f_X(x)$ satisfies
 \begin{enumerate}
     \item $f_X(x)\geq0$, for all $x$ in $\mathbb{R}$
     \item $\int_{-\infty}^{\infty}f(w)dw=1$
 \end{enumerate}
+    
+\end{proposition}
 
-Namely, the objectives are:
+The precise objectives are to
 \begin{enumerate}
     \item Perform a data analysis step of the time series subject to the study;
     \item Evaluate the decomposition of objects;
     \item Find the best time series model fitting to the principal component scores;
     \item Obtain a set of forecast values for the probability density functions;
-    \item Compare the accuracy of the model with other state-of-the-art methods.
+    \item Compare the accuracy of the model with other state-of-the-art methods in a risk management context.
 \end{enumerate}
 
 
 
-\section{Literature Review}
+\chapter{Literature Review}
 
 
 
@@ -267,14 +906,14 @@ This structure turns $S^D$ into a real Hilbert space under the operations $\oplu
 
 % Introdução a FDA: \citeonline{dabo2024uncovering}.
 
-\citeonline{aue2015prediction},\citeonline{bathia2010identifying}, \citeonline{benko2009common}, \citeonline{besse1986principal}, \citeonline{bosq2000linear}, \citeonline{dabo2008functional}, \citeonline{dauxois1982asymptotic}, \citeonline{ferraty2003curves}, \citeonline{hall2006assessing}, \citeonline{ferraty2006nonparametric}, \citeonline{horta2018dynamics}, \citeonline{hron2016simplicial}, \citeonline{muller1998heavy}, \citeonline{petersen2016functional}, \citeonline{ramsay1991some}, \citeonline{ramsay2002applied}, \citeonline{ramsay2005functional}, \citeonline{ramsay2009FDAwithR}
+% \citeonline{aue2015prediction},\citeonline{bathia2010identifying}, \citeonline{benko2009common}, \citeonline{besse1986principal}, \citeonline{bosq2000linear}, \citeonline{dabo2008functional}, \citeonline{dauxois1982asymptotic}, \citeonline{ferraty2003curves}, \citeonline{hall2006assessing}, \citeonline{ferraty2006nonparametric}, \citeonline{horta2018dynamics}, \citeonline{hron2016simplicial}, \citeonline{muller1998heavy}, \citeonline{petersen2016functional}, \citeonline{ramsay1991some}, \citeonline{ramsay2002applied}, \citeonline{ramsay2005functional}, \citeonline{ramsay2009FDAwithR}
 
-\section{Framework}
+\chapter{Framework}
 
-First, we might define some useful concepts used in most work about functional time series. 
+First, we might define some useful concepts used in most works about functional time series. 
 
 \begin{definition}
-Let \( X(t) \), \( t \in \mathcal{T} \subset \mathbb{R} \), be a square-integrable stochastic process with mean function \( \mu(t) = \mathbb{E}[X(t)] \) and covariance function 
+Let \( X(t) \), \( t \in \mathcal{T} \subseteq \mathbb{R} \), be a square-integrable stochastic process with mean function \( \mu(t) = \mathbb{E}[X(t)] \) and covariance function 
 \begin{equation}
 C(s, t) = \text{Cov}(X(s), X(t)) = \mathbb{E}[(X(s) - \mu(s))(X(t) - \mu(t))].
 \end{equation}
@@ -317,17 +956,17 @@ But when we're dealing with probability functions, we cannot use standard tools 
 
 \citeonline{petersen2016functional}, also considering the inherent constraints of densities, thought of a mapping into into a Hilbert space through a continuous and invertible map.
 
-\begin{theorem}
-This is the first theorem.
-\end{theorem}
+% \begin{theorem}
+% This is the first theorem.
+% \end{theorem}
 
-\begin{lemma}
-This is a lemma that follows the theorem.
-\end{lemma}
+% \begin{lemma}
+% This is a lemma that follows the theorem.
+% \end{lemma}
 
-\begin{definition}
-This is a definition related to the previous results.
-\end{definition}
+% \begin{definition}
+% This is a definition related to the previous results.
+% \end{definition}
 
 \begin{definition}
 In the theory of random processes, a sequence $\{ X_n \}_{n=1}^{\infty}$ is said to be $\psi$-mixing if the dependence between past and future events decreases as they become further apart in time, according to a specific mixing coefficient.
@@ -361,7 +1000,7 @@ The associated norm is:
 
 The Wasserstein metric, also known as the Earth Mover's Distance (EMD), is a distance function defined between probability distributions on a given metric space. It arises naturally in optimal transport theory, where the goal is to quantify the "cost" of transporting mass from one distribution to another.
 
-Let $(\mathcal{X}, d)$ be a Polish metric space (i.e., a complete separable metric space), and let $\mathcal{P}_p(\mathcal{X})$ denote the space of Borel probability measures on $\mathcal{X}$ with finite $p$-th moment, defined as:
+Let $(\mathcal{X}, d)$ be a complete separable metric space, and let $\mathcal{P}_p(\mathcal{X})$ denote the space of Borel probability measures on $\mathcal{X}$ with finite $p$-th moment, defined as:
 \[
 \mathcal{P}_p(\mathcal{X}) = \left\{ \mu \in \mathcal{P}(\mathcal{X}) \; \middle| \; \int_{\mathcal{X}} d(x_0, x)^p \, d\mu(x) < \infty \text{ for some } x_0 \in \mathcal{X} \right\}.
 \]
@@ -372,13 +1011,13 @@ W_p(\mu, \nu) = \left( \inf_{\pi \in \Pi(\mu, \nu)} \int_{\mathcal{X} \times \ma
 \]
 where $\Pi(\mu, \nu)$ denotes the set of all couplings of $\mu$ and $\nu$, i.e., all probability measures on $\mathcal{X} \times \mathcal{X}$ with marginals $\mu$ and $\nu$.
 
-The Wasserstein metric has gained significant attention in statistics, machine learning, and functional data analysis due to its meaningful geometric structure and robustness to small perturbations in distributions. In particular, it provides a powerful tool for comparing empirical distributions and studying convergence properties in probabilistic settings.
+% The Wasserstein metric has gained significant attention in statistics, machine learning, and functional data analysis due to its meaningful geometric structure and robustness to small perturbations in distributions. In particular, it provides a powerful tool for comparing empirical distributions and studying convergence properties in probabilistic settings.
 
 % \subsection{Estimação de densidade}
-\section{Data analysis}
+\chapter{Data analysis}
 % \subsubsection{Análise exploratória}
 
-\section{Results}
+\chapter{Results}
 
 % \section{Considerações finais}
 
@@ -388,12 +1027,18 @@ The Wasserstein metric has gained significant attention in statistics, machine l
 
 \newpage
 \bibliographystyle{abntex2-alf}
-\bibliography{references}
+\bibliography{referencias}
 
 \newpage
-\section{Apêndice}
-\subsection{Figuras}
-\subsection{Tabelas}
+\chapter{Apêndice}
+\section{Figuras}
+\section{Tabelas}
 
+%---------------------------------------------------------------------
+% INDICE REMISSIVO
+%---------------------------------------------------------------------
+%%%%%MF\phantompart
+%%%%%MF\printindex
+%---------------------------------------------------------------------
 
 \end{document}
