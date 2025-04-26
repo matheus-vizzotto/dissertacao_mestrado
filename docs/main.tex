@@ -93,6 +93,7 @@
 \newtheorem{lemma}{Lemma}     % Lemmas have their own numbering
 \newtheorem{definition}{Definition}
 \newtheorem{proposition}{Proposition} 
+\newtheorem{example}{Example} 
 \usepackage[bottom=0.5cm]{geometry}
 
 % --- 
@@ -792,26 +793,112 @@ A foundational treatment of linear models for functional data was provided by \c
 % Together, these contributions form a robust theoretical and methodological foundation for the analysis and prediction of functional data observed over time, making Functional Time Series a vibrant and evolving area of research in modern statistics.
 
 \section{Compositional Data Analysis}
-Compositional data (CoDa) are multivariate observations conveying relative information, typically represented as vectors with strictly positive components summing to a constant, usually one or 100\% \cite{aitchison1982statistical}. Such data arise naturally in diverse disciplines, including geology (e.g., mineral compositions), economics (e.g., market shares), biology (e.g., proportions of species in ecological samples), and medicine (e.g., time-use or microbiome data).
+Compositional data (CoDa) are multivariate observations conveying relative information, typically represented as vectors with strictly positive components summing to a constant like 1 or 100\% \cite{aitchison1982statistical}. Such data arise naturally in diverse disciplines, but are specially related to the context of this research since we are dealing with probability measures.
 
-Classical multivariate statistical techniques often fail to appropriately handle the specific properties of compositional data due to the constant-sum constraint and the inherent relative scale of the data. As a consequence, applying standard techniques directly to raw compositional data can lead to misleading results \cite{pawlowsky2015modelling}.
-
-Aitchison's pioneering work \cite{aitchison1986statistical} laid the foundation for the modern statistical treatment of compositional data. He introduced the use of log-ratio transformations, such as the centered log-ratio (clr), additive log-ratio (alr), and isometric log-ratio (ilr) transformations, to enable the application of standard statistical tools in an appropriate transformed space. These transformations map the data from the simplex (the sample space of compositions) to real Euclidean space, facilitating analysis while preserving the essential relative information.
+Classical multivariate statistical techniques often fail to appropriately handle the specific properties of compositional data due to the constant-sum constraint and the inherent relative scale of the data. As a consequence, applying standard techniques directly to raw compositional data can lead to misleading results \cite{pawlowsky2015modelling}. Aitchison's work \cite{aitchison1986statistical} laid the foundation for the modern statistical treatment this problem. He introduced the use of log-ratio transformations, such as the centered log-ratio (clr), additive log-ratio (alr), and isometric log-ratio (ilr) transformations, to enable the application of standard statistical tools in an appropriate transformed space. These transformations map the data from the simplex (the sample space of compositions) to real Euclidean space, facilitating analysis while preserving the essential relative information.
 
 The simplex, denoted as $\mathcal{S}^D = \left\{ \mathbf{x} = (x_1, \ldots, x_D) \in \mathbb{R}^D_{>0} : \sum_{i=1}^D x_i = \kappa \right\}$, where $\kappa$ is a positive constant (typically 1 or 100), serves as the sample space for compositional data \cite{egozcue2003isometric}. A key aspect of CoDa is the use of the Aitchison geometry on the simplex, which redefines operations such as perturbation (compositionally meaningful addition) and powering (compositionally meaningful scalar multiplication).
 
-In recent years, CoDa methodology has seen significant advancements, particularly in its integration with functional data analysis, machine learning, and Bayesian inference \cite{van2013analyzing,greenacre2018compositional}. These developments have broadened the applicability of CoDa tools to more complex data structures, such as longitudinal compositional data or high-dimensional microbiome datasets.
+% In recent years, CoDa methodology has seen significant advancements, particularly in its integration with functional data analysis, machine learning, and Bayesian inference \cite{van2013analyzing,greenacre2018compositional}. These developments have broadened the applicability of CoDa tools to more complex data structures, such as longitudinal compositional data or high-dimensional microbiome datasets.
 
 % This paper introduces the theoretical basis and methodological framework of CoDa, with emphasis on log-ratio transformations and the geometry of the simplex, providing a foundation for the application and development of compositional techniques in applied scientific research.
+% \subsection{Simplex}
+
+% The $D$-part \textit{simplex} is defined as:
+% \[
+% \mathcal{S}^D = \left\{ \mathbf{x} = (x_1, \dots, x_D) \in \mathbb{R}^D \ : \ x_i > 0 \ \forall i, \quad \sum_{i=1}^D x_i = \kappa \right\},
+% \]
+% where $\kappa > 0$ is a constant (typically $\kappa = 1$).
+
+% Each $\mathbf{x} \in \mathcal{S}^D$ is called a \textit{composition}.
+
+% \subsection{Equivalence Principle}
+
+% Two compositions $\mathbf{x}, \mathbf{y} \in \mathcal{S}^D$ are said to be \textit{equivalent} if:
+% \[
+% \exists \ \lambda > 0 \text{ such that } \mathbf{y} = \lambda \mathbf{x}.
+% \]
+% Multiplying all components by a positive constant does not change the relative information.
+
+% \subsection{Perturbation}
+
+% The \textit{perturbation} operation in $\mathcal{S}^D$ is defined as:
+% \[
+% \mathbf{x} \oplus \mathbf{y} = \mathcal{C}(x_1 y_1, \dots, x_D y_D),
+% \]
+% where $\mathcal{C}(\cdot)$ denotes the \textit{closure operation}:
+% \[
+% \mathcal{C}(z_1, \dots, z_D) = \left( \frac{z_1}{\sum_{i=1}^D z_i}, \dots, \frac{z_D}{\sum_{i=1}^D z_i} \right).
+% \]
+
+% \subsection{Aitchison Geometry}
+
+% The simplex $\mathcal{S}^D$ can be endowed with an inner product, a norm, and a distance.
+
+% The \textit{Aitchison inner product} between two compositions $\mathbf{x}, \mathbf{y} \in \mathcal{S}^D$ is:
+% \[
+% \langle \mathbf{x}, \mathbf{y} \rangle_A = \frac{1}{2D} \sum_{i=1}^D \sum_{j=1}^D \log\left(\frac{x_i}{x_j}\right) \log\left(\frac{y_i}{y_j}\right).
+% \]
+% The associated \textit{Aitchison norm} is:
+% \[
+% \|\mathbf{x}\|_A = \sqrt{ \langle \mathbf{x}, \mathbf{x} \rangle_A }.
+% \]
+% The \textit{Aitchison distance} between $\mathbf{x}$ and $\mathbf{y}$ is:
+% \[
+% d_A(\mathbf{x}, \mathbf{y}) = \|\log(\mathbf{x}) - \log(\mathbf{y})\|_A,
+% \]
+% where $\log(\mathbf{x}) = (\log(x_1), \dots, \log(x_D))$.
+
+% \section{Main Transformations}
+
+% \subsection{Centered Log-Ratio (clr) Transformation}
+
+% The \textit{clr transformation} is defined as:
+% \[
+% \text{clr}(\mathbf{x}) = \left( \log\left( \frac{x_1}{g(\mathbf{x})} \right), \dots, \log\left( \frac{x_D}{g(\mathbf{x})} \right) \right),
+% \]
+% where $g(\mathbf{x})$ is the \textit{geometric mean}:
+% \[
+% g(\mathbf{x}) = \left( \prod_{i=1}^D x_i \right)^{1/D}.
+% \]
+% Note: the clr-transformed data lie in a hyperplane of $\mathbb{R}^D$ because their components sum to zero.
+
+% \subsection{Isometric Log-Ratio (ilr) Transformation}
+
+% The \textit{ilr transformation} maps a composition into $\mathbb{R}^{D-1}$ through an orthonormal basis. It takes the form:
+% \[
+% \text{ilr}(\mathbf{x}) = (z_1, \dots, z_{D-1}),
+% \]
+% where each $z_j$ is a log-contrast (linear combination of logarithms of ratios between parts).
+
+% The ilr transformation preserves distances (the Aitchison distance becomes the Euclidean distance).
+
+% \section{Key Results}
+
+% \begin{itemize}
+%     \item \textbf{Fundamental principle:} Only ratios between components matter; absolute values are irrelevant.
+%     \item \textbf{Subcompositional coherence:} Analyses must be coherent whether on the full composition or a subcomposition.
+%     \item \textbf{Use of ilr coordinates:} After ilr transformation, standard multivariate techniques can be applied.
+%     \item \textbf{Caution:} Directly applying standard methods on raw compositional data (ignoring the simplex structure) leads to spurious results.
+% \end{itemize}
+
+% \section{References}
+
+% \begin{itemize}
+%     \item Aitchison, J. (1986). \textit{The Statistical Analysis of Compositional Data}. Chapman \& Hall.
+%     \item Pawlowsky-Glahn, V., Egozcue, J. J., \& Tolosana-Delgado, R. (2015). \textit{Modeling and Analysis of Compositional Data}. Wiley.
+%     \item van den Boogaart, K. G., \& Tolosana-Delgado, R. (2013). \textit{Analyzing Compositional Data with R}. Springer.
+% \end{itemize}
 
 
-An important and growing extension of CoDa is its adaptation to probability density functions (PDFs), which share a key compositional property: they are non-negative and integrate to one. This extension is formally developed within the framework of \textit{Bayes spaces}, where PDFs are treated as infinite-dimensional compositional objects \cite{egozcue2006hilbert}. The centered log-ratio (clr) transformation is generalized to functions, allowing PDFs to be analyzed in a Hilbert space endowed with the Aitchison geometry. For a density $f(x)$ defined on a compact support $I$, the clr transform is given by
-\[
-\text{clr}(f)(x) = \log(f(x)) - \frac{1}{|I|} \int_I \log(f(t))\,dt,
-\]
-which maps $f$ into a real-valued function with zero integral.
+An important and growing extension of CoDa is its adaptation to probability density functions (PDFs), which share a key compositional property: they are non-negative and integrate to one. This extension is formally developed within the framework of \textit{Bayes spaces}, where PDFs are treated as infinite-dimensional compositional objects \cite{egozcue2006hilbert}. The centered log-ratio (clr) transformation is generalized to functions, allowing PDFs to be analyzed in a Hilbert space endowed with the Aitchison geometry. 
+% For a density $f(x)$ defined on a compact support $I$, the clr transform is given by
+% \[
+% \text{clr}(f)(x) = \log(f(x)) - \frac{1}{|I|} \int_I \log(f(t))\,dt,
+% \]
+% which maps $f$ into a real-valued function with zero integral.
 
-This perspective enables the application of functional principal component analysis (fPCA), clustering, and regression directly to probability densities, and has found applications in various domains including electricity demand modeling \cite{delicado2011compositional}, Bayesian model assessment, and compositional inference in medical statistics \cite{talska2018principal}.
+% This perspective enables the application of functional principal component analysis (fPCA), clustering, and regression directly to probability densities, and has found applications in various domains including electricity demand modeling \cite{delicado2011compositional}, Bayesian model assessment, and compositional inference in medical statistics \cite{talska2018principal}.
 
 % This paper introduces the theoretical basis and methodological framework of CoDa, with emphasis on log-ratio transformations, the geometry of the simplex, and their extension to the analysis of probability density functions.
 
@@ -823,7 +910,7 @@ This perspective enables the application of functional principal component analy
 % \subsection{Functional Time Series}
 
 \chapter{Goal}
-The main goal of this work is to assess the viability of forecasting functional time series that inherently carry relative information. Specifically, the functional observations are probability density functions, which are subject to the following constraints by definition:
+The main goal of this work is to assess the viability of forecasting functional time series that inherently carry relative information. Specifically, the functional observations are probability density functions, which are subject to the following constraints:
 \begin{proposition}
 Let $f_X(x)$ denote the density function of a continuous random variable X,  defined on the probability space $(\Omega, \mathbb{F}, \mathbb{P})$. Then $f_X(x)$ satisfies
 \begin{enumerate}
@@ -835,11 +922,11 @@ Let $f_X(x)$ denote the density function of a continuous random variable X,  def
 
 The precise objectives are to
 \begin{enumerate}
-    \item Perform a data analysis step of the time series subject to the study;
-    \item Evaluate the decomposition of objects;
+    \item Perform data analysis of the time series subject to the study;
+    \item Evaluate time series decomposition, i.e., its dimensionality;
     \item Find the best time series model fitting to the principal component scores;
     \item Obtain a set of forecast values for the probability density functions;
-    \item Compare the accuracy of the model with other state-of-the-art methods in a risk management context.
+    \item Evaluate the performance of the predictions within an application.
 \end{enumerate}
 
 
@@ -848,51 +935,51 @@ The precise objectives are to
 
 
 
-\subsection*{Aitchison Geometry}
+% \subsection*{Aitchison Geometry}
 
-Let $S^D$ denote the \emph{D-part simplex}, defined as:
-\[
-S^D = \left\{ \mathbf{x} = (x_1, \dots, x_D) \in \mathbb{R}^D : x_i > 0 \ \text{for all} \ i, \ \sum_{i=1}^D x_i = 1 \right\}.
-\]
+% Let $S^D$ denote the \emph{D-part simplex}, defined as:
+% \[
+% S^D = \left\{ \mathbf{x} = (x_1, \dots, x_D) \in \mathbb{R}^D : x_i > 0 \ \text{for all} \ i, \ \sum_{i=1}^D x_i = 1 \right\}.
+% \]
 
-The \textbf{Aitchison geometry} on $S^D$ is a vector space structure defined by the following components:
+% The \textbf{Aitchison geometry} on $S^D$ is a vector space structure defined by the following components:
 
-\begin{itemize}
-    \item \textbf{Perturbation (Composition Addition)}: For $\mathbf{x}, \mathbf{y} \in S^D$, their perturbation is defined as:
-    \[
-    \mathbf{x} \oplus \mathbf{y} = \mathcal{C}(x_1 y_1, \dots, x_D y_D),
-    \]
-    where $\mathcal{C}$ is the closure operator:
-    \[
-    \mathcal{C}(\mathbf{z}) = \left( \frac{z_1}{\sum_{i=1}^D z_i}, \dots, \frac{z_D}{\sum_{i=1}^D z_i} \right).
-    \]
+% \begin{itemize}
+%     \item \textbf{Perturbation (Composition Addition)}: For $\mathbf{x}, \mathbf{y} \in S^D$, their perturbation is defined as:
+%     \[
+%     \mathbf{x} \oplus \mathbf{y} = \mathcal{C}(x_1 y_1, \dots, x_D y_D),
+%     \]
+%     where $\mathcal{C}$ is the closure operator:
+%     \[
+%     \mathcal{C}(\mathbf{z}) = \left( \frac{z_1}{\sum_{i=1}^D z_i}, \dots, \frac{z_D}{\sum_{i=1}^D z_i} \right).
+%     \]
     
-    \item \textbf{Powering (Scalar Multiplication)}: For $\alpha \in \mathbb{R}$ and $\mathbf{x} \in S^D$,
-    \[
-    \alpha \odot \mathbf{x} = \mathcal{C}(x_1^\alpha, \dots, x_D^\alpha).
-    \]
+%     \item \textbf{Powering (Scalar Multiplication)}: For $\alpha \in \mathbb{R}$ and $\mathbf{x} \in S^D$,
+%     \[
+%     \alpha \odot \mathbf{x} = \mathcal{C}(x_1^\alpha, \dots, x_D^\alpha).
+%     \]
     
-    \item \textbf{Aitchison Inner Product}: For $\mathbf{x}, \mathbf{y} \in S^D$, define
-    \[
-    \langle \mathbf{x}, \mathbf{y} \rangle_A = \frac{1}{2D} \sum_{i=1}^D \sum_{j=1}^D \log\left(\frac{x_i}{x_j}\right) \log\left(\frac{y_i}{y_j}\right).
-    \]
+%     \item \textbf{Aitchison Inner Product}: For $\mathbf{x}, \mathbf{y} \in S^D$, define
+%     \[
+%     \langle \mathbf{x}, \mathbf{y} \rangle_A = \frac{1}{2D} \sum_{i=1}^D \sum_{j=1}^D \log\left(\frac{x_i}{x_j}\right) \log\left(\frac{y_i}{y_j}\right).
+%     \]
     
-    \item \textbf{Aitchison Norm}: The norm induced by the inner product is:
-    \[
-    \|\mathbf{x}\|_A = \sqrt{\langle \mathbf{x}, \mathbf{x} \rangle_A}.
-    \]
+%     \item \textbf{Aitchison Norm}: The norm induced by the inner product is:
+%     \[
+%     \|\mathbf{x}\|_A = \sqrt{\langle \mathbf{x}, \mathbf{x} \rangle_A}.
+%     \]
     
-    \item \textbf{Aitchison Distance}: The distance between two compositions $\mathbf{x}, \mathbf{y} \in S^D$ is:
-    \[
-    d_A(\mathbf{x}, \mathbf{y}) = \|\text{clr}(\mathbf{x}) - \text{clr}(\mathbf{y})\|_2,
-    \]
-    where $\text{clr}(\mathbf{x})$ is the \emph{centered log-ratio transformation}:
-    \[
-    \text{clr}(\mathbf{x}) = \left( \log\frac{x_1}{g(\mathbf{x})}, \dots, \log\frac{x_D}{g(\mathbf{x})} \right), \quad g(\mathbf{x}) = \left( \prod_{i=1}^D x_i \right)^{1/D}.
-    \]
-\end{itemize}
+%     \item \textbf{Aitchison Distance}: The distance between two compositions $\mathbf{x}, \mathbf{y} \in S^D$ is:
+%     \[
+%     d_A(\mathbf{x}, \mathbf{y}) = \|\text{clr}(\mathbf{x}) - \text{clr}(\mathbf{y})\|_2,
+%     \]
+%     where $\text{clr}(\mathbf{x})$ is the \emph{centered log-ratio transformation}:
+%     \[
+%     \text{clr}(\mathbf{x}) = \left( \log\frac{x_1}{g(\mathbf{x})}, \dots, \log\frac{x_D}{g(\mathbf{x})} \right), \quad g(\mathbf{x}) = \left( \prod_{i=1}^D x_i \right)^{1/D}.
+%     \]
+% \end{itemize}
 
-This structure turns $S^D$ into a real Hilbert space under the operations $\oplus$, $\odot$ and the inner product $\langle \cdot, \cdot \rangle_A$.
+% This structure turns $S^D$ into a real Hilbert space under the operations $\oplus$, $\odot$ and the inner product $\langle \cdot, \cdot \rangle_A$.
 
 % \subsection{Para olhar}
 
@@ -913,23 +1000,9 @@ This structure turns $S^D$ into a real Hilbert space under the operations $\oplu
 First, we might define some useful concepts used in most works about functional time series. 
 
 \begin{definition}
-Let \( X(t) \), \( t \in \mathcal{T} \subseteq \mathbb{R} \), be a square-integrable stochastic process with mean function \( \mu(t) = \mathbb{E}[X(t)] \) and covariance function 
+Let $\mathcal{H}$ be a separable Hilbert space taken to be $\mathcal{H} = L^2(\mathcal{I})$, that is, the space of square-integrable functions on a compact interval $\mathcal{I} \subset \mathbb{R}$, equipped with the inner product
 \begin{equation}
-C(s, t) = \text{Cov}(X(s), X(t)) = \mathbb{E}[(X(s) - \mu(s))(X(t) - \mu(t))].
-\end{equation}
-
-Then, if \( C(s, t) \) is continuous and positive semi-definite, the Karhunen--Lo\`eve Expansion of \( X(t) \) is given by
-
-\begin{equation}
-X(t) = \mu(t) + \sum_{k=1}^\infty \xi_k \phi_k(t),
-\end{equation}
-where \( \{ \phi_k(t) \}_{k=1}^\infty \) are the orthonormal eigenfunctions of the covariance operator associated with \( C(s, t) \); \( \{ \xi_k \}_{k=1}^\infty \) are uncorrelated random variables with zero mean and variances equal to the corresponding eigenvalues \( \lambda_k \); and \( \mathbb{E}[\xi_k \xi_j] = \lambda_k \delta_{kj} \), with \( \delta_{kj} \) being the Kronecker delta.
-\end{definition}
-
-\begin{definition}
-Let $\mathcal{H}$ be a separable Hilbert space taken to be $\mathcal{H} = L^2(\mathcal{T})$, that is, the space of square-integrable functions on a compact interval $\mathcal{T} \subset \mathbb{R}$, equipped with the inner product
-\begin{equation}
-\langle f, g \rangle = \int_{\mathcal{T}} f(t) g(t) \, dt,
+\langle f, g \rangle = \int_{\mathcal{I}} f(t) g(t) \, dt,
 \end{equation}
 and the associated norm $\|f\| = \sqrt{\langle f, f \rangle}$.
 
@@ -941,18 +1014,85 @@ If we consider an observed functional time series object $Y_t$, we define
 
 \begin{equation}
      Y_t(u) = X_t(u) + \varepsilon_t(u), \quad u \in \mathcal{T}, \quad t = 1, \dots, n,
+\label{eq:observed_ts}
 \end{equation}
 where the noise term $\varepsilon_t(u)$ is originated from experimental error and numerical rounding in discrete data treatment.
 
+\begin{definition}
+Let \( X(t) \), \( t \in \mathcal{I} \subseteq \mathbb{R} \), be a square-integrable stochastic process with mean function \( \mu(t) = \mathbb{E}[X(t)] \) and covariance function 
+\begin{equation}
+C(s, t) = \text{Cov}(X(s), X(t)) = \mathbb{E}[(X(s) - \mu(s))(X(t) - \mu(t))].
+\end{equation}
+
+Then, if \( C(s, t) \) is continuous and positive semi-definite, the Karhunen--Lo\`eve Expansion of \( X(t) \) is given by
+
+\begin{equation}
+X(t) = \mu(t) + \sum_{k=1}^\infty \xi_k \phi_k(t),
+\label{eq:kl_decomp}
+\end{equation}
+where \( \{ \phi_k(t) \}_{k=1}^\infty \) are the orthonormal eigenfunctions of the covariance operator associated with \( C(s, t) \); \( \{ \xi_k \}_{k=1}^\infty \) are uncorrelated random variables with zero mean and variances equal to the corresponding eigenvalues \( \lambda_k \), and $\{\xi_{tk},k\geq1\}$ is a ranked set such that $\text{Var}(\xi_{tk})=\lambda_k$ is monotonically decreasing as k increases; and \( \mathbb{E}[\xi_k \xi_j] = \lambda_k \delta_{kj} \), with \( \delta_{kj} \) being the Kronecker delta.
+\end{definition}
+
 Now, we may ask ourselves how to deal with this type of data. In \citeonline{bosq2000linear}, we can find a \textit{functional autoregressive} (FAR) approach for time series forecasting, and this has long been the main method used in research because of the lack of other techniques. Nevertheless, the work of \citeonline{aue2015prediction} proposes a simplification of functional time series prediction by reducing it to a multivariate forecasting problem, thereby allowing the use of well-established tools, in contrast with the methodology of the FAR(p) model. The proposed algorithm consists of three steps: first, a number $d$ of principal components is selected to retain $(\alpha \cdot 100)\%$ of the variance of the original data; then, given a forecast horizon $h$, a VAR($p$) model is fitted to the principal components, and an $h$-step-ahead forecast is computed; finally, the multivariate forecasts are transformed back to the original functional space via a truncated Karhunen--Lo\`eve representation. It is also shown that the one-step-ahead forecast from a VAR(1) model in the second step is asymptotically equivalent to that of a FAR(1) model, which simplifies the forecasting task. Another important contribution of the paper is the proposal of a fully automatic and joint procedure for selecting the model order $p$ and the number of components $d$ through the minimization of a functional final prediction error (fFPE) criterion given by
+
 \begin{equation}
  \textit{fFPE}(p,d)=\frac{n+pd}{n-pd}\mathrm{tr}(\hat{\Sigma}_{Z})+\sum_{l>d}\hat{\lambda}_{l},
 \end{equation}
 which makes the proposed methodology entirely data-driven. The possibility of including exogenous variables in the model is also supported without major theoretical complications. Finally, simulation studies and applications to real data compare the performance of the new methodology with that of \citeonline{hyndmanUllah2007}, which carries out forecasting by treating the principal component scores as univariate time series, and \citeonline{bosq2000linear}, using the autoregressive order selection criterion proposed by \citeonline{kokoszkaReimherr2013}. In both settings, the new method outperformed the alternatives. We can therefore conclude that this is a useful solution for the problem at hand.
 
-\citeonline{bathia2010identifying} propose a way to identify the dimensionality of these objects while modeling the serial dependence of the time series.
+\citeonline{bathia2010identifying} propose a way to identify the dimensionality of these objects while modeling the serial dependence of the time series. Under stationarity assumptions, equation \ref{eq:kl_decomp} tells $X_t(\cdot)$ is $d$-dimensional if $\lambda_d \neq 0$ and $\lambda_{d+1} = 0$, where $d \geq 1$ is a finite integer. What these authors propose is precisely to determine $d$ and $\mathcal{M}=\textbf{span}\{\phi_1,...,\phi_d\}$. For a given lag $k \geq 1$, let the lag-$k$ autocovariance operator be
+\begin{equation}
+M_k(u, v) = \text{Cov}(X_t(u), X_{t+k}(v)).
+\label{eq:covariance_operator}
+\end{equation}
+Since $\varepsilon_t(\cdot)$ is assumed to be white noise and independent across $t$, $M_k(u,v)$ can be estimated directly from $Y_t(\cdot)$ via:
+\[
+\widehat{M}_k(u, v) = \frac{1}{n-p} \sum_{t=1}^{n-p} \left( Y_t(u) - \overline{Y}(u) \right)\left( Y_{t+k}(v) - \overline{Y}(v) \right),
+\]
+where $\overline{Y}(u)$ is the sample mean function. Also, define a non-negative operator that aggregates the dependence information across different lags
+\begin{equation}
+K(u, v) = \sum_{k=1}^{p} \int_I M_k(u, z) M_k(v, z) \, dz
+\end{equation}
 
-But when we're dealing with probability functions, we cannot use standard tools since the space they lie in is not a vector space. To overcome this, \citeonline{hron2016simplicial} proposed a transformation into a Bayes space $\mathcal{B}^2$ of functional compositions.
+and whose sample version is given by
+\begin{equation}
+\widehat{K}(u,v) = \sum_{k=1}^{p} \int_I \widehat{M}_k(u, z) \widehat{M}_k(v, z) \, dz.
+\end{equation}
+
+If one performs an eigenanalysis of $\widehat{K}$, then the nonzero eigenvalues obtained through a bootstrap test correspond to the dynamic dimension $d$ and the eigenfunctions associated with nonzero eigenvalues span the estimated dynamic space $\widehat{\mathcal{M}}$.
+
+Now, we may find ourselves more comfortable on dealing with functional time series. But when it comes to probability density functions, we cannot use standard tools since the space they lie in is not a vector space. Consider the following:
+
+\begin{example} Let $f_1(x), f_2(x)$ be two exponential probability density functions such that 
+\[
+f_1(x) = e^{-x}, \quad f_2(x) = 2e^{-2x}, \quad x \geq 0.
+\]
+Both $f_1$ and $f_2$ are valid PDFs, since $f_i(x) \geq 1$ and
+\[
+\int_0^\infty f_1(x) \, dx = 1, \quad \int_0^\infty f_2(x) \, dx = 1.
+\]
+But their sum is given by
+\[
+f(x) = f_1(x) + f_2(x) = e^{-x} + 2e^{-2x}.
+\]
+If we compute the integral,
+\[
+\int_0^\infty f(x) \, dx = \int_0^\infty e^{-x} \, dx + 2 \int_0^\infty e^{-2x} \, dx = 1 + 1 = 2.
+\]
+Thus, $f$ does not integrate to $1$ and the set of PDFs is not closed under addition. Further, consider the scalar multiplication of $f_1$ by $\alpha=2$. Then
+\[
+2 f_1(x) = 2 e^{-x}.
+\]
+and
+\[
+\int_0^\infty 2f_1(x) \, dx = 2 \int_0^\infty e^{-x} \, dx = 2.
+\]
+We conclude that the set of PDFs is not closed both under addition and scalar multiplication, except for scalars equal to $1$. 
+\end{example}
+
+We can see, therefore, that the space where PDFs live is not a vector space, and we have a problem using typical tools for treating functions on Hilbert spaces.
+
+To overcome this, \citeonline{hron2016simplicial} proposed a transformation into a Bayes space $\mathcal{B}^2$ of functional compositions.
 
 \citeonline{petersen2016functional}, also considering the inherent constraints of densities, thought of a mapping into into a Hilbert space through a continuous and invertible map.
 
