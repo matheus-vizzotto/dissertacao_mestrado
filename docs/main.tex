@@ -793,6 +793,7 @@ A foundational treatment of linear models for functional data was provided by \c
 % Together, these contributions form a robust theoretical and methodological foundation for the analysis and prediction of functional data observed over time, making Functional Time Series a vibrant and evolving area of research in modern statistics.
 
 \section{Compositional Data Analysis}
+\label{subsec:CoDa}
 Compositional data (CoDa) are multivariate observations conveying relative information, typically represented as vectors with strictly positive components summing to a constant like 1 or 100\% \cite{aitchison1982statistical}. Such data arise naturally in diverse disciplines, but are specially related to the context of this research since we are dealing with probability measures.
 
 Classical multivariate statistical techniques often fail to appropriately handle the specific properties of compositional data due to the constant-sum constraint and the inherent relative scale of the data. As a consequence, applying standard techniques directly to raw compositional data can lead to misleading results \cite{pawlowsky2015modelling}. Aitchison's work \cite{aitchison1986statistical} laid the foundation for the modern statistical treatment this problem. He introduced the use of log-ratio transformations, such as the centered log-ratio (clr), additive log-ratio (alr), and isometric log-ratio (ilr) transformations, to enable the application of standard statistical tools in an appropriate transformed space. These transformations map the data from the simplex (the sample space of compositions) to real Euclidean space, facilitating analysis while preserving the essential relative information.
@@ -1090,11 +1091,51 @@ and
 We conclude that the set of PDFs is not closed both under addition and scalar multiplication, except for scalars equal to $1$. 
 \end{example}
 
-We can see, therefore, that the space where PDFs live is not a vector space, and we have a problem using typical tools for treating functions on Hilbert spaces.
+We can see, therefore, that the space where PDFs live is not a vector space, and we have a problem using typical tools for treating functions on Hilbert spaces. To overcome this, \citeonline{hron2016simplicial} proposed a transformation into a Bayes space $\mathcal{B}^2$ of functional compositions, which is the result of a generalization of the Aitchison geometry introduced in Section~\ref{subsec:CoDa}, and a methodology for an adaptation of FPCA to the infinite dimensional simplex space. One of the main concerns of this research was to preserve two features of functional compositions, namely scale invariance and relative scale property. The first one refers to the fact that, in Bayes spaces, two probability density functions \( f \) and \( g \) are considered equivalent if they are proportional, i.e.,
+\[
+f = \lambda g, \quad \lambda > 0.
+\]
+The integral constraint
+\[
+\int_I f(x) \, dx = 1
+\]
+selects a particular representative from the equivalence class. However, the essential information carried by the density function is not altered by scaling. In other words, multiplying a density by a positive constant does not change its relative information content. This property is known as scale invariance: only the ratios between the values of a density function matter, not their absolute scale. %Therefore, the choice of normalizing the integral to 1 is purely conventional. 
+The latter property reflects the fact that variations in density functions must be interpreted relatively, rather than absolutely. For instance, an increase of a probability value from 0.05 to 0.1 is fundamentally different from an increase from 0.5 to 0.55, even though both changes are 0.05 in absolute terms. This implies that the analysis must be sensitive to relative changes, which motivates the use of log-ratio transformations rather than standard arithmetic differences. Thus the authors define 
+\[
+(f \oplus g)(t) = \frac{f(t)g(t)}{\int_I f(s)g(s) \, ds}, \quad (\alpha \odot f)(t) = \frac{f(t)^\alpha}{\int_I f(s)^\alpha \, ds}, \quad t \in I.
+\]
+where $f \oplus g$ is the perturbation and $\alpha \odot f$ is the powering of two absolutely integrable density functions $f,g \in \mathcal{B}^2(I)$. These two resulting functions are probability density functions, and if we endow our space with the inner product    
 
-To overcome this, \citeonline{hron2016simplicial} proposed a transformation into a Bayes space $\mathcal{B}^2$ of functional compositions.
+\[
+\langle f, g \rangle_{\mathcal{B}} = \frac{1}{2\eta} \int_I \int_I \ln\left( \frac{f(t)}{f(s)} \right) \ln\left( \frac{g(t)}{g(s)} \right) \, dt \, ds, \quad f, g \in \mathcal{B}^2(I),
+\]
 
-\citeonline{petersen2016functional}, also considering the inherent constraints of densities, thought of a mapping into into a Hilbert space through a continuous and invertible map.
+then $\mathcal{B}^2(I)$ can be proved to be a separable Hilbert Space that is isomorphic to the Hilbert Space $L^2(I)$ through the centred log-ratio transformation given in \cite{van2014bayes} by 
+
+\[
+\text{clr}(f)(t)=f_c(t)=\text{ln}f(t)-\frac{1}{\eta}\int_{I}\text{ln}f(s)ds
+\]
+
+With this, the Simplicial Functional Principal Component Analysis can be performed by maximizing, over a sample $X_1, ...,X_n$,
+\[
+\frac{1}{N} \sum_{i=1}^{N} \langle X_i, \zeta_j \rangle_{\mathcal{B}}^2 
+\quad \text{subject to} \quad \|\zeta_j\|_{\mathcal{B}} = 1; \quad \langle \zeta_j, \zeta_k \rangle_{\mathcal{B}} = 0, \quad k < j,
+\]
+where $\{\zeta_j\}_{j\geq1},\zeta_j \in \mathcal{B}^2(I),$ are the simplicial principal components.
+
+Another solution was given by \citeonline{petersen2016functional} with a mapping into a Hilbert space through a continuous and invertible map $\psi$ that allows the implementation of standard FDA methods, with the possibility of transforming the results into the original space of densities. Two major maps are introduced: Log Quantile Density ($\psi_Q(f)$) and Log Hazard ($\psi_Q(f)$) Transformations, given by
+\[
+\psi_Q(f)(t) = \log q(t) = -\log f(Q(t)), \quad t \in [0,1],
+\]
+where $q(t) = \frac{d}{dt} Q(t)$ and $Q(t)$ is the quantile function, and
+\[
+    \psi_H(f)(t) = \log\left( \frac{f(t)}{1 - F(t)} \right), \quad t \in [0,1-\delta],
+\]
+where $F$ is the cumulative distribution function. Both transformations ensure that the mapped objects lie in $L^2$ and both are continuous, ensuring stability of the analysis. Variations also are modeled inside the structure of density functions, avoiding artifacts caused by linear approximations. Means and variances are computed intrinsically using appropriate metrics (e.g., Wasserstein distance).
+
+Under mild regularity assumptions, estimators of modes of variation and principal components are shown to be consistent; rates of convergence are derived both for fully observed densities and for cases where densities are estimated from data samples; Optimal rates are attained when appropriate density estimators are used (e.g., modified kernel estimators).
+
+The main results are a superior representation of variability compared to direct FPCA on densities; better interpretability of modes of variation, especially when data show horizontal variation (e.g., shifts of modes); and the fact that the methodology is applicable to regression and classification models where densities are predictors or responses. Also, a key difference about this work compared to \citeonline{hron2016simplicial} is the fact that it does not rely on a specific transformation, but consider a general class of transformations independently of a metric. 
 
 % \begin{theorem}
 % This is the first theorem.
@@ -1108,48 +1149,48 @@ To overcome this, \citeonline{hron2016simplicial} proposed a transformation into
 % This is a definition related to the previous results.
 % \end{definition}
 
-\begin{definition}
-In the theory of random processes, a sequence $\{ X_n \}_{n=1}^{\infty}$ is said to be $\psi$-mixing if the dependence between past and future events decreases as they become further apart in time, according to a specific mixing coefficient.
+% \begin{definition}
+% In the theory of random processes, a sequence $\{ X_n \}_{n=1}^{\infty}$ is said to be $\psi$-mixing if the dependence between past and future events decreases as they become further apart in time, according to a specific mixing coefficient.
 
-Let $\{ X_n \}_{n=1}^{\infty}$ be a sequence of random variables defined on a probability space $(\Omega, \mathcal{F}, P)$. The sequence is called \emph{$\psi$-mixing} if there exists a function $\psi(n)$ such that for any two $\sigma$-algebras $\mathcal{F}_a^b = \sigma(X_a, X_{a+1}, \ldots, X_b)$ and $\mathcal{F}_c^d = \sigma(X_c, X_{c+1}, \ldots, X_d)$ with $a \leq b < c \leq d$, the following holds:
-\[
-\psi(n) = \sup_{A \in \mathcal{F}_1^k, B \in \mathcal{F}_{k+n}^\infty} |P(A \cap B) - P(A)P(B)|,
-\]
-where $\psi(n) \to 0$ as $n \to \infty$.
+% Let $\{ X_n \}_{n=1}^{\infty}$ be a sequence of random variables defined on a probability space $(\Omega, \mathcal{F}, P)$. The sequence is called \emph{$\psi$-mixing} if there exists a function $\psi(n)$ such that for any two $\sigma$-algebras $\mathcal{F}_a^b = \sigma(X_a, X_{a+1}, \ldots, X_b)$ and $\mathcal{F}_c^d = \sigma(X_c, X_{c+1}, \ldots, X_d)$ with $a \leq b < c \leq d$, the following holds:
+% \[
+% \psi(n) = \sup_{A \in \mathcal{F}_1^k, B \in \mathcal{F}_{k+n}^\infty} |P(A \cap B) - P(A)P(B)|,
+% \]
+% where $\psi(n) \to 0$ as $n \to \infty$.
 
-The sequence is said to be $\psi$-mixing if $\psi(n) \to 0$ as $n \to \infty$. This condition implies that the events in the distant past and the far future become asymptotically independent.
-\end{definition}
+% The sequence is said to be $\psi$-mixing if $\psi(n) \to 0$ as $n \to \infty$. This condition implies that the events in the distant past and the far future become asymptotically independent.
+% \end{definition}
 
-\begin{definition}
+% \begin{definition}
 
-Let $\mathcal{X}$ be a domain and $h_0(x)$ a reference probability density function on $\mathcal{X}$. The \emph{Bayes space} $B^2(\mathcal{X}, h_0)$ is defined as the space of all functions $h(x) > 0$ such that:
-\[
-\log \frac{h(x)}{h_0(x)} \in L^2(\mathcal{X}),
-\]
-where $L^2(\mathcal{X})$ denotes the space of square-integrable functions on $\mathcal{X}$. The inner product between two elements $h_1(x), h_2(x) \in B^2(\mathcal{X}, h_0)$ is given by:
-\[
-\langle h_1, h_2 \rangle_{B^2} = \int_{\mathcal{X}} \log \frac{h_1(x)}{h_0(x)} \log \frac{h_2(x)}{h_0(x)} h_0(x) dx.
-\]
-The associated norm is:
-\[
-\| h \|_{B^2} = \left( \int_{\mathcal{X}} \left( \log \frac{h(x)}{h_0(x)} \right)^2 h_0(x) dx \right)^{\frac{1}{2}}.
-\]
-\end{definition}
+% Let $\mathcal{X}$ be a domain and $h_0(x)$ a reference probability density function on $\mathcal{X}$. The \emph{Bayes space} $B^2(\mathcal{X}, h_0)$ is defined as the space of all functions $h(x) > 0$ such that:
+% \[
+% \log \frac{h(x)}{h_0(x)} \in L^2(\mathcal{X}),
+% \]
+% where $L^2(\mathcal{X})$ denotes the space of square-integrable functions on $\mathcal{X}$. The inner product between two elements $h_1(x), h_2(x) \in B^2(\mathcal{X}, h_0)$ is given by:
+% \[
+% \langle h_1, h_2 \rangle_{B^2} = \int_{\mathcal{X}} \log \frac{h_1(x)}{h_0(x)} \log \frac{h_2(x)}{h_0(x)} h_0(x) dx.
+% \]
+% The associated norm is:
+% \[
+% \| h \|_{B^2} = \left( \int_{\mathcal{X}} \left( \log \frac{h(x)}{h_0(x)} \right)^2 h_0(x) dx \right)^{\frac{1}{2}}.
+% \]
+% \end{definition}
 
 % \subsection{Introduction to the Wasserstein Metric}
 
-The Wasserstein metric, also known as the Earth Mover's Distance (EMD), is a distance function defined between probability distributions on a given metric space. It arises naturally in optimal transport theory, where the goal is to quantify the "cost" of transporting mass from one distribution to another.
+% The Wasserstein metric, also known as the Earth Mover's Distance (EMD), is a distance function defined between probability distributions on a given metric space. It arises naturally in optimal transport theory, where the goal is to quantify the "cost" of transporting mass from one distribution to another.
 
-Let $(\mathcal{X}, d)$ be a complete separable metric space, and let $\mathcal{P}_p(\mathcal{X})$ denote the space of Borel probability measures on $\mathcal{X}$ with finite $p$-th moment, defined as:
-\[
-\mathcal{P}_p(\mathcal{X}) = \left\{ \mu \in \mathcal{P}(\mathcal{X}) \; \middle| \; \int_{\mathcal{X}} d(x_0, x)^p \, d\mu(x) < \infty \text{ for some } x_0 \in \mathcal{X} \right\}.
-\]
+% Let $(\mathcal{X}, d)$ be a complete separable metric space, and let $\mathcal{P}_p(\mathcal{X})$ denote the space of Borel probability measures on $\mathcal{X}$ with finite $p$-th moment, defined as:
+% \[
+% \mathcal{P}_p(\mathcal{X}) = \left\{ \mu \in \mathcal{P}(\mathcal{X}) \; \middle| \; \int_{\mathcal{X}} d(x_0, x)^p \, d\mu(x) < \infty \text{ for some } x_0 \in \mathcal{X} \right\}.
+% \]
 
-For two probability measures $\mu, \nu \in \mathcal{P}_p(\mathcal{X})$, the $p$-Wasserstein distance between them is defined as:
-\[
-W_p(\mu, \nu) = \left( \inf_{\pi \in \Pi(\mu, \nu)} \int_{\mathcal{X} \times \mathcal{X}} d(x, y)^p \, d\pi(x, y) \right)^{1/p},
-\]
-where $\Pi(\mu, \nu)$ denotes the set of all couplings of $\mu$ and $\nu$, i.e., all probability measures on $\mathcal{X} \times \mathcal{X}$ with marginals $\mu$ and $\nu$.
+% For two probability measures $\mu, \nu \in \mathcal{P}_p(\mathcal{X})$, the $p$-Wasserstein distance between them is defined as:
+% \[
+% W_p(\mu, \nu) = \left( \inf_{\pi \in \Pi(\mu, \nu)} \int_{\mathcal{X} \times \mathcal{X}} d(x, y)^p \, d\pi(x, y) \right)^{1/p},
+% \]
+% where $\Pi(\mu, \nu)$ denotes the set of all couplings of $\mu$ and $\nu$, i.e., all probability measures on $\mathcal{X} \times \mathcal{X}$ with marginals $\mu$ and $\nu$.
 
 % The Wasserstein metric has gained significant attention in statistics, machine learning, and functional data analysis due to its meaningful geometric structure and robustness to small perturbations in distributions. In particular, it provides a powerful tool for comparing empirical distributions and studying convergence properties in probabilistic settings.
 
