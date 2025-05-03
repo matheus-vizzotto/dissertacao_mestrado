@@ -1,301 +1,1240 @@
-% \documentclass{article}
-% \usepackage{graphicx} % Required for inserting images
+%% abtex2-modelo-trabalho-academico.tex, v-1.9.2 laurocesar
+%% Copyright 2012-2014 by abnTeX2 group at http://abntex2.googlecode.com/ 
+%%
+%% This work may be distributed and/or modified under the
+%% conditions of the LaTeX Project Public License, either version 1.3
+%% of this license or (at your option) any later version.
+%% The latest version of this license is in
+%%   http://www.latex-project.org/lppl.txt
+%% and version 1.3 or later is part of all distributions of LaTeX
+%% version 2005/12/01 or later.
+%%
+%% This work has the LPPL maintenance status `maintained'.
+%% 
+%% The Current Maintainer of this work is the abnTeX2 team, led
+%% by Lauro César Araujo. Further information are available on 
+%% http://abntex2.googlecode.com/
+%%
+%% This work consists of the files abntex2-modelo-trabalho-academico.tex,
+%% abntex2-modelo-include-comandos and abntex2-modelo-references.bib
+%%
 
-% \title{este_2025_boosting}
-% \author{Matheus Vizzotto dos Santos}
-% \date{April 2025}
+% ------------------------------------------------------------------------
+% ------------------------------------------------------------------------
+% abnTeX2: Modelo de Trabalho Academico (tese de doutorado, dissertacao de
+% mestrado e trabalhos monograficos em geral) em conformidade com 
+% ABNT NBR 14724:2011: Informacao e documentacao - Trabalhos academicos -
+% Apresentacao
+% ------------------------------------------------------------------------
+% ------------------------------------------------------------------------
 
-% \begin{document}
+%-------------------------------------------------------------------------
+% Modelo adaptado especificamente para o contexto do PPgSI-EACH-USP por 
+% Marcelo Fantinato, com auxílio dos Professores Norton T. Roman, Helton
+% H. Bíscaro, e Sarajane M. Peres, em 2015, com muitos agradecimentos aos 
+% criadores da classe e do modelo base.
+%-------------------------------------------------------------------------
 
-% \maketitle
+\documentclass[
+	% -- opções da classe memoir --
+	12pt,				% tamanho da fonte
+	% openright,			% capítulos começam em pág ímpar (insere página vazia caso preciso)
+	oneside,			% para impressão apenas no anverso (apenas frente). Oposto a twoside
+	a4paper,			% tamanho do papel. 
+	% -- opções da classe abntex2 --
+	%chapter=TITLE,		% títulos de capítulos convertidos em letras maiúsculas
+	%section=TITLE,		% títulos de seções convertidos em letras maiúsculas
+	%subsection=TITLE,	% títulos de subseções convertidos em letras maiúsculas
+	%subsubsection=TITLE,% títulos de subsubseções convertidos em letras maiúsculas
+	% -- opções do pacote babel --
+	english,			% idioma adicional para hifenização
+	%french,				% idioma adicional para hifenização
+	%spanish,			% idioma adicional para hifenização
+	brazil				% o último idioma é o principal do documento
+	]{abntex2ppgsi}
 
-% \section{Introduction}
+% ---
+% Pacotes básicos 
+% ---
+% \usepackage{lmodern}			% Usa a fonte Latin Modern			
+% \usepackage[T1]{fontenc}		% Selecao de codigos de fonte.
+\usepackage[utf8]{inputenc}		% Codificacao do documento (conversão automática dos acentos)
+\usepackage{lastpage}			% Usado pela Ficha catalográfica
+\usepackage{indentfirst}		% Indenta o primeiro parágrafo de cada seção.
+\usepackage{color}				% Controle das cores
+\usepackage{graphicx}			% Inclusão de gráficos
+\usepackage{microtype} 			% para melhorias de justificação
+\usepackage{pdfpages}     %para incluir pdf
+\usepackage{algorithm}			%para ilustrações do tipo algoritmo
+\usepackage{mdwlist}			%para itens com espaço padrão da abnt
+\usepackage[noend]{algpseudocode}			%para ilustrações do tipo algoritmo
+		
+% ---
+% Pacotes adicionais, usados apenas no âmbito do Modelo Canônico do abnteX2
+% ---
+\usepackage{lipsum}				% para geração de dummy text
+% ---
 
-% \end{document}
-
-
-\documentclass[a4paper,11pt]{article}
-\usepackage[utf8]{inputenc}
-\usepackage[T1]{fontenc}
-\usepackage[centertags]{amsmath}
-\usepackage{amsfonts}
-\usepackage{amssymb}
+% ---
+% Pacotes de citações
+% ---
+\usepackage[brazilian,hyperpageref]{backref}	 % Paginas com as citações na bibl
+\usepackage[alf]{abntex2cite}	% Citações padrão ABNT
+% PACOTES MATHEUS
+\usepackage{hyperref}
+%\usepackage[brazilian]{babel} %ajustar palavras de acordo com português no documento final
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{mathtools}
+\usepackage{bm}
+\usepackage{geometry}
+% \usepackage{array}
 \usepackage{amsthm}
-\usepackage{fancyhdr}
-\usepackage[left=3cm,top=4cm,right=3cm,bottom=3cm,headheight=3.8cm]{geometry}
-\usepackage[singlespacing]{setspace}
-\usepackage{natbib}
-\usepackage{graphicx}
-\usepackage{indentfirst}
+\newtheorem{theorem}{Theorem} % Theorems have their own numbering
+\newtheorem{lemma}{Lemma}     % Lemmas have their own numbering
+\newtheorem{definition}{Definition}
+\newtheorem{proposition}{Proposition} 
+\newtheorem{example}{Example} 
+\usepackage[bottom=0.5cm]{geometry}
 
-\renewcommand{\headrulewidth}{0pt}
-\renewcommand{\footrulewidth}{0pt}
+% --- 
+% CONFIGURAÇÕES DE PACOTES
+% --- 
 
-\setlength{\parindent}{0pt}
-\thispagestyle{empty}
+% ---
+% Configurações do pacote backref
+% Usado sem a opção hyperpageref de backref
+\renewcommand{\backrefpagesname}{Citado na(s) página(s):~}
+% Texto padrão antes do número das páginas
+\renewcommand{\backref}{}
+% Define os textos da citação
+\renewcommand*{\backrefalt}[4]{
+	\ifcase #1 %
+		Nenhuma citação no texto.%
+	\or
+		Citado na página #2.%
+	\else
+		Citado #1 vezes nas páginas #2.%
+	\fi}%
+% ---
 
+% ---
+% Informações de dados para CAPA e FOLHA DE ROSTO
+% ---
+
+%-------------------------------------------------------------------------
+% Comentário adicional do PPgSI - Informações sobre o ``instituicao'':
+%
+% Não mexer. Deixar exatamente como está.
+%
+%-------------------------------------------------------------------------
+\instituicao{
+	UNIVERSIDADE FEDERAL DO RIO GRANDE DO SUL
+	\par
+	FACULDADE DE CIÊNCIAS ECONÔMICAS
+	\par
+	PROGRAMA DE PÓS-GRADUAÇÃO EM ECONOMIA}
+
+%-------------------------------------------------------------------------
+% Comentário adicional do PPgSI - Informações sobre o ``título'':
+%
+% Em maiúscula apenas a primeira letra da sentença (do título), exceto 
+% nomes próprios, geográficos, institucionais ou Programas ou Projetos ou 
+% siglas, os quais podem ter letras em maiúscula também.
+%
+% O subtítulo do trabalho é opcional.
+% Sem ponto final.
+%
+% Atenção: o título da Dissertação na versão corrigida não pode mudar. 
+% Ele deve ser idêntico ao da versão original.
+%
+%-------------------------------------------------------------------------
+\titulo{Forecasting probability density functions in Hilbert spaces}
+
+%-------------------------------------------------------------------------
+% Comentário adicional do PPgSI - Informações sobre o ``autor'':
+%
+% Todas as letras em maiúsculas.
+% Nome completo.
+% Sem ponto final.
+%-------------------------------------------------------------------------
+\autor{\uppercase{Matheus Vizzotto dos Santos}}
+
+%-------------------------------------------------------------------------
+% Comentário adicional do PPgSI - Informações sobre o ``local'':
+%
+% Não incluir o ``estado''.
+% Sem ponto final.
+%-------------------------------------------------------------------------
+\local{Porto Alegre}
+
+%-------------------------------------------------------------------------
+% Comentário adicional do PPgSI - Informações sobre a ``data'':
+%
+% Colocar o ano do depósito (ou seja, o ano da entrega) da respectiva 
+% versão, seja ela a versão original (para a defesa) seja ela a versão 
+% corrigida (depois da aprovação na defesa). 
+%
+% Atenção: Se a versão original for depositada no final do ano e a versão 
+% corrigida for entregue no ano seguinte, o ano precisa ser atualizado no 
+% caso da versão corrigida. 
+% Cuidado, pois o ano da ``capa externa'' também precisa ser atualizado 
+% nesse caso.
+%
+% Não incluir o dia, nem o mês.
+% Sem ponto final.
+%-------------------------------------------------------------------------
+\data{2025}
+
+%-------------------------------------------------------------------------
+% Comentário adicional do PPgSI - Informações sobre o ``Orientador'':
+%
+% Se for uma professora, trocar por ``Profa. Dra.''
+% Nome completo.
+% Sem ponto final.
+%-------------------------------------------------------------------------
+\orientador{Prof. Dr. Flávio A. Ziegelmann}
+
+%-------------------------------------------------------------------------
+% Comentário adicional do PPgSI - Informações sobre o ``Coorientador'':
+%
+% Opcional. Incluir apenas se houver co-orientador formal, de acordo com o 
+% Regulamento do Programa.
+%
+% Se for uma professora, trocar por ``Profa. Dra.''
+% Nome completo.
+% Sem ponto final.
+%-------------------------------------------------------------------------
+\coorientador{Prof. Dr. Eduardo de Oliveira Horta}
+
+\tipotrabalho{Dissertação (Mestrado)}
+
+\preambulo{
+%-------------------------------------------------------------------------
+% Comentário adicional do PPgSI - Informações sobre o texto ``Versão 
+% original'':
+%
+% Não usar para Qualificação.
+% Não usar para versão corrigida de Dissertação.
+%
+%-------------------------------------------------------------------------
+\newline \newline \newline 
+%-------------------------------------------------------------------------
+% Comentário adicional do PPgSI - Informações sobre o ``texto principal do
+% preambulo'':
+%
+% Para Qualificação, trocar por: Texto de Exame de Qualificação apresentado à Escola de Artes, Ciências e Humanidades da Universidade de São Paulo como parte dos requisitos para obtenção do título de Mestre em Ciências pelo Programa de Pós-graduação em Sistemas de Informação.
+%
+%-------------------------------------------------------------------------
+Projeto de dissertação apresentado ao Programa de Pós-Graduação em Economia da Faculdade de Ciências Econômicas da UFRGS, como requisito parcial para a obtenção do título de Mestre em Economia, com ênfase em Economia Aplicada.}
+%
+% \newline \newline Área de concentração: Metodologia e Técnicas da Computação
+%-------------------------------------------------------------------------
+% Comentário adicional do PPgSI - Informações sobre o texto da ``Versão 
+% corrigida'':
+%
+% Não usar para Qualificação.
+% Não usar para versão original de Dissertação.
+% 
+% Substituir ``xx de xxxxxxxxxxxxxxx de xxxx'' pela ``data da defesa''.
+%
+%-------------------------------------------------------------------------
+% \newline \newline \newline Versão corrigida contendo as alterações solicitadas pela comissão julgadora em xx de xxxxxxxxxxxxxxx de xxxx. A versão original encontra-se em acervo reservado na Biblioteca da EACH-USP e na Biblioteca Digital de Teses e Dissertações da USP (BDTD), de acordo com a Resolução CoPGr 6018, de 13 de outubro de 2011.}
+% ---
+
+
+% ---
+% Configurações de aparência do PDF final
+
+% alterando o aspecto da cor azul
+\definecolor{blue}{RGB}{41,5,195}
+
+% informações do PDF
+\makeatletter
+\hypersetup{
+     	%pagebackref=true,
+		pdftitle={\@title}, 
+		pdfauthor={\@author},
+    	pdfsubject={\imprimirpreambulo},
+	    pdfcreator={LaTeX com abnTeX2 adaptado para o PPgSI-EACH-USP},
+		pdfkeywords={abnt}{latex}{abntex}{abntex2}{qualificação de mestrado}{dissertação de mestrado}{ppgsi}, 
+		colorlinks=true,       		% false: boxed links; true: colored links
+    	linkcolor=black,          	% color of internal links
+    	citecolor=black,        		% color of links to bibliography
+    	filecolor=black,      		% color of file links
+		urlcolor=black,
+		bookmarksdepth=4
+}
+\makeatother
+% --- 
+
+% --- 
+% Espaçamentos entre linhas e parágrafos 
+% --- 
+
+% O tamanho do parágrafo é dado por:
+\setlength{\parindent}{1.25cm}
+
+% Controle do espaçamento entre um parágrafo e outro:
+\setlength{\parskip}{0cm}  % tente também \onelineskip
+\renewcommand{\baselinestretch}{1.5}
+
+% ---
+% compila o indice
+% ---
+\makeindex
+% ---
+
+	% Controlar linhas orfas e viuvas
+  \clubpenalty10000
+  \widowpenalty10000
+  \displaywidowpenalty10000
+
+% ----
+% Início do documento
+% ----
+\setulmarginsandblock{1in}{1.5in}{1}
 
 \begin{document}
 
+% Retira espaço extra obsoleto entre as frases.
+\frenchspacing 
 
-\begin{center}
-\Large{\textbf{Boosting algorithms for inflation forecasts}}
-\end{center}
+% ----------------------------------------------------------
+% ELEMENTOS PRÉ-TEXTUAIS
+% ----------------------------------------------------------
+% \pretextual
 
-\begin{center}
-    Matheus Vizzotto dos Santos - Universidade Federal do Rio Grande do Sul	
-    
-    \vspace{0.5cm}
-    \large{\textbf{Abstract}}
-\end{center}
+% ---
+% Capa
+% ---
+%-------------------------------------------------------------------------
+% Comentário adicional do PPgSI - Informações sobre a ``capa'':
+%
+% Esta é a ``capa'' principal/oficial do trabalho, a ser impressa apenas 
+% para os casos de encadernação simples (ou seja, em ``espiral'' com 
+% plástico na frente).
+% 
+% Não imprimir esta ``capa'' quando houver ``capa dura'' ou ``capa brochura'' 
+% em que estas mesmas informações já estão presentes nela.
+%
+%-------------------------------------------------------------------------
+\imprimircapa
+% ---
 
-Boosting-based techniques have proved to attain high performance in classification tasks. A similar approach in the field of time series also offers greater accuracy and robustness compared to traditional models in areas such as healthcare, environmental sciences, finance and economics. This study evaluates the application of the AdaBoost, XGBoost, LightGBM, and CatBoost algorithms in forecasting Brazilian inflation. For this purpose, lags of the IPCA series and other monthly macroeconomic variables were used. The optimal hyperparameters were obtained using the Bayesian method in cross-validation. The results indicate a better forecasting ability for the CatBoost and XGBoost models compared to the others.
+% ---
+% Folha de rosto
+% (o * indica que haverá a ficha bibliográfica)
+% ---
+\imprimirfolhaderosto*
+% ---
 
-\vspace{0.5cm}
-\textbf{Keywords:} forecast; time series; inflation; Brazil; boosting.
+% ---
+% Inserir a autorização para reprodução e ficha bibliografica
+% ---
 
-\section{Introduction}
+%-------------------------------------------------------------------------
+% Comentário adicional do PPgSI - Informações sobre o texto da 
+% ``autorização para reprodução e ficha bibliografica'':
+%
+% Página a ser usada apenas para Dissertação (tanto na versão original 
+% quanto na versão corrigida).
+%
+% Solicitar a ficha catalográfica na Biblioteca da EACH. 
+% Duas versões devem ser solicitadas, em dois momentos distintos: uma vez 
+% para a versão original, e depois outra atualizada para a versão 
+% corrigida.
+%
+% Atenção: esta página de ``autorização para reprodução e ficha 
+% catalográfica'' deve ser impressa obrigatoriamente no verso da folha de 
+% rosto.
+%
+% Não usar esta página para Qualificação.
+%
+% Substitua o arquivo ``fig_ficha_catalografica.pdf'' abaixo referenciado 
+% pelo PDF elaborado pela Biblioteca
+%
+%-------------------------------------------------------------------------
+\begin{fichacatalografica}
+    \includepdf{fig_ficha_catalografica.pdf}
+\end{fichacatalografica}
 
-Time series forecasting plays a fundamental role in the analysis and projection of economic variables, being especially relevant for the monitoring and forecasting of inflation in Brazil. Traditional models, such as ARIMA \citep{boxjenkins1970} and Exponential Smoothing \citep{holt1957}, although widely used, present limitations when it comes to capturing nonlinear patterns and complex interactions among the variables that influence the series of interest. However, machine learning-based methods have emerged as effective alternatives, offering greater flexibility and accuracy in forecasts. Among these methods, boosting algorithms such as AdaBoost, XGBoost, LightGBM, and CatBoost have established themselves as promising approaches for forecasting economic time series, including inflation. These models employ ensemble learning techniques, combining multiple decision trees to reduce errors and improve generalization. Unlike conventional approaches, boosting methods are capable of capturing nonlinear dynamics and subtle interactions among explanatory variables, providing more accurate forecasts even in highly volatile scenarios, such as those often observed in the Brazilian economy.
+% ---
+% Inserir errata
+% ---
+%-------------------------------------------------------------------------
+% Comentário adicional do PPgSI - Informações sobre ``Errata'':
+%
+% Usar esta página de errata apenas em casos de excepcionais, e apenas 
+% para a versão corrigida da Dissertação. Por exemplo, quando depois de
+% já depositada e publicada a versão corrigida, ainda assim verifica-se
+% a necessidade de alguma correção adicional.
+%
+% Se precisar usar esta página, busque a forma correta (o modelo correto) 
+% para fazê-lo, de acordo com a norma ABNT.
+%
+% Não usar esta página para versão original de Dissertação.
+% Não usar esta página para Qualificação.
+%
+%-------------------------------------------------------------------------
+% \begin{errata}
+% Elemento opcional para versão corrigida, depois de depositada.
+% \end{errata}
+% ---
 
-Beyond predictive robustness, boosting algorithms offer advantages such as the ability to handle missing data, computational efficiency when processing large volumes of data, and the possibility of incorporating advanced hyperparameter optimization techniques. In the context of inflation, these features are crucial, given that the data often exhibit structural trends, seasonality, and exogenous shocks that affect projections. The results obtained in this study will contribute to a better understanding of the potential of these techniques in macroeconomic variables.
+% ---
+% Inserir folha de aprovação
+% ---
 
-\section{Related Work}
+% \begin{folhadeaprovacao}
+%-------------------------------------------------------------------------
+% Comentário adicional do PPgSI - Informações sobre ``Folha da aprovação'':
+%
+% Para Qualificação, trocar por: Texto de Exame de Qualificação de autoria de Fulano de Tal, sob o título \textbf{``\imprimirtitulo''}, apresentado à Escola de Artes, Ciências e Humanidades da Universidade de São Paulo, como parte dos requisitos para obtenção do título de Mestre em Ciências pelo Programa de Pós-graduação em Sistemas de Informação, na área de concentração Metodologia e Técnicas da Computação, aprovado em \_\_\_ de \_\_\_\_\_\_\_\_\_\_\_\_\_\_ de \_\_\_\_\_\_ pela comissão examinadora constituída pelos doutores:
+%
+% Substituir ``Fulano de Tal'' pelo nome completo do autor do trabalho, com 
+% apenas as iniciais em maiúsculo.
+%
+% Substiuir ``___ de ______________ de ______'' por: 
+%     - Para versão original de Dissertação: deixar em branco, pois a data 
+%       pode mudar, mesmo que ela já esteja prevista.
+%     - Para versão corrigida de Dissertação: usar a data em que a defesa 
+%       efetivamente ocorreu.
+%
+%-------------------------------------------------------------------------
+% \noindent Dissertação de autoria de Fulano de Tal, sob o título \textbf{``\imprimirtitulo''}, apresentada à Escola de Artes, Ciências e Humanidades da Universidade de São Paulo, para obtenção do título de Mestre em Ciências pelo Programa de Pós-graduação em Sistemas de Informação, na área de concentração Metodologia e Técnicas da Computação, aprovada em \_\_\_\_\_\_\_ de \_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_ de \_\_\_\_\_\_\_\_\_\_ pela comissão julgadora constituída pelos doutores:
 
-The use of machine learning for time series forecasting has become well established among researchers and practitioners. An example is the work of \cite{zhang1998forecasting}, which discussed the results and pitfalls associated with the use of artificial neural networks available at the time, such as the Multi-Layer Perceptron (MLP) and its variants. Among the reasons for their attractiveness were the absence of initial assumptions and the fact that they are data-driven, meaning they are capable of capturing underlying relationships without further specifications. However, the results were mixed when nonlinear models were compared to traditional ones, with nonlinear models outperforming in some contexts and traditional models in others.
+% \vspace*{3cm}
 
-Another important, more recent work is that of \cite{voyant2017machine}, which explored the use of machine learning methods for solar radiation forecasting. Among the techniques analyzed were those classified under supervised learning (Support Vector Regression, decision trees, K-nearest neighbor) and unsupervised learning (K-means and hierarchical clustering). The study also addressed the growing use of ensemble learning methods (boosting, bagging, and random subspace) for time series forecasting, showing positive results.
+% \begin{center}
+%-------------------------------------------------------------------------
+% Comentário adicional do PPgSI - Informações sobre ``assinaturas'':
+%
+% Para Qualificação e para versão original de Dissertação: deixar em 
+% branco (ou seja, assim como está abaixo), pois os membros da banca podem
+% mudar, mesmo que eles já estejam previstos.
+% 
+% Para versão corrigida de Dissertação: usar os dados dos examinadores que 
+% efetivamente participaram da defesa. 
+% 
+% Para versão corrigida de Dissertação: em caso de ``professora'', trocar 
+% por ``Profa. Dra.'' 
+% 
+% Para versão corrigida de Dissertação: ao colocar os nomes dos 
+% examinadores, remover o sublinhado
+% 
+% Para versão corrigida de Dissertação: ao colocar os nomes dos 
+% examinadores, usar seus nomes completos, exatamente conforme constam em 
+% seus Currículos Lattes
+% 
+% Para versão corrigida de Dissertação: ao colocar os nomes das 
+% instituições, remover o sublinhado e remover a palavra ``Instituição:''
+%
+% Não abreviar os nomes das instituições.
+%
+%-------------------------------------------------------------------------
+% \_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_
+% \vspace*{0.2cm} 
+% \\ \textbf{Prof. Dr. \_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_} 
+% \\ \vspace*{0.2cm} 
+% Instituição: \_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_ 
+% \\ \vspace*{0.2cm}
+% Presidente 
 
-\cite{makridakis2018}, in turn, compared the performance of Holt-Winters and ARIMA models with that of nonlinear models such as MLP, Bayesian Neural Networks, Radial Basis Functions, K-Nearest Neighbor, Support Vector Regression, and regression trees. Surprisingly (or not), the results pointed to the superiority of the ARIMA model over the others. The authors highlight this result due to a frequent issue with machine learning: the overfitting of models to the training data reduces their ability to generalize to unseen horizons.
+% \vspace*{2cm}
 
-In the latest competition in the series of tournaments organized by the same authors (the M5 Competition), held in 2020, important results emerged from the forecasting of over 42,000 time series. \cite{MAKRIDAKISM5} compared different approaches, including statistical models and machine learning methods, highlighting the widespread use of the Light Gradient Boosting Machine (LightGBM) by the top competitors among more than five thousand participants, especially when combined with appropriate feature engineering. Contrary to the studies referenced above, it was concluded that nonlinear models outperformed traditional ones.
+% \_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_
+% \vspace*{0.2cm} 
+% \\ \textbf{Prof. Dr. \_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_} 
+% \\ \vspace*{0.2cm} 
+% Instituição: \_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_
 
-\cite{sousa2023comparing} also sought to evaluate the performance of boosting algorithms in time series forecasting, specifically the XGBoost, LightGBM, and CatBoost models in the retail context. After considerable effort in engineering explanatory variables for the dataset and optimizing hyperparameters based on splitting the observations into four validation sets, XGBoost achieved the lowest Weighted Absolute Percentage Error (WAPE), although LightGBM showed greater stability when forecasting over different future cycles.
+% \vspace*{2cm}
 
-In the context of forecasting economic variables, \cite{yoon2021forecasting} proposed implementing boosting models and Random Forest to forecast Japan's real GDP growth using quarterly data with 147 observations per variable. As in the study above, hyperparameters were selected through a cross-validation process, allowing the construction of a model with a Mean Absolute Percentage Error (MAPE) of 19.86\%, also supported by the Root Mean Squared Error (RMSE) metric.
+% \_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_
+% \vspace*{0.2cm} 
+% \\ \textbf{Prof. Dr. \_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_} 
+% \\ \vspace*{0.2cm} 
+% Instituição: \_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_
 
-\cite{XIANGCATBOOST} explored the use of a two-layer CatBoost model for medium and long-term electricity load forecasting in China, highlighting its computational efficiency and ability to handle heterogeneous datasets. Compared to the results from XGBoost, AdaBoost, Random Forest, Bagging, and MLP models, the proposed algorithm achieved the best forecasting performance, with a MAPE of 1.58\%.
+% \vspace*{2cm}
 
-Another relevant study is that of \cite{bentejac2021comparative}, who conducted a comprehensive comparison of the main boosting algorithms, including XGBoost, LightGBM, and CatBoost, evaluating their performance across various applications, such as macroeconomic data forecasting. Their results indicated that LightGBM offers better scalability for large datasets, while CatBoost is more effective for modeling time series with complex categorical features. XGBoost, meanwhile, ranked second in both accuracy and model training speed.
+% \_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_
+% \vspace*{0.2cm} 
+% \\ \textbf{Prof. Dr. \_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_} 
+% \\ \vspace*{0.2cm} 
+% Instituição: \_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_
 
-In addition to decision tree-based models, some studies explored the use of AdaBoost in the time series context. \cite{khan2021boosting} applied this method to forecast energy sector variables, comparing its performance with the other models discussed in this article. However, XGBoost and CatBoost proved to be the best algorithms for the task, with accuracy ranging from 80\% to 92\%. It was observed that although AdaBoost performed well in certain scenarios, it can be less efficient compared to techniques like XGBoost and LightGBM, especially when there is high variability in data.
+% \end{center}
+  
+% \end{folhadeaprovacao}
+% ---
 
-Given this evidence, it is clear that boosting algorithms have gained prominence by offering significant improvements over traditional forecasting models. However, challenges remain, such as the proper selection of hyperparameters, the choice of predictive variables, and integration with hybrid techniques, such as neural networks and statistical models.
+% ---
+% Dedicatória
+% ---
+%-------------------------------------------------------------------------
+% Comentário adicional do PPgSI - Informações sobre ``Dedicatória'': 
+%
+% Opcional para Dissertação.
+% Não sugerido para Qualificação.
+% 
+%-------------------------------------------------------------------------
+% \begin{dedicatoria}
+%    \vspace*{\fill}
+%    \centering
+%    \noindent
+%    \textit{Escreva aqui sua dedicatória, se desejar, ou remova esta página...} 
+% 	 \vspace*{\fill}
+% \end{dedicatoria}
+% ---
 
-\section{Methodology}
-\subsection{Data}
-The object of this study consists of the monthly percentage variation of Brazilian inflation between January 2004 and December 2024, as published by IBGE. The choice of this period is due to potential issues related to the stabilization phase of Plano Real and the implementation of different monetary regimes prior to the initial cut-off date.
+% ---
+% Agradecimentos
+% ---
+%-------------------------------------------------------------------------
+% Comentário adicional do PPgSI - Informações sobre ``Agradecimentos'': 
+%
+% Opcional para Dissertação.
+% Não sugerido para Qualificação.
+% 
+% Lembrar de agradecer agências de fomento e outras instituições similares.
+%
+%-------------------------------------------------------------------------
+% \begin{agradecimentos}
+% Texto de exemplo, texto de exemplo, texto de exemplo, texto de exemplo, texto de exemplo, texto de exemplo, texto de exemplo, texto de exemplo, texto de exemplo, texto de exemplo, texto de exemplo, texto de exemplo, texto de exemplo, texto de exemplo, texto de exemplo, texto de exemplo, texto de exemplo, texto de exemplo, texto de exemplo, texto de exemplo, texto de exemplo, texto de exemplo.
 
-\begin{figure}[h!]
-    \centering
-    \includegraphics[width=0.8\linewidth]{figures/serie_temporal.png} % Replace with your image filename
-    \caption{IPCA - Monthly variation.}
-    \label{fig:example}
-\end{figure}
+% Texto de exemplo, texto de exemplo, texto de exemplo, texto de exemplo, texto de exemplo, texto de exemplo, texto de exemplo, texto de exemplo, texto de exemplo, texto de exemplo, texto de exemplo, texto de exemplo, texto de exemplo, texto de exemplo, texto de exemplo, texto de exemplo, texto de exemplo, texto de exemplo, texto de exemplo, texto de exemplo, texto de exemplo, texto de exemplo.
 
-As exogenous variables, time series commonly associated with price level forecasting were used. These include the monetary aggregates M1, M2, M3, and M4; the Selic rate; the exchange rate; and the Central Bank's Economic Activity Index (IBC-BR). All series have a monthly frequency, and 12 lags of each were used to predict inflation — which also included 12 lags of itself. In other words, the models were estimated with a maximum of 96 attributes.
+% Texto de exemplo, texto de exemplo, texto de exemplo, texto de exemplo, texto de exemplo, texto de exemplo, texto de exemplo, texto de exemplo, texto de exemplo, texto de exemplo, texto de exemplo, texto de exemplo, texto de exemplo, texto de exemplo, texto de exemplo, texto de exemplo, texto de exemplo, texto de exemplo, texto de exemplo, texto de exemplo, texto de exemplo, texto de exemplo.
 
-To evaluate the performance of the algorithms, the dataset was divided into three partitions. The first, used to train each of the models (the \textit{training} segment), consisted of 228 observations from January 2004 to December 2022. The second, used for hyperparameter tuning (the \textit{validation} segment), contained 12 observations for 2023. The last was used to assess the out-of-sample accuracy of the models (the \textit{test} segment), with 12 records for 2024.
+% Texto de exemplo, texto de exemplo, texto de exemplo, texto de exemplo, texto de exemplo, texto de exemplo, texto de exemplo, texto de exemplo, texto de exemplo, texto de exemplo, texto de exemplo, texto de exemplo, texto de exemplo, texto de exemplo, texto de exemplo, texto de exemplo, texto de exemplo, texto de exemplo, texto de exemplo, texto de exemplo, texto de exemplo, texto de exemplo.
 
-\subsection{Models}
-Boosting is a technique originally developed for classification problems but successfully adapted for regression tasks. The core idea is to combine several weak models, often referred to as \textit{weak learners}, to create a more robust and accurate predictive model. Unlike methods such as \textit{bagging}, which train models independently, boosting trains models sequentially, with each new model attempting to correct the errors made by its predecessors.
+% Texto de exemplo, texto de exemplo, texto de exemplo, texto de exemplo, texto de exemplo, texto de exemplo, texto de exemplo, texto de exemplo, texto de exemplo, texto de exemplo, texto de exemplo, texto de exemplo, texto de exemplo, texto de exemplo, texto de exemplo, texto de exemplo, texto de exemplo, texto de exemplo, texto de exemplo, texto de exemplo, texto de exemplo, texto de exemplo.
+% \end{agradecimentos}
+% ---
 
-\subsubsection{AdaBoost}
-\textit{Adaptive Boosting} (AdaBoost), introduced by \cite{freund1997decision}, was one of the first boosting algorithms developed. A modification proposed by \cite{drucker1997boosting} for regression problems assigns weights to weak models based on their performance in minimizing a loss function.
+% ---
+% Epígrafe
+% ---
+%-------------------------------------------------------------------------
+% Comentário adicional do PPgSI - Informações sobre ``Epígrafe'': 
+%
+% Opcional para Dissertação.
+% Não sugerido para Qualificação.
+% 
+%-------------------------------------------------------------------------
+% \begin{epigrafe}
+%     \vspace*{\fill}
+% 	\begin{flushright}
+% 		\textit{``Escreva aqui uma epígrafe, se desejar, ou remova esta página...''\\
+% 		(Autor da epígrafe)}
+% 	\end{flushright}
+% \end{epigrafe}
+% ---
 
-The model can be understood as follows: given a training set $\{(x_i, y_i)\}_{i=1}^{n}$, where $x_i$ represents the samples and $y_i \in \mathbb{R}$ are the real values of the response variable, AdaBoost for regression combines multiple weak estimators to form a strong model. Initially, each sample is assigned a uniform weight:
+% ---
+% RESUMOS
+% ---
 
-\[
-w_i^{(1)} = \frac{1}{n}, \quad \forall \quad i = 1, \dots, n.
-\]
+% resumo em português
+\setlength{\absparsep}{18pt} % ajusta o espaçamento dos parágrafos do resumo
+\begin{resumo}
 
-Then, for each boosting iteration:
-\begin{enumerate}
-    \item A weak model $h_t(x)$ is trained using the weights $w_i^{(t)}$.
-    \item The weighted absolute error is calculated:
-    \[
-    \epsilon_t = \frac{\sum_{i=1}^{n} w_i^{(t)} |y_i - h_t(x_i)|}{\sum_{i=1}^{n} w_i^{(t)}}
-    \]
-    \item The importance of the estimator is determined:
-    \[
-    \alpha_t = \frac{1}{2} \ln \left( \frac{1 - \epsilon_t}{\epsilon_t} \right)
-    \]
-    \item The sample weights are updated:
-    \[
-    w_i^{(t+1)} = w_i^{(t)} \exp\left(\alpha_t |y_i - h_t(x_i)|\right)
-    \]
-    \item The weights are normalized so that $\sum w_i^{(t+1)} = 1$.
-\end{enumerate}
+%-------------------------------------------------------------------------
+% Comentário adicional do PPgSI - Informações sobre ``referência'':
+% 
+% Troque os seguintes campos pelos dados de sua Dissertação (mantendo a 
+% formatação e pontuação):
+%   - SOBRENOME
+%   - Nome1
+%   - Nome2
+%   - Nome3
+%   - Título do trabalho: subtítulo do trabalho
+%   - AnoDeDefesa
+%
+% Mantenha todas as demais informações exatamente como estão.
+% 
+% [Não usar essas informações de ``referência'' para Qualificação]
+%
+%-------------------------------------------------------------------------
+% \begin{flushleft}
+% SOBRENOME, Nome1 Nome2 Nome3. \textbf{Título do trabalho}: subtítulo do trabalho. \imprimirdata. \pageref{LastPage} f. Dissertação (Mestrado em Ciências) – Escola de Artes, Ciências e Humanidades, Universidade de São Paulo, São Paulo, AnoDeDefesa.
+% \end{flushleft}
 
-The final model is obtained as a weighted combination of the weak estimators:
-\[
-H(x) = \sum_{t=1}^{T} \alpha_t h_t(x).
-\]
+A Análise de Dados Funcionais (Functional Data Analysis – FDA) tem emergido como um campo em rápida evolução, estendendo os métodos estatísticos clássicos para dados representados por funções. Nesse contexto, a análise de séries temporais também pode ser generalizada ao tratar cada observação como uma função, em vez de um escalar ou vetor. Este trabalho foca na previsão de uma classe específica de objetos funcionais: as funções densidade de probabilidade (FDPs). Um dos principais desafios nesse cenário surge do fato de que PDFs não formam um espaço vetorial, mas residem em um subconjunto convexo, tornando as técnicas padrão de séries temporais funcionais uma tarefa complexa. Para contornar isso, propõe-se uma abordagem de transformação linear que mapeia FDPs em um espaço de Hilbert, permitindo a aplicação de técnicas consolidadas de séries temporais funcionais. A eficácia dessa abordagem é ilustrada por meio de uma aplicação em dados financeiros de alta frequência.
 
-\subsubsection{XGBoost}
-\textit{Extreme Gradient Boosting} (XGBoost) is a machine learning algorithm developed by \cite{chen2016xgboost}, who introduced significant improvements to the traditional \textit{Gradient Boosting Decision Trees} (GBDT), making the model faster and more scalable. Its main advantages include support for parallelization, advanced regularization, and optimization of the objective function, which justifies its widespread use in recent years for both classification and regression tasks.
+\textbf{Palavras-chaves}: Análise de dados funcionais. Séries temporais funcionais. Funções de densidade de probabilidade. Projeção. Expansão de Karhunen-Loève. 
+\end{resumo}
 
-The general objective function of XGBoost can be defined as:
-\begin{equation}
-\mathcal{L}(\Theta) = \sum_{i=1}^{n} l(y_i, \hat{y}_i) + \sum_{k=1}^{K} \Omega(f_k)
-\end{equation}
+% resumo em inglês
+%-------------------------------------------------------------------------
+% Comentário adicional do PPgSI - Informações sobre ``resumo em inglês''
+% 
+% Caso a Qualificação ou a Dissertação inteira seja elaborada no idioma inglês, 
+% então o ``Abstract'' vem antes do ``Resumo''.
+% 
+%-------------------------------------------------------------------------
+\begin{resumo}[Abstract]
+\begin{otherlanguage*}{english}
 
-where $l(y_i, \hat{y}_i)$ is the loss function (for example, mean squared error); $\Omega(f_k)$ is the regularization term; $f_k$ represents the individual decision trees; and $K$ is the total number of trees. The term $\Omega(f_k)$ is used to penalize the number of leaves and the magnitude of the leaf weights to prevent model overfitting, such that
-\begin{equation}
-\Omega(f) = \gamma T + \frac{1}{2} \lambda \sum_{j=1}^{T} w_j^2
-\end{equation}
-
-where $T$ is the number of leaves in the tree; $\gamma$ controls the penalty for the number of leaves; $w_j$ are the weights of the leaves; and $\lambda$ is the L2 regularization factor.
-XGBoost uses a second-order approximation to optimize the objective function, given by the Taylor expansion of the loss function:
-\begin{equation}
-\mathcal{L}^{(t)} \approx \sum_{i=1}^{n} \left[ g_i f_t(x_i) + \frac{1}{2} h_i f_t^2(x_i) \right] + \Omega(f_t)
-\end{equation}
-
-where $g_i = \frac{\partial l(y_i, \hat{y}_i)}{\partial \hat{y}_i}$ is the gradient of the loss function and $h_i = \frac{\partial^2 l(y_i, \hat{y}_i)}{\partial \hat{y}_i^2}$ is its Hessian. The score for the best split in a tree under the algorithm is given by
-\begin{equation}
-\text{Gain} = \frac{1}{2} \left[ \frac{G_L^2}{H_L + \lambda} + \frac{G_R^2}{H_R + \lambda} - \frac{(G_L + G_R)^2}{H_L + H_R + \lambda} \right] - \gamma
-\end{equation}
-
-where $G_L, G_R$ and $H_L, H_R$ are the sums of the gradients and Hessians in the left and right regions of the split, and $\gamma$ penalizes splits that do not bring significant gain. Since the gradient guides the tree splitting in the region of greatest error reduction, XGBoost becomes more efficient than its predecessors.
-
-\subsubsection{LightGBM}
-The \textit{Light Gradient Boosting Machine} (LightGBM) was developed by \cite{ke2017lightgbm} as an even more efficient alternative to XGBoost, focusing on optimizing training time and memory usage. While XGBoost uses a level-wise growth approach, where all nodes at a given depth are expanded before moving on to the next, LightGBM uses a depth-wise (leaf-wise) growth strategy, where the leaf with the highest loss reduction is expanded first. This procedure was enabled by two innovative techniques at the time, which allowed LightGBM to handle large volumes of data and high-dimensionality more efficiently: the \textit{Gradient-based One-Side Sampling} (GOSS) and \textit{Exclusive Feature Bundling} (EFB) strategies.
-
-The GOSS technique reduces the number of samples used in training by selecting all instances with large gradients (indicating high errors) and randomly sampling among those with small gradients. Mathematically, the method works as follows: let $O$ be the training dataset at a given node of a decision tree. The variance gain by splitting attribute $j$ at point $d$ at this node is defined as
-\begin{equation}
-    V_{j|O}(d) = \frac{1}{n_O}\left(
-                    \frac{(\sum_{\{x_i \in O:x_{ij} \leq d\}}g_i)^2}{n_{l|O}^j(d)} +
-                    \frac{(\sum_{\{x_i \in O:x_{ij} > d\}}g_i)^2}{n_{r|O}^j(d)} \right)
-\end{equation}
-where $n_O = \sum I[x_i \in O]$, $n_{l|O}^j(d) = \sum I[x_i \in O: x_{ij} \leq d]$, and $n_{r|O}^j(d) = \sum I[x_i \in O: x_{ij} > d]$. Initially, the training instances are ranked by the absolute value of their gradients in descending order. Then, the top $\alpha$ fraction of instances with the largest gradients is retained, forming a subset $A$. The remaining instances, $A^c$, consisting of $(1-\alpha)\times 100\%$ of the samples with smaller gradients, are randomly sampled to create another subset $B$ with size $b\times|A^c|$. Finally, the instances are split according to the estimated variance gain $\tilde{V}_{j}(d)$ over the subset $A \cup B$:
-\begin{equation}
-    \tilde{V}_{j}(d) = \frac{1}{n}\left(
-                    \frac{(\sum_{x_i \in A_l}g_i + \frac{1-\alpha}{b}\sum_{x_i \in B_l}g_i)^2}{n_{l}^j(d)} +
-                    \frac{(\sum_{x_i \in A_r}g_i + \frac{1-\alpha}{b}\sum_{x_i \in B_r}g_i)^2}{n_{r}^j(d)} 
-                    \right)
-\end{equation}
-where $A_{l} = \{x_i \in A : x_{ij} \leq d\}$, $A_{r} = \{x_i \in A : x_{ij} > d\}$, $B_{l} = \{x_i \in B : x_{ij} \leq d\}$, and $B_{r} = \{x_i \in B : x_{ij} > d\}$. Therefore, the estimated variance gain is applied to a smaller subset rather than the full dataset to determine the best split point, making the algorithm computationally less expensive.
-
-EFB, on the other hand, addresses high-dimensional data by combining features that rarely take nonzero values simultaneously, particularly for categorical attributes. Both techniques maintain model accuracy while significantly reducing processing time.
-
-\subsubsection{CatBoost}
-\cite{prokhorenkova2018catboost} proposed the CatBoost algorithm to efficiently handle categorical data and address the discrepancy between the accuracy of boosting models on training and test data.
-
-Unlike the previously cited models, CatBoost can handle categorical variables without requiring preprocessing, which typically involves \textit{one-hot} or \textit{label encoding}. These common approaches can lead to an excessive increase in data dimensionality, while the \textit{target statistics} method used by CatBoost simply replaces the categories with statistics derived from the target variable.
-
-Another innovation introduced by the study is the \textit{ordered boosting} technique, which reduces overfitting caused by the \textit{target leakage} problem — that is, when information from the future or information directly related to the target variable is incorrectly included in the training data, which would not be available during model evaluation on test data. This technique can be seen as a generalization of \textit{gradient boosting}, where training is conducted in a specific order to avoid future information leakage during the model fitting process.
-
-\subsection{Hyperparameter Optimization}
-In traditional forecasting techniques, significant time could be spent selecting the best parameter values for a model, such as following the Box and Jenkins methodology to determine the orders of autoregressive and moving average components in an ARIMA model. However, this is generally not the case for nonparametric models, especially those discussed in this study. Here, it is more useful to perform targeted testing of different values for specific parameters of each algorithm — a task that can be approached in several ways. The most popular of these methods are discussed next.
-
-\subsubsection{Grid Search}
-\textit{Grid Search} is an exhaustive approach to hyperparameter optimization, where all possible combinations of hyperparameters are evaluated. The strategy involves initially defining a grid of values for each hyperparameter and evaluating every combination, ensuring that the optimal list of hyperparameters is found. Its minimization problem can be defined as
-\begin{equation}
-    \theta^* = \arg\min_{\theta \in \mathcal{T}} \mathcal{L}(\theta),
-\end{equation}
-where $\theta^*$ is the vector of optimal hyperparameters; $\mathcal{T}$ is the set of all possible hyperparameter combinations; and $\mathcal{L}(\theta)$ is the model's loss function with hyperparameters $\theta$.
-
-Although \textit{Grid Search} is a simple and intuitive approach, it is not computationally efficient, especially when the number of hyperparameters or the range of possible values for each becomes significantly large.
-
-\subsubsection{Random Search}
-\textit{Random Search} is an alternative to \textit{Grid Search}, where instead of evaluating all possible hyperparameter combinations, random combinations are selected within the search space. 
-This approach can be more efficient than Grid Search, especially when the number of hyperparameters is large, as it does not exhaustively explore all combinations in a grid and can therefore cover a broader space within a fixed time constraint.
-
-\subsubsection{Bayesian Optimization}
-Bayesian Optimization \citep{snoek2012practical} is a probabilistic approach to hyperparameter optimization, aiming to balance exploration of new hyperparameter combinations with exploitation of areas already known to produce good results. Instead of exhaustively evaluating all combinations or selecting random values, a probabilistic model is used to model the loss function and identify the most promising points in the search space.
-
-The main idea is to model the loss function using a surrogate model (such as a Gaussian process) and, based on it, decide where to conduct new hyperparameter evaluations. The algorithm seeks to find the combination of hyperparameters that minimizes the loss function with the fewest number of evaluations possible. The procedure can be characterized as:
-\begin{equation}
-    \theta^* = \arg\min_{\theta \in \mathcal{T}} \mathbb{E}[\mathcal{L}(\theta)],
-\end{equation}
-where $\mathbb{E}[\mathcal{L}(\theta)]$ is the expected value of the loss function, estimated through the probabilistic model, and $\mathcal{T}$ is the hyperparameter search space. This will be the technique employed in the present study, due to its versatility; a description of the hyperparameters selected for each model can be found in the Appendix.
-
-\subsection{Evaluation Metrics}
-To establish an objective function for the optimization of the models' parameters and to compare the forecasting results, some performance metrics will be presented:
-
-\begin{itemize}
-    \item Mean Squared Error (MSE)
-        \begin{equation}
-        \text{MSE} = \frac{1}{n} \sum_{t=1}^{n} (y_t - \hat{y}_t)^2
-        \end{equation}
-    \item Root Mean Squared Error (RMSE)
-        \begin{equation}
-            \text{RMSE} = \sqrt{\frac{1}{n} \sum_{t=1}^{n} (y_t - \hat{y}_t)^2}
-        \end{equation}
-    \item Mean Absolute Error (MAE)
-        \begin{equation}
-            \text{MAE} = \frac{1}{n} \sum_{t=1}^{n} |y_t - \hat{y}_t|
-        \end{equation}
-    \item Mean Absolute Percentage Error (MAPE)
-        \begin{equation}
-            \text{MAPE} = \frac{100}{n} \sum_{t=1}^{n} \left| \frac{y_t - \hat{y}_t}{y_t} \right|
-        \end{equation}
-    \item Symmetric Mean Absolute Percentage Error (SMAPE)
-        \begin{equation}
-            \text{SMAPE} = \frac{100}{n} \sum_{t=1}^{n} \frac{|y_t - \hat{y}_t|}{\frac{|y_t| + |\hat{y}_t|}{2}},
-        \end{equation}
-\end{itemize}
-where $y_t$ and $\hat{y}_t$ are the observed and predicted values at time $t$, respectively, and $n$ is the total number of observations.
-
-It is important to highlight some key characteristics of these metrics. The Mean Squared Error penalizes larger errors more heavily, since errors are squared — making it a metric more sensitive to \textit{outliers}. The Mean Absolute Percentage Error is widely used because it expresses errors as a percentage, which facilitates interpretation and comparison across different datasets. However, it has limitations when the actual values ($y_t$) are very close to zero, as it can result in very large or undefined values \cite{HYNDMAN2006679}. Another issue with this metric is that it treats over-predictions and under-predictions differently. To correct for this, the symmetric version (SMAPE) is used, which treats errors in a more balanced way.
-
-\section{Results and Discussion}
-After obtaining the optimal parameters for each of the models, the latter were re-estimated using the training and validation partitions (that is, data from January 2004 to December 2023). For the in-sample forecasts, XGBoost was the best-performing model, followed by CatBoost. The former achieved an RMSE of 0.0005; the latter, 0.0146. This ranking was consistent across the other in-sample evaluation metrics as well.
-
-To reproduce the out-of-sample results, a one-step-ahead forecast was performed for each month of 2024, yielding the results shown in Figure 2.
-\begin{figure}[h!]
-    \centering
-    \includegraphics[width=0.8\linewidth]{figures/previsao.png} % Replace with your image filename
-    \caption{One-step-ahead forecast.}
-    \label{fig:example}
-\end{figure}
-
-\begin{figure}[h!]
-    \centering
-    \includegraphics[width=0.8\linewidth]{figures/erros_previsao.png} % Replace with your image filename
-    \caption{Forecast errors ($y_t-\hat{y}_t$).}
-    \label{fig:example}
-\end{figure}
-
-Figure 4 displays the corresponding accuracy metrics. As suggested by \cite{hyndman2018forecasting}, a baseline \textit{naive} forecast was also performed, where predictions are simply the last observed value (in this case, the IPCA value from December 2023 repeated across all months of 2024). However, the results from the naive model were omitted from the figures because they did not outperform the best models in this study. The XGBoost model showed the best performance according to the Mean Absolute Error and the Mean Absolute Percentage Error, with values of 0.1954 and 191.5450\%, respectively. AdaBoost slightly outperformed XGBoost only in terms of the SMAPE metric, achieving a value of 0.6170. CatBoost, on the other hand, performed better out of sample when considering the Mean Squared Error and its root (0.0550 and 0.2346).
-
-Given the small difference in accuracy according to the SMAPE, XGBoost demonstrated the best overall performance, ranking first in most of the error measures. CatBoost ranked second, followed by LightGBM, and finally AdaBoost, which ranked last in four out of five metrics.
-
-\begin{figure}[h!]
-    \centering
-    \includegraphics[width=0.8\linewidth]{figures/metricas.png} % Replace with your image filename
-    \caption{Forecast metrics for the test partition.}
-    \label{fig:example}
-\end{figure}
-
-The results are similar to those in previous studies to some extent. As seen in the related work section, LightGBM was the model that appeared most frequently among the winners of the M5 competition; \cite{bentejac2021comparative} also obtained similar results. However, that was not the case in the present study, where LightGBM ranked third overall. On the other hand, CatBoost's performance corroborates the findings of \cite{XIANGCATBOOST} for a two-layer architecture, while XGBoost's performance aligns with that reported by \cite{sousa2023comparing}.
-
-One-step-ahead forecasting may not be very practical for monthly series, as operational planning or budgeting often requires a longer forecast horizon. In this regard, future research could extend the present study by evaluating model performance across different forecast horizons and cumulatively. Moreover, considering the context in which some of these algorithms were developed, further work could involve enhancing the feature engineering step by including interactions among lags, seasonal dummy variables, and rolling-window statistics such as moving averages and standard deviations.
-
-
-
-%use natbib for citation
-\bibliographystyle{chicago}
-\bibliography{biblio}
-
-\newpage    
-
-\begin{center}
-\Large{\textbf{Forecasting probability density functions in Hilbert Spaces}}
-\end{center}
-
-\begin{center}
-    Matheus Vizzotto dos Santos - Universidade Federal do Rio Grande do Sul	\\
-    Flávio A. Ziegelmann - Universidade Federal do Rio Grande do Sul \\
-    Eduardo de Oliveira Horta - Universidade Federal do Rio Grande do Sul
-    
-    \vspace{0.5cm}
-    \large{\textbf{Summary}}
-\end{center}
+%-------------------------------------------------------------------------
+% Comentário adicional do PPgSI - Informações sobre ``referência em inglês''
+% 
+% Troque os seguintes campos pelos dados de sua Dissertação (mantendo a 
+% formatação e pontuação):
+%     - SURNAME
+%     - FirstName1
+%     - MiddleName1
+%     - MiddleName2
+%     - Work title: work subtitle
+%     - DefenseYear (Ano de Defesa)
+%
+% Mantenha todas as demais informações exatamente como estão.
+%
+% [Não usar essas informações de ``referência'' para Qualificação]
+%
+%-------------------------------------------------------------------------
+% \begin{flushleft}
+% SURNAME, FirstName MiddleName1 MiddleName2. \textbf{Work title}: work subtitle. \imprimirdata. \pageref{LastPage} p. Dissertation (Master of Science) – School of Arts, Sciences and Humanities, University of São Paulo, São Paulo, DefenseYear. 
+% \end{flushleft}
 
 Functional Data Analysis (FDA) has emerged as a rapidly evolving field, extending classical statistical methods to data represented by functions. In this context, time-dependent analysis can also be generalized by treating each observation as a function rather than a scalar or vector, giving rise to functional time series. This work focuses on forecasting a specific class of functional objects: probability density functions (PDFs). A key challenge in this setting arises from the fact that PDFs do not form a vector space, but instead reside in a convex subset, rendering standard functional time series techniques a tricky endeavor. To address this, we propose a transformation approach that maps PDFs into a Hilbert space, enabling the application of established functional time series tools. The effectiveness of this method will be illustrated through an application to high-frequency financial data, with results highlighting its potential compared to other state-of-the-art tools for accurate and interpretable forecasting.
 
-\vspace{0.5cm}
-\textbf{Keywords}: Functional data analysis; functional time series; probability density functions; forecasting; Karhunen-Loève expansion. 
+\textbf{Keywords}: Functional data analysis. Functional time series. Probability density functions. Forecasting. Karhunen-Loève expansion. 
+
+\end{otherlanguage*}
+\end{resumo}
+
+% ---
+% ---
+% inserir lista de figuras
+% ---
+% \pdfbookmark[0]{\listfigurename}{lof}
+% \listoffigures*
+% \cleardoublepage
+% ---
+
+% ---
+% inserir lista de algoritmos
+% ---
+% \pdfbookmark[0]{\listalgorithmname}{loa}
+% \listofalgorithms
+% \cleardoublepage
+
+% ---
+% inserir lista de tabelas
+% ---
+% \pdfbookmark[0]{\listtablename}{lot}
+% \listoftables*
+% \cleardoublepage
+% ---
+
+% ---
+% inserir lista de abreviaturas e siglas
+% ---
+%-------------------------------------------------------------------------
+% Comentário adicional do PPgSI - Informações sobre ``Lista de abreviaturas 
+% e siglas'': 
+%
+% Opcional.
+% Uma vez que se deseja usar, é necessário manter padrão e consistência no
+% trabalho inteiro.
+% Se usar: inserir em ordem alfabética.
+%
+%-------------------------------------------------------------------------
+% \begin{siglas}
+%   \item[Sigla/abreviatura 1] Definição da sigla ou da abreviatura por extenso
+%   \item[Sigla/abreviatura 2] Definição da sigla ou da abreviatura por extenso
+%   \item[Sigla/abreviatura 3] Definição da sigla ou da abreviatura por extenso
+%   \item[Sigla/abreviatura 4] Definição da sigla ou da abreviatura por extenso
+%   \item[Sigla/abreviatura 5] Definição da sigla ou da abreviatura por extenso
+%   \item[Sigla/abreviatura 6] Definição da sigla ou da abreviatura por extenso
+%   \item[Sigla/abreviatura 7] Definição da sigla ou da abreviatura por extenso
+%   \item[Sigla/abreviatura 8] Definição da sigla ou da abreviatura por extenso
+%   \item[Sigla/abreviatura 9] Definição da sigla ou da abreviatura por extenso
+%   \item[Sigla/abreviatura 10] Definição da sigla ou da abreviatura por extenso
+% \end{siglas}
+% ---
+
+% ---
+% inserir lista de símbolos
+% ---
+%-------------------------------------------------------------------------
+% Comentário adicional do PPgSI - Informações sobre ``Lista de símbolos'': 
+%
+% Opcional.
+% Uma vez que se deseja usar, é necessário manter padrão e consistência no
+% trabalho inteiro.
+% Se usar: inserir na ordem em que aparece no texto.
+% 
+%-------------------------------------------------------------------------
+% \begin{simbolos}
+%   \item[$ \Gamma $] Letra grega Gama
+%   \item[$ \Lambda $] Lambda
+%   \item[$ \zeta $] Letra grega minúscula zeta
+%   \item[$ \in $] Pertence
+% \end{simbolos}
+% ---
+
+% ---
+% inserir o sumario
+% ---
+\pdfbookmark[0]{\contentsname}{toc}
+\tableofcontents*
+\cleardoublepage
+% ---
+
+
+
+% ----------------------------------------------------------
+% ELEMENTOS TEXTUAIS
+% ----------------------------------------------------------
+\textual
+
+
+
+%-------------------------------------------------------------------------
+% Comentário adicional do PPgSI - Informações sobre ``títulos de seções''
+% 
+% Para todos os títulos (seções, subseções, tabelas, ilustrações, etc):
+%
+% Em maiúscula apenas a primeira letra da sentença (do título), exceto 
+% nomes próprios, geográficos, institucionais ou Programas ou Projetos ou
+% siglas, os quais podem ter letras em maiúscula também.
+%
+%-------------------------------------------------------------------------
+\chapter{Introduction}
+\section{Context}
+High-frequency trading (HFT) represents a significant evolution in modern financial markets, characterized by the execution of large volumes of trades at extremely high speeds. In such an environment, traditional assumptions of financial econometrics—such as normally distributed returns or independent and identically distributed (i.i.d.) increments—frequently break down. As a result, the specification of the probability density function (PDF) governing price changes or returns becomes a foundational aspect of modeling, forecasting, and executing trades in HFT systems.
+
+PDF specification allows practitioners to move beyond point forecasts and assess the full range of possible future price realizations. This is particularly important in high-frequency contexts, where price changes are often small but frequent, and the tail behavior of the distribution can have outsized impacts on profitability and risk. Accurate modeling of PDFs aids in several key HFT tasks, including order placement, market making, liquidity provision, and statistical arbitrage.
+
+Empirical studies have shown that the distributions of high-frequency returns exhibit heavy tails, volatility clustering, and non-Gaussianity, especially over very short horizons \cite{cont2001empirical}. Mischaracterizing these features can result in substantial model risk, leading to incorrect probability estimates and suboptimal execution. For instance, assuming normality in return distributions can underestimate the likelihood of large price swings, increasing exposure to adverse selection or sudden liquidity shocks.
+
+Various models have been proposed to better capture the observed dynamics of high-frequency data. Nonparametric and semiparametric methods, such as kernel density estimation and mixture models, offer flexibility in modeling the empirical PDF without overly restrictive distributional assumptions \cite{fan2003nonlinear}. On the parametric side, models based on generalized hyperbolic distributions \cite{prause1999generalized}, $\alpha$-stable distributions \cite{nolan2003modeling}, and autoregressive conditional duration (ACD) models \cite{engle1998autoregressive} have been shown to provide better fits to high-frequency financial time series.
+
+In practical HFT systems, the real-time estimation of these PDFs is often embedded in algorithmic decision engines. For example, limit order placement algorithms rely on an accurate forecast of the short-term price movement distribution to maximize expected fill rates while minimizing adverse selection risk \cite{cartea2015algorithmic}. Similarly, market-making strategies use estimates of the conditional PDF to dynamically adjust bid-ask spreads based on the predicted volatility and direction of price changes.
+
+Thus, the specification of the probability density function is not merely a statistical exercise, but a key driver of performance in high-frequency trading. It directly informs the risk-reward trade-offs of algorithmic strategies and serves as a bridge between quantitative modeling and microstructural market dynamics.
+
+\section{A glimpse into Functional Data Analysis}
+An alternative to this analysis is to interpret PDFs as a sequence of random functions, which would allow a researcher to forecast its value for a specific time horizon. This is where Functional Data Analysis (FDA), an extension from Multivariate Data Analysis (MDA), comes into play. First off, we may recall that Multivariate Data Analysis encompasses a collection of techniques designed to analyze data that arises from more than one variable. Unlike univariate or bivariate methods, MDA seeks to explore the structure and relationships that exist in datasets with multiple interdependent measurements, enabling a more comprehensive understanding of complex phenomena that are obserserved in fields such as biology, economics and finance. Techniques such as Principal Component Analysis \cite{pearson1901lines}, Factor Analysis, Cluster Analysis and Canonical Correlation \cite{hotelling1936relations} enable one to reduce dimensionality, detect latent structures, and model the joint distribution of variables.
+
+% Another key milestone was the introduction of \textit{Discriminant Analysis} by \citeonline{fisher1936use}, originally applied to distinguish between species of iris flowers using several morphological measurements. Fisher’s Linear Discriminant Analysis (LDA) laid the groundwork for modern supervised classification techniques. These early methods were implemented manually or with the help of mechanical calculators, and only became widespread with the advent of digital computers in the mid-20th century.
+
+% By the 1960s and 1970s, multivariate analysis had become a core statistical tool, with widespread adoption in psychology, sociology, and economics. Seminal textbooks, such as \citeonline{anderson1958introduction} and \citeonline{tatsuoka1971multivariate}, codified the theory and practice of MDA. Software implementations began emerging in statistical packages like SAS, SPSS, and later R, which enabled more complex analyses to be conducted more efficiently and at scale.
+
+% Today, multivariate analysis is a foundational aspect of data science, with modern extensions including machine learning models, multivariate time series, and high-dimensional data exploration. The ability to extract meaning from multiple correlated variables remains crucial across disciplines, underscoring the enduring value and relevance of the early contributions to multivariate data analysis.
+
+Functional Data Analysis, by its turn, is a statistical framework for analyzing data that can be represented by functions, curves, or trajectories over a continuum such as time, space, or frequency. Unlike traditional multivariate analysis, which handles data as finite-dimensional vectors, FDA treats each observation as a function, often lying in an infinite-dimensional Hilbert space. This perspective is especially useful for studying processes that evolve continuously, such as temperature records, electroencephalogram (EEG) signals or financial intraday returns.
+
+% The emergence of FDA stems from the realization that many scientific and engineering datasets are best understood when their underlying smooth structure is preserved rather than discretized. Functional data techniques provide tools for smoothing, registering, comparing, and modeling such curves \citeonline{ramsay2005functional}.
+
+The foundational developments in FDA began with the pioneering work of \citeonline{ramsay1982fitting}, who introduced spline smoothing techniques for curve estimation. In their influential texts, \citeonline{ramsay2005functional} and \citeonline{ferraty2006nonparametric} developed a unified theory that encompasses functional principal component analysis (FPCA), functional regression, and clustering of functional observations.
+
+One of the earliest practical applications of FDA was in growth curve analysis, where children’s height measurements taken at different ages were analyzed as smooth trajectories \cite{ramsay1991some}. Since then, FDA has seen widespread use in meteorology, biomechanics, and econometrics. Some modern extensions now integrate FDA with machine learning and time series models.
+
+The core challenge in FDA lies in adapting classical statistical techniques to infinite-dimensional spaces. This requires tools from functional analysis, such as basis function expansions (e.g., splines, Fourier, wavelets), and the use of inner product structures for defining distances and covariances between functions. These methods enable dimension reduction (via FPCA), classification, hypothesis testing, and regression in the functional domain. %For some clarification,
+
+% \begin{definition}
+% Let \( V \) be a vector space over a field \( \mathbb{K} \), where \( \mathbb{K} \) is either \( \mathbb{R} \) or \( \mathbb{C} \). An \textbf{inner product} on \( V \) is a function
+% \[
+% \langle \cdot, \cdot \rangle : V \times V \to \mathbb{K}
+% \]
+% that satisfies the following properties for all \( u, v, w \in V \) and all scalars \( \alpha \in \mathbb{K} \):
+
+% \begin{enumerate}
+%     \item Conjugate symmetry: \( \langle u, v \rangle = \overline{\langle v, u \rangle} \)
+%     \item Linearity in the first argument: \( \langle \alpha u + w, v \rangle = \alpha \langle u, v \rangle + \langle w, v \rangle \)
+%     \item Positive-definiteness: \( \langle v, v \rangle \geq 0 \), with equality if and only if \( v = 0 \)
+% \end{enumerate}
+% \end{definition}
+
+% \begin{definition}[Hilbert Space]
+% A \textbf{Hilbert space} is a vector space \( \mathcal{H} \) over \( \mathbb{K} \) equipped with an inner product \( \langle \cdot, \cdot \rangle \), such that \( \mathcal{H} \) is complete with respect to the norm induced by the inner product
+% \[
+% \|v\| = \sqrt{\langle v, v \rangle},
+% \]
+% that is, every Cauchy sequence\footnote{A sequence \( \{v_n\} \) in a metric space \( \mathcal{H} \) is called a \textit{Cauchy sequence} if for every \( \epsilon > 0 \), there exists an integer \( N \) such that for all \( m, n \geq N \), we have \( \| v_n - v_m \| < \epsilon \).} in \( \mathcal{H} \)  converges to a limit in \( \mathcal{H} \).
+% \end{definition}
+
+% With the rise of high-frequency and longitudinal data in numerous fields, FDA continues to grow in relevance, offering a mathematically rich and practically effective framework for analyzing complex, smooth data structures.
+
+%%%%%% FUNCTIONAL TIME SERIES
+
+Further, if we consider each of the curves to be time-dependent, we obtain a \emph{functional time series} (FTS) object, which is simply a sequence of random functions indexed by time. Each observation in the series is a function, typically lying in an infinite-dimensional function space. In this case, let $\mathcal{H}$ be the separable Hilbert space $L^2(\mathcal{I})$, the space of square-integrable functions on a compact interval $\mathcal{I} \subseteq \mathbb{R}$, equipped with an inner product. A foundational treatment of linear models for functional data was provided by \citeonline{bosq2000linear}, who developed autoregressive models in a Hilbert space setting, laying the groundwork for many later developments in the field. His approach enabled the extension of classical time series concepts like stationarity and autocorrelation to the infinite-dimensional setting. This leads to a possibility of forecasting objects like PDFs, but some caveats related to the nature of this type of data must be considered. 
+
+% A \emph{functional time series} is a sequence of $\mathcal{H}$-valued random variables $\{X_t\}_{t \in \mathbb{Z}}$, where each $X_t$ is a random element of $\mathcal{H}$, i.e.,
+% \[
+% X_t : \Omega \to \mathcal{H}, \quad t \in \mathbb{Z}.
+% \]
+
+% A functional time series $\{X_t\}_{t \in \mathbb{Z}}$ is said to be \textbf{Mean-square continuous} if $\mathbb{E}\|X_t\|^2 < \infty$ for all $t$; \textbf{Second-order stationary} if the mean function $\mu(t) := \mathbb{E}[X_t]$ is constant over time and the autocovariance operator 
+%     \[
+%     \Gamma_h = \text{Cov}(X_{t+h}, X_t) = \mathbb{E}[(X_{t+h} - \mu) \otimes (X_t - \mu)]
+%     \]
+%     depends only on the lag $h$, where $\otimes$ denotes the tensor product.
+
+
+% Functional Time Series (FTS) analysis is a modern statistical framework developed to handle data that are naturally viewed as functions observed over time. Unlike traditional time series models that deal with scalar or finite-dimensional vector observations, FTS methods treat each observation as a real-valued function, typically defined on a compact interval. This functional approach allows for the modeling of complex dynamic phenomena where each data point is an entire curve, such as daily temperature curves, intraday financial returns, or spectrometric curves.
+
+% A foundational treatment of linear models for functional data was provided by \citeonline{bosq2000linear}, who developed autoregressive models in a Hilbert space setting, laying the groundwork for many later developments in the field. His approach enabled the extension of classical time series concepts like stationarity and autocorrelation to the infinite-dimensional setting. This leads to a possibility of forecasting objects like PDFs, but some caveats related to the nature of this type of data must be considered. 
+
+% Subsequent research has addressed various aspects of FTS, such as model assessment and estimation. \citeonline{hall2006assessing} introduced diagnostic tools and inference procedures for assessing the adequacy of functional time series models, emphasizing the importance of model checking in high-dimensional settings. Their work underscored the challenges posed by the infinite-dimensional nature of the data and proposed practical solutions for effective model validation.
+
+% \citeonline{bathia2010identifying} focused on identifying and estimating finite-dimensional dynamic structures in functional time series, addressing the issue of dimensionality reduction while preserving temporal dependence. Their methodology enables the recovery of dynamic factors that drive the functional observations over time, thus facilitating interpretable modeling and forecasting.
+
+% \citeonline{aue2015prediction} advanced the field further by developing predictive methods for FTS, including linear prediction theory and associated estimation techniques. Their work provided both theoretical guarantees and practical algorithms for functional time series forecasting, which is a central goal in many applications.
+
+% Together, these contributions form a robust theoretical and methodological foundation for the analysis and prediction of functional data observed over time, making Functional Time Series a vibrant and evolving area of research in modern statistics.
+
+\section{Compositional Data Analysis}
+\label{subsec:CoDa}
+Compositional data (CoDa) are multivariate observations conveying relative information, typically represented as vectors with strictly positive components summing to a constant like 1 or 100\% \cite{aitchison1982statistical}. Such data arise naturally in diverse disciplines, but are specially related to the context of this research since we are dealing with probability measures.
+
+Classical multivariate statistical techniques often fail to appropriately handle the specific properties of compositional data due to the constant-sum constraint and the inherent relative scale of the data. As a consequence, applying standard techniques directly to raw compositional data can lead to misleading results \cite{pawlowsky2015modelling}. Aitchison's work \cite{aitchison1986statistical} laid the foundation for the modern statistical treatment this problem. He introduced the use of log-ratio transformations, such as the centered log-ratio (clr), additive log-ratio (alr), and isometric log-ratio (ilr) transformations, to enable the application of standard statistical tools in an appropriate transformed space. These transformations map the data from the simplex (the sample space of compositions) to real Euclidean space, facilitating analysis while preserving the essential relative information.
+
+The simplex, denoted as $\mathcal{S}^D = \left\{ \mathbf{x} = (x_1, \ldots, x_D) \in \mathbb{R}^D_{>0} : \sum_{i=1}^D x_i = \kappa \right\}$, where $\kappa$ is a positive constant (typically 1 or 100), serves as the sample space for compositional data \cite{egozcue2003isometric}. A key aspect of CoDa is the use of the Aitchison geometry on the simplex, which redefines operations such as perturbation (compositionally meaningful addition) and powering (compositionally meaningful scalar multiplication).
+
+% In recent years, CoDa methodology has seen significant advancements, particularly in its integration with functional data analysis, machine learning, and Bayesian inference \cite{van2013analyzing,greenacre2018compositional}. These developments have broadened the applicability of CoDa tools to more complex data structures, such as longitudinal compositional data or high-dimensional microbiome datasets.
+
+% This paper introduces the theoretical basis and methodological framework of CoDa, with emphasis on log-ratio transformations and the geometry of the simplex, providing a foundation for the application and development of compositional techniques in applied scientific research.
+% \subsection{Simplex}
+
+% The $D$-part \textit{simplex} is defined as:
+% \[
+% \mathcal{S}^D = \left\{ \mathbf{x} = (x_1, \dots, x_D) \in \mathbb{R}^D \ : \ x_i > 0 \ \forall i, \quad \sum_{i=1}^D x_i = \kappa \right\},
+% \]
+% where $\kappa > 0$ is a constant (typically $\kappa = 1$).
+
+% Each $\mathbf{x} \in \mathcal{S}^D$ is called a \textit{composition}.
+
+% \subsection{Equivalence Principle}
+
+% Two compositions $\mathbf{x}, \mathbf{y} \in \mathcal{S}^D$ are said to be \textit{equivalent} if:
+% \[
+% \exists \ \lambda > 0 \text{ such that } \mathbf{y} = \lambda \mathbf{x}.
+% \]
+% Multiplying all components by a positive constant does not change the relative information.
+
+% \subsection{Perturbation}
+
+% The \textit{perturbation} operation in $\mathcal{S}^D$ is defined as:
+% \[
+% \mathbf{x} \oplus \mathbf{y} = \mathcal{C}(x_1 y_1, \dots, x_D y_D),
+% \]
+% where $\mathcal{C}(\cdot)$ denotes the \textit{closure operation}:
+% \[
+% \mathcal{C}(z_1, \dots, z_D) = \left( \frac{z_1}{\sum_{i=1}^D z_i}, \dots, \frac{z_D}{\sum_{i=1}^D z_i} \right).
+% \]
+
+% \subsection{Aitchison Geometry}
+
+% The simplex $\mathcal{S}^D$ can be endowed with an inner product, a norm, and a distance.
+
+% The \textit{Aitchison inner product} between two compositions $\mathbf{x}, \mathbf{y} \in \mathcal{S}^D$ is:
+% \[
+% \langle \mathbf{x}, \mathbf{y} \rangle_A = \frac{1}{2D} \sum_{i=1}^D \sum_{j=1}^D \log\left(\frac{x_i}{x_j}\right) \log\left(\frac{y_i}{y_j}\right).
+% \]
+% The associated \textit{Aitchison norm} is:
+% \[
+% \|\mathbf{x}\|_A = \sqrt{ \langle \mathbf{x}, \mathbf{x} \rangle_A }.
+% \]
+% The \textit{Aitchison distance} between $\mathbf{x}$ and $\mathbf{y}$ is:
+% \[
+% d_A(\mathbf{x}, \mathbf{y}) = \|\log(\mathbf{x}) - \log(\mathbf{y})\|_A,
+% \]
+% where $\log(\mathbf{x}) = (\log(x_1), \dots, \log(x_D))$.
+
+% \section{Main Transformations}
+
+% \subsection{Centered Log-Ratio (clr) Transformation}
+
+% The \textit{clr transformation} is defined as:
+% \[
+% \text{clr}(\mathbf{x}) = \left( \log\left( \frac{x_1}{g(\mathbf{x})} \right), \dots, \log\left( \frac{x_D}{g(\mathbf{x})} \right) \right),
+% \]
+% where $g(\mathbf{x})$ is the \textit{geometric mean}:
+% \[
+% g(\mathbf{x}) = \left( \prod_{i=1}^D x_i \right)^{1/D}.
+% \]
+% Note: the clr-transformed data lie in a hyperplane of $\mathbb{R}^D$ because their components sum to zero.
+
+% \subsection{Isometric Log-Ratio (ilr) Transformation}
+
+% The \textit{ilr transformation} maps a composition into $\mathbb{R}^{D-1}$ through an orthonormal basis. It takes the form:
+% \[
+% \text{ilr}(\mathbf{x}) = (z_1, \dots, z_{D-1}),
+% \]
+% where each $z_j$ is a log-contrast (linear combination of logarithms of ratios between parts).
+
+% The ilr transformation preserves distances (the Aitchison distance becomes the Euclidean distance).
+
+% \section{Key Results}
+
+% \begin{itemize}
+%     \item \textbf{Fundamental principle:} Only ratios between components matter; absolute values are irrelevant.
+%     \item \textbf{Subcompositional coherence:} Analyses must be coherent whether on the full composition or a subcomposition.
+%     \item \textbf{Use of ilr coordinates:} After ilr transformation, standard multivariate techniques can be applied.
+%     \item \textbf{Caution:} Directly applying standard methods on raw compositional data (ignoring the simplex structure) leads to spurious results.
+% \end{itemize}
+
+% \section{References}
+
+% \begin{itemize}
+%     \item Aitchison, J. (1986). \textit{The Statistical Analysis of Compositional Data}. Chapman \& Hall.
+%     \item Pawlowsky-Glahn, V., Egozcue, J. J., \& Tolosana-Delgado, R. (2015). \textit{Modeling and Analysis of Compositional Data}. Wiley.
+%     \item van den Boogaart, K. G., \& Tolosana-Delgado, R. (2013). \textit{Analyzing Compositional Data with R}. Springer.
+% \end{itemize}
+
+
+An important and growing extension of CoDa is its adaptation to probability density functions (PDFs), which share a key compositional property: they are non-negative and integrate to one. This extension is formally developed within the framework of \textit{Bayes spaces}, where PDFs are treated as infinite-dimensional compositional objects \cite{egozcue2006hilbert}. The centered log-ratio (clr) transformation is generalized to functions, allowing PDFs to be analyzed in a Hilbert space endowed with the Aitchison geometry. 
+% For a density $f(x)$ defined on a compact support $I$, the clr transform is given by
+% \[
+% \text{clr}(f)(x) = \log(f(x)) - \frac{1}{|I|} \int_I \log(f(t))\,dt,
+% \]
+% which maps $f$ into a real-valued function with zero integral.
+
+% This perspective enables the application of functional principal component analysis (fPCA), clustering, and regression directly to probability densities, and has found applications in various domains including electricity demand modeling \cite{delicado2011compositional}, Bayesian model assessment, and compositional inference in medical statistics \cite{talska2018principal}.
+
+% This paper introduces the theoretical basis and methodological framework of CoDa, with emphasis on log-ratio transformations, the geometry of the simplex, and their extension to the analysis of probability density functions.
+
+
+% Trabalhos iniciais (ex Ramsay).
+
+% \citeonline{gertheiss2024}, \citeonline{dabo2024uncovering}
+
+% \subsection{Functional Time Series}
+
+\chapter{Goal}
+The main goal of this work is to assess the viability of forecasting functional time series that inherently carry relative information. Specifically, the functional observations are probability density functions, which are subject to the following constraints:
+\begin{proposition}
+Let $f_X(x)$ denote the density function of a continuous random variable X,  defined on the probability space $(\Omega, \mathbb{F}, \mathbb{P})$. Then $f_X(x)$ satisfies
+\begin{enumerate}
+    \item $f_X(x)\geq0$, for all $x$ in $\mathbb{R}$
+    \item $\int_{-\infty}^{\infty}f(w)dw=1$
+\end{enumerate}
+    
+\end{proposition}
+
+The precise objectives are to
+\begin{enumerate}
+    \item Perform data analysis of the time series subject to the study;
+    \item Evaluate time series decomposition, i.e., its dimensionality;
+    \item Find the best time series model fitting to the principal component scores;
+    \item Obtain a set of forecast values for the probability density functions;
+    \item Evaluate the performance of the predictions within an application.
+\end{enumerate}
+
+
+
+\chapter{Literature Review}
+
+
+
+% \subsection*{Aitchison Geometry}
+
+% Let $S^D$ denote the \emph{D-part simplex}, defined as:
+% \[
+% S^D = \left\{ \mathbf{x} = (x_1, \dots, x_D) \in \mathbb{R}^D : x_i > 0 \ \text{for all} \ i, \ \sum_{i=1}^D x_i = 1 \right\}.
+% \]
+
+% The \textbf{Aitchison geometry} on $S^D$ is a vector space structure defined by the following components:
+
+% \begin{itemize}
+%     \item \textbf{Perturbation (Composition Addition)}: For $\mathbf{x}, \mathbf{y} \in S^D$, their perturbation is defined as:
+%     \[
+%     \mathbf{x} \oplus \mathbf{y} = \mathcal{C}(x_1 y_1, \dots, x_D y_D),
+%     \]
+%     where $\mathcal{C}$ is the closure operator:
+%     \[
+%     \mathcal{C}(\mathbf{z}) = \left( \frac{z_1}{\sum_{i=1}^D z_i}, \dots, \frac{z_D}{\sum_{i=1}^D z_i} \right).
+%     \]
+    
+%     \item \textbf{Powering (Scalar Multiplication)}: For $\alpha \in \mathbb{R}$ and $\mathbf{x} \in S^D$,
+%     \[
+%     \alpha \odot \mathbf{x} = \mathcal{C}(x_1^\alpha, \dots, x_D^\alpha).
+%     \]
+    
+%     \item \textbf{Aitchison Inner Product}: For $\mathbf{x}, \mathbf{y} \in S^D$, define
+%     \[
+%     \langle \mathbf{x}, \mathbf{y} \rangle_A = \frac{1}{2D} \sum_{i=1}^D \sum_{j=1}^D \log\left(\frac{x_i}{x_j}\right) \log\left(\frac{y_i}{y_j}\right).
+%     \]
+    
+%     \item \textbf{Aitchison Norm}: The norm induced by the inner product is:
+%     \[
+%     \|\mathbf{x}\|_A = \sqrt{\langle \mathbf{x}, \mathbf{x} \rangle_A}.
+%     \]
+    
+%     \item \textbf{Aitchison Distance}: The distance between two compositions $\mathbf{x}, \mathbf{y} \in S^D$ is:
+%     \[
+%     d_A(\mathbf{x}, \mathbf{y}) = \|\text{clr}(\mathbf{x}) - \text{clr}(\mathbf{y})\|_2,
+%     \]
+%     where $\text{clr}(\mathbf{x})$ is the \emph{centered log-ratio transformation}:
+%     \[
+%     \text{clr}(\mathbf{x}) = \left( \log\frac{x_1}{g(\mathbf{x})}, \dots, \log\frac{x_D}{g(\mathbf{x})} \right), \quad g(\mathbf{x}) = \left( \prod_{i=1}^D x_i \right)^{1/D}.
+%     \]
+% \end{itemize}
+
+% This structure turns $S^D$ into a real Hilbert space under the operations $\oplus$, $\odot$ and the inner product $\langle \cdot, \cdot \rangle_A$.
+
+% \subsection{Para olhar}
+
+% Trabalhos relacionados à estimação de séries temporais funcionais.
+
+% Previsão.
+
+% Tentativas de prever funções de densidade de probabilidade.
+
+% Artigo Horta.
+
+% Introdução a FDA: \citeonline{dabo2024uncovering}.
+
+% \citeonline{aue2015prediction},\citeonline{bathia2010identifying}, \citeonline{benko2009common}, \citeonline{besse1986principal}, \citeonline{bosq2000linear}, \citeonline{dabo2008functional}, \citeonline{dauxois1982asymptotic}, \citeonline{ferraty2003curves}, \citeonline{hall2006assessing}, \citeonline{ferraty2006nonparametric}, \citeonline{horta2018dynamics}, \citeonline{hron2016simplicial}, \citeonline{muller1998heavy}, \citeonline{petersen2016functional}, \citeonline{ramsay1991some}, \citeonline{ramsay2002applied}, \citeonline{ramsay2005functional}, \citeonline{ramsay2009FDAwithR}
+
+\chapter{Framework}
+
+First, we might define some useful concepts that are present in most works about functional time series. 
+
+\begin{definition}[Inner product]
+Let \( V \) be a vector space over a field \( \mathbb{K} \), where \( \mathbb{K} \) is either \( \mathbb{R} \) or \( \mathbb{C} \). An inner product on \( V \) is a function
+\[
+\langle \cdot, \cdot \rangle : V \times V \to \mathbb{K}
+\]
+that satisfies the following properties for all \( u, v, w \in V \) and all scalars \( \alpha \in \mathbb{K} \):
+
+\begin{enumerate}
+    \item Conjugate symmetry: \( \langle u, v \rangle = \overline{\langle v, u \rangle} \)
+    \item Linearity in the first argument: \( \langle \alpha u + w, v \rangle = \alpha \langle u, v \rangle + \langle w, v \rangle \)
+    \item Positive-definiteness: \( \langle v, v \rangle \geq 0 \), with equality if and only if \( v = 0 \)
+\end{enumerate}
+\end{definition}
+
+\begin{definition}[Hilbert Space]
+A Hilbert space is a vector space \( \mathcal{H} \) over \( \mathbb{K} \) equipped with an inner product \( \langle \cdot, \cdot \rangle \), such that \( \mathcal{H} \) is complete with respect to the norm induced by the inner product
+\[
+\|v\| = \sqrt{\langle v, v \rangle},
+\]
+that is, every Cauchy sequence\footnote{A sequence \( \{v_n\} \) in a metric space \( \mathcal{H} \) is called a \textit{Cauchy sequence} if for every \( \epsilon > 0 \), there exists an integer \( N \) such that for all \( m, n \geq N \), we have \( \| v_n - v_m \| < \epsilon \).} in \( \mathcal{H} \)  converges to a limit in \( \mathcal{H} \).
+\end{definition}
+
+\begin{definition}[Functional time series]
+Let $\mathcal{H}$ be a separable Hilbert space taken to be $\mathcal{H} = L^2(\mathcal{I})$, that is, the space of square-integrable functions on a compact interval $\mathcal{I} \subset \mathbb{R}$, equipped with the inner product
+\begin{equation}
+\langle f, g \rangle = \int_{\mathcal{I}} f(t) g(t) \, dt,
+\end{equation}
+and the associated norm $\|f\| = \sqrt{\langle f, f \rangle}$. A \emph{functional time series} is a sequence of $\mathcal{H}$-valued random variables $\{X_t\}_{t \in \mathbb{Z}}$, where each $X_t$ is a random element of $\mathcal{H}$, i.e., $X_t : \Omega \to \mathcal{H}, t \in \mathbb{Z}.$
+
+\begin{definition}[Karhunen–Loève Expansion]
+Let \( X(t) \), \( t \in \mathcal{I} \subseteq \mathbb{R} \), be a square-integrable stochastic process with mean function \( \mu(t) = \mathbb{E}[X(t)] \) and covariance function 
+\begin{equation}
+C(s, t) = \text{Cov}(X(s), X(t)) = \mathbb{E}[(X(s) - \mu(s))(X(t) - \mu(t))].
+\end{equation}
+
+Then, if \( C(s, t) \) is continuous and positive semi-definite, the Karhunen--Lo\`eve Expansion of \( X(t) \) is given by
+
+\begin{equation}
+X(t) = \mu(t) + \sum_{k=1}^\infty \xi_k \phi_k(t),
+\label{eq:kl_decomp}
+\end{equation}
+where \( \{ \phi_k(t) \}_{k=1}^\infty \) are the orthonormal eigenfunctions of the covariance operator associated with \( C(s, t) \); \( \{ \xi_k \}_{k=1}^\infty \) are uncorrelated random variables with zero mean and variances equal to the corresponding eigenvalues \( \lambda_k \), and $\{\xi_{tk},k\geq1\}$ is a ranked set such that $\text{Var}(\xi_{tk})=\lambda_k$ is monotonically decreasing as k increases; and \( \mathbb{E}[\xi_k \xi_j] = \lambda_k \delta_{kj} \), with \( \delta_{kj} \) being the Kronecker delta.
+\end{definition}
+
+\end{definition}
+
+If we consider an observed functional time series object $Y_t$, we define
+
+\begin{equation}
+     Y_t(u) = X_t(u) + \varepsilon_t(u), \quad u \in \mathcal{T}, \quad t = 1, \dots, n,
+\label{eq:observed_ts}
+\end{equation}
+where the noise term $\varepsilon_t(u)$ is originated from experimental error and numerical rounding in discrete data treatment.
+
+Now, we may ask ourselves how to deal with this type of data. In \citeonline{bosq2000linear}, we can find a \textit{functional autoregressive} (FAR) approach for time series forecasting, and this has long been the main method used in research because of the lack of other techniques. Nevertheless, the work of \citeonline{aue2015prediction} proposes a simplification of functional time series prediction by reducing it to a multivariate forecasting problem, thereby allowing the use of well-established tools, in contrast with the methodology of the FAR(p) model. The proposed algorithm consists of three steps: first, a number $d$ of principal components is selected to retain $(\alpha \cdot 100)\%$ of the variance of the original data; then, given a forecast horizon $h$, a VAR($p$) model is fitted to the principal components, and an $h$-step-ahead forecast is computed; finally, the multivariate forecasts are transformed back to the original functional space via a truncated Karhunen--Lo\`eve representation. It is also shown that the one-step-ahead forecast from a VAR(1) model in the second step is asymptotically equivalent to that of a FAR(1) model, which simplifies the forecasting task. Another important contribution of the paper is the proposal of a fully automatic and joint procedure for selecting the model order $p$ and the number of components $d$ through the minimization of a functional final prediction error (fFPE) criterion given by
+
+\begin{equation}
+ \textit{fFPE}(p,d)=\frac{n+pd}{n-pd}\mathrm{tr}(\hat{\Sigma}_{Z})+\sum_{l>d}\hat{\lambda}_{l},
+\end{equation}
+which makes the proposed methodology entirely data-driven. The possibility of including exogenous variables in the model is also supported without major theoretical complications. Finally, simulation studies and applications to real data compare the performance of the new methodology with that of \citeonline{hyndmanUllah2007}, which carries out forecasting by treating the principal component scores as univariate time series, and \citeonline{bosq2000linear}, using the autoregressive order selection criterion proposed by \citeonline{kokoszkaReimherr2013}. In both settings, the new method outperformed the alternatives. We can therefore conclude that this is a useful solution for the problem at hand.
+
+\citeonline{bathia2010identifying} propose a way to identify the dimensionality of these objects while modeling the serial dependence of the time series. Under stationarity assumptions, equation \ref{eq:kl_decomp} tells $X_t(\cdot)$ is $d$-dimensional if $\lambda_d \neq 0$ and $\lambda_{d+1} = 0$, where $d \geq 1$ is a finite integer. What these authors propose is precisely to determine $d$ and $\mathcal{M}=\textbf{span}\{\phi_1,...,\phi_d\}$. For a given lag $k \geq 1$, let the lag-$k$ autocovariance operator be
+\begin{equation}
+M_k(u, v) = \text{Cov}(X_t(u), X_{t+k}(v)).
+\label{eq:covariance_operator}
+\end{equation}
+Since $\varepsilon_t(\cdot)$ is assumed to be white noise and independent across $t$, $M_k(u,v)$ can be estimated directly from $Y_t(\cdot)$ via:
+\[
+\widehat{M}_k(u, v) = \frac{1}{n-p} \sum_{t=1}^{n-p} \left( Y_t(u) - \overline{Y}(u) \right)\left( Y_{t+k}(v) - \overline{Y}(v) \right),
+\]
+where $\overline{Y}(u)$ is the sample mean function. Also, define a non-negative operator that aggregates the dependence information across different lags
+\begin{equation}
+K(u, v) = \sum_{k=1}^{p} \int_I M_k(u, z) M_k(v, z) \, dz
+\end{equation}
+
+and whose sample version is given by
+\begin{equation}
+\widehat{K}(u,v) = \sum_{k=1}^{p} \int_I \widehat{M}_k(u, z) \widehat{M}_k(v, z) \, dz.
+\end{equation}
+
+If one performs an eigenanalysis of $\widehat{K}$, then the nonzero eigenvalues obtained through a bootstrap test correspond to the dynamic dimension $d$ and the eigenfunctions associated with nonzero eigenvalues span the estimated dynamic space $\widehat{\mathcal{M}}$.
+
+Now, we may find ourselves more comfortable on dealing with functional time series. But when it comes to probability density functions, we cannot use standard tools since the space they lie in is not a vector space. Consider the following:
+
+\begin{example} Let $f_1(x), f_2(x)$ be two exponential probability density functions such that 
+\[
+f_1(x) = e^{-x}, \quad f_2(x) = 2e^{-2x}, \quad x \geq 0.
+\]
+Both $f_1$ and $f_2$ are valid PDFs, since $f_i(x) \geq 1$ and
+\[
+\int_0^\infty f_1(x) \, dx = 1, \quad \int_0^\infty f_2(x) \, dx = 1.
+\]
+But their sum is given by
+\[
+f(x) = f_1(x) + f_2(x) = e^{-x} + 2e^{-2x}.
+\]
+If we compute the integral,
+\[
+\int_0^\infty f(x) \, dx = \int_0^\infty e^{-x} \, dx + 2 \int_0^\infty e^{-2x} \, dx = 1 + 1 = 2.
+\]
+Thus, $f$ does not integrate to $1$ and the set of PDFs is not closed under addition. Further, consider the scalar multiplication of $f_1$ by $\alpha=2$. Then
+\[
+2 f_1(x) = 2 e^{-x}.
+\]
+and
+\[
+\int_0^\infty 2f_1(x) \, dx = 2 \int_0^\infty e^{-x} \, dx = 2.
+\]
+We conclude that the set of PDFs is not closed both under addition and scalar multiplication, except for scalars equal to $1$. 
+\end{example}
+
+We can see, therefore, that the space where PDFs live is not a vector space, and we have a problem using typical tools for treating functions on Hilbert spaces. To overcome this, \citeonline{hron2016simplicial} proposed a transformation into a Bayes space $\mathcal{B}^2$ of functional compositions, which is the result of a generalization of the Aitchison geometry introduced in Section~\ref{subsec:CoDa}, and a methodology for an adaptation of FPCA to the infinite dimensional simplex space. One of the main concerns of this research was to preserve two features of functional compositions, namely the  scale invariance and the relative scale properties. The first one refers to the fact that, in Bayes spaces, two probability density functions \( f \) and \( g \) are considered equivalent if they are proportional, i.e.,
+\[
+f = \lambda g, \quad \lambda > 0.
+\]
+The integral constraint
+\[
+\int_I f(x) \, dx = 1
+\]
+selects a particular representative from the equivalence class. However, the essential information carried by the density function is not altered by scaling. In other words, multiplying a density by a positive constant does not change its relative information content. This property is known as scale invariance: only the ratios between the values of a density function matter, not their absolute scale. %Therefore, the choice of normalizing the integral to 1 is purely conventional. 
+The latter property tells that variations in density functions must be interpreted relatively, rather than absolutely. For instance, an increase of a probability value from 0.05 to 0.1 is fundamentally different from an increase from 0.5 to 0.55, even though both changes are 0.05 in absolute terms. This implies that the analysis must be sensitive to relative changes, which motivates the use of log-ratio transformations rather than standard arithmetic differences. Thus the authors define 
+\[
+(f \oplus g)(t) = \frac{f(t)g(t)}{\int_I f(s)g(s) \, ds}, \quad (\alpha \odot f)(t) = \frac{f(t)^\alpha}{\int_I f(s)^\alpha \, ds}, \quad t \in I.
+\]
+where $f \oplus g$ is the perturbation and $\alpha \odot f$ is the powering of two absolutely integrable density functions $f,g \in \mathcal{B}^2(I)$. These two resulting functions are probability density functions, and if we endow our space with the inner product    
+
+\[
+\langle f, g \rangle_{\mathcal{B}} = \frac{1}{2\eta} \int_I \int_I \ln\left( \frac{f(t)}{f(s)} \right) \ln\left( \frac{g(t)}{g(s)} \right) \, dt \, ds, \quad f, g \in \mathcal{B}^2(I),
+\]
+then $\mathcal{B}^2(I)$ can be proved to be a separable Hilbert Space that is isomorphic to the Hilbert Space $L^2(I)$ through the centred log-ratio transformation given in \citeonline{van2014bayes} by 
+
+\[
+\text{clr}(f)(t)=f_c(t)=\text{ln}f(t)-\frac{1}{\eta}\int_{I}\text{ln}f(s)ds
+\]
+
+With this, the Simplicial Functional Principal Component Analysis can be performed by maximizing, over a sample $X_1, ...,X_n$,
+\[
+\frac{1}{N} \sum_{i=1}^{N} \langle X_i, \zeta_j \rangle_{\mathcal{B}}^2 
+\quad \text{subject to} \quad \|\zeta_j\|_{\mathcal{B}} = 1; \quad \langle \zeta_j, \zeta_k \rangle_{\mathcal{B}} = 0, \quad k < j,
+\]
+where $\{\zeta_j\}_{j\geq1},\zeta_j \in \mathcal{B}^2(I),$ are the simplicial principal components.
+
+Another solution was given by \citeonline{petersen2016functional} with a mapping into a Hilbert space through a continuous and invertible map $\psi$ that allows the implementation of standard FDA methods, with the possibility of transforming the results into the original space of densities. Two major maps are introduced: Log Quantile Density ($\psi_Q(f)$) and Log Hazard ($\psi_Q(f)$) Transformations, given by
+\[
+\psi_Q(f)(t) = \log q(t) = -\log f(Q(t)), \quad t \in [0,1],
+\]
+where $q(t) = \frac{d}{dt} Q(t)$ and $Q(t)$ is the quantile function, and
+\[
+    \psi_H(f)(t) = \log\left( \frac{f(t)}{1 - F(t)} \right), \quad t \in [0,1-\delta],
+\]
+where $F$ is the cumulative distribution function. Both transformations ensure that the mapped objects lie in $L^2$ and both are continuous, ensuring stability of the analysis. Variations also are modeled inside the structure of density functions, avoiding artifacts caused by linear approximations. Means and variances are computed intrinsically using appropriate metrics (e.g., Wasserstein distance).
+
+Under mild regularity assumptions, estimators of modes of variation and principal components are shown to be consistent; rates of convergence are derived both for fully observed densities and for cases where densities are estimated from data samples; optimal rates are attained when appropriate density estimators are used (e.g., modified kernel estimators).
+
+The main results are a superior representation of variability compared to direct FPCA on densities; better interpretability of modes of variation, especially when data show horizontal variation (e.g., shifts of modes); and the fact that the methodology is applicable to regression and classification models where densities are predictors or responses. Also, a key difference about this work compared to \citeonline{hron2016simplicial} is the fact that it does not rely on a specific transformation, but consider a general class of transformations independently of a metric. 
+
+% \begin{theorem}
+% This is the first theorem.
+% \end{theorem}
+
+% \begin{lemma}
+% This is a lemma that follows the theorem.
+% \end{lemma}
+
+% \begin{definition}
+% This is a definition related to the previous results.
+% \end{definition}
+
+% \begin{definition}
+% In the theory of random processes, a sequence $\{ X_n \}_{n=1}^{\infty}$ is said to be $\psi$-mixing if the dependence between past and future events decreases as they become further apart in time, according to a specific mixing coefficient.
+
+% Let $\{ X_n \}_{n=1}^{\infty}$ be a sequence of random variables defined on a probability space $(\Omega, \mathcal{F}, P)$. The sequence is called \emph{$\psi$-mixing} if there exists a function $\psi(n)$ such that for any two $\sigma$-algebras $\mathcal{F}_a^b = \sigma(X_a, X_{a+1}, \ldots, X_b)$ and $\mathcal{F}_c^d = \sigma(X_c, X_{c+1}, \ldots, X_d)$ with $a \leq b < c \leq d$, the following holds:
+% \[
+% \psi(n) = \sup_{A \in \mathcal{F}_1^k, B \in \mathcal{F}_{k+n}^\infty} |P(A \cap B) - P(A)P(B)|,
+% \]
+% where $\psi(n) \to 0$ as $n \to \infty$.
+
+% The sequence is said to be $\psi$-mixing if $\psi(n) \to 0$ as $n \to \infty$. This condition implies that the events in the distant past and the far future become asymptotically independent.
+% \end{definition}
+
+% \begin{definition}
+
+% Let $\mathcal{X}$ be a domain and $h_0(x)$ a reference probability density function on $\mathcal{X}$. The \emph{Bayes space} $B^2(\mathcal{X}, h_0)$ is defined as the space of all functions $h(x) > 0$ such that:
+% \[
+% \log \frac{h(x)}{h_0(x)} \in L^2(\mathcal{X}),
+% \]
+% where $L^2(\mathcal{X})$ denotes the space of square-integrable functions on $\mathcal{X}$. The inner product between two elements $h_1(x), h_2(x) \in B^2(\mathcal{X}, h_0)$ is given by:
+% \[
+% \langle h_1, h_2 \rangle_{B^2} = \int_{\mathcal{X}} \log \frac{h_1(x)}{h_0(x)} \log \frac{h_2(x)}{h_0(x)} h_0(x) dx.
+% \]
+% The associated norm is:
+% \[
+% \| h \|_{B^2} = \left( \int_{\mathcal{X}} \left( \log \frac{h(x)}{h_0(x)} \right)^2 h_0(x) dx \right)^{\frac{1}{2}}.
+% \]
+% \end{definition}
+
+% \subsection{Introduction to the Wasserstein Metric}
+
+% The Wasserstein metric, also known as the Earth Mover's Distance (EMD), is a distance function defined between probability distributions on a given metric space. It arises naturally in optimal transport theory, where the goal is to quantify the "cost" of transporting mass from one distribution to another.
+
+% Let $(\mathcal{X}, d)$ be a complete separable metric space, and let $\mathcal{P}_p(\mathcal{X})$ denote the space of Borel probability measures on $\mathcal{X}$ with finite $p$-th moment, defined as:
+% \[
+% \mathcal{P}_p(\mathcal{X}) = \left\{ \mu \in \mathcal{P}(\mathcal{X}) \; \middle| \; \int_{\mathcal{X}} d(x_0, x)^p \, d\mu(x) < \infty \text{ for some } x_0 \in \mathcal{X} \right\}.
+% \]
+
+% For two probability measures $\mu, \nu \in \mathcal{P}_p(\mathcal{X})$, the $p$-Wasserstein distance between them is defined as:
+% \[
+% W_p(\mu, \nu) = \left( \inf_{\pi \in \Pi(\mu, \nu)} \int_{\mathcal{X} \times \mathcal{X}} d(x, y)^p \, d\pi(x, y) \right)^{1/p},
+% \]
+% where $\Pi(\mu, \nu)$ denotes the set of all couplings of $\mu$ and $\nu$, i.e., all probability measures on $\mathcal{X} \times \mathcal{X}$ with marginals $\mu$ and $\nu$.
+
+% The Wasserstein metric has gained significant attention in statistics, machine learning, and functional data analysis due to its meaningful geometric structure and robustness to small perturbations in distributions. In particular, it provides a powerful tool for comparing empirical distributions and studying convergence properties in probabilistic settings.
+
+% \subsection{Estimação de densidade}
+\chapter{Data analysis}
+% \subsubsection{Análise exploratória}
+
+\chapter{Results}
+
+% \section{Considerações finais}
+
+
+
+% \include{fichario}
+
+\newpage
+\bibliographystyle{abntex2-alf}
+\bibliography{referencias}
+
+\newpage
+\chapter{Apêndice}
+\section{Figuras}
+\section{Tabelas}
+
+%---------------------------------------------------------------------
+% INDICE REMISSIVO
+%---------------------------------------------------------------------
+%%%%%MF\phantompart
+%%%%%MF\printindex
+%---------------------------------------------------------------------
 
 \end{document}
